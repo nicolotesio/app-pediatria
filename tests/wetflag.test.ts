@@ -17,6 +17,15 @@ describe("calculateWetflag", () => {
     expect(result.warnings).toHaveLength(0);
   });
 
+  it("usa il peso selezionato quando disponibile", () => {
+    const result = calculateWetflag(4, 20);
+
+    expect(result.estimatedWeightKg).toBe(20);
+    expect(result.defibrillationEnergyJ).toBe(80);
+    expect(result.fluidBolusMl).toBe(400);
+    expect(result.endotrachealTubeMm.uncuffed).toBe(5);
+  });
+
   it("segnala eta fuori range", () => {
     const result = calculateWetflag(12);
 

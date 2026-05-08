@@ -31,9 +31,13 @@ export const wetflagMetadata = {
 const MIN_AGE = 1;
 const MAX_AGE = 10;
 
-export function calculateWetflag(ageYears: number): WetflagResult {
+export function calculateWetflag(ageYears: number, weightKg = estimateWeightForAge(ageYears)): WetflagResult {
   if (!Number.isFinite(ageYears)) {
     throw new Error("Eta non valida");
+  }
+
+  if (!Number.isFinite(weightKg) || weightKg <= 0) {
+    throw new Error("Peso non valido");
   }
 
   const warnings: string[] = [];
@@ -45,7 +49,7 @@ export function calculateWetflag(ageYears: number): WetflagResult {
     throw new Error("Eta non puo essere negativa");
   }
 
-  const estimatedWeightKg = round1((ageYears + 4) * 2);
+  const estimatedWeightKg = round1(weightKg);
   const defibrillationEnergyJ = round1(4 * estimatedWeightKg);
   const uncuffedTube = round1(ageYears / 4 + 4);
   const cuffedTube = round1(ageYears / 4 + 3.5);
@@ -79,6 +83,10 @@ export function calculateWetflag(ageYears: number): WetflagResult {
       "Defibrillazione, tubo e fluidi richiedono rivalutazione clinica continua."
     ]
   };
+}
+
+export function estimateWeightForAge(ageYears: number) {
+  return round1((ageYears + 4) * 2);
 }
 
 function round1(value: number) {
