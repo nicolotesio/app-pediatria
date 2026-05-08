@@ -1,7 +1,6 @@
-<<<<<<< HEAD
 # Appunti di Pediatria
 
-Webapp personale Next.js per appunti, risorse e strumenti clinici pediatrici. Il nome visuale dell'app e **PediaNotes**.
+Webapp personale Next.js per appunti, risorse e strumenti clinici pediatrici, a cura di **Dr Nicolò Tesio**.
 
 ## Installazione
 
@@ -56,6 +55,3 @@ Il calcolatore WETFLAG e implementato come stima iniziale per eta 1-10 anni e ri
 ## PWA/offline
 
 E incluso un service worker semplice in `public/sw.js`, registrato in produzione. La cache e volutamente minima e va rivalidata prima di un uso clinico offline esteso.
-=======
-# app-pediatria
->>>>>>> f3d3d581409b363ad53b2742b3793af5bf35ae0d

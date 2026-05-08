@@ -8,10 +8,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    default: "PediaNotes",
-    template: "%s | PediaNotes"
+    default: "Appunti di Pediatria",
+    template: "%s | Appunti di Pediatria"
   },
-  description: "Webapp personale per appunti, risorse e strumenti clinici in pediatria.",
+  description: "Webapp personale di Dr Nicolò Tesio per appunti, risorse e strumenti clinici in pediatria.",
   manifest: "/manifest.webmanifest"
 };
 

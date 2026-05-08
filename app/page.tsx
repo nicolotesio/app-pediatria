@@ -40,8 +40,8 @@ export default function HomePage() {
     <div className="pb-16">
       <section className="grid gap-8 py-6 lg:grid-cols-[1fr_24rem] lg:items-end">
         <SectionHeader
-          eyebrow="Appunti di Pediatria"
-          title="PediaNotes"
+          eyebrow="di Dr Nicolò Tesio"
+          title="Appunti di Pediatria"
           description="Webapp personale per appunti, risorse e strumenti clinici pediatrici. Progettata per essere chiara, aggiornable, prudente sulle fonti e pronta a crescere senza backend complesso."
         />
         <div className="rounded-lg border border-teal-200 bg-teal-50 p-5 text-sm leading-6 text-teal-950 dark:border-teal-900 dark:bg-teal-950 dark:text-teal-100">

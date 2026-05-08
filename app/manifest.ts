@@ -3,8 +3,8 @@ import type { MetadataRoute } from "next";
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Appunti di Pediatria",
-    short_name: "PediaNotes",
-    description: "Appunti, risorse e strumenti clinici personali per pediatria.",
+    short_name: "Appunti Pediatria",
+    description: "Appunti, risorse e strumenti clinici personali di Dr Nicolò Tesio.",
     start_url: "/",
     display: "standalone",
     background_color: "#f8fafc",

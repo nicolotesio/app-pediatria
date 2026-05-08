@@ -20,8 +20,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Link href="/" className="flex items-center gap-3">
             <span className="grid size-10 place-items-center rounded-lg bg-teal-700 text-sm font-bold text-white">PN</span>
             <span>
-              <span className="block text-base font-semibold">PediaNotes</span>
-              <span className="block text-xs text-slate-500 dark:text-slate-400">Appunti di Pediatria</span>
+              <span className="block text-base font-semibold">Appunti di Pediatria</span>
+              <span className="block text-xs text-slate-500 dark:text-slate-400">di Dr Nicolò Tesio</span>
             </span>
           </Link>
           <div className="flex items-center gap-2">
