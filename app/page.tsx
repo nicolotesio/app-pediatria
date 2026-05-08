@@ -38,15 +38,12 @@ const sections = [
 export default function HomePage() {
   return (
     <div className="pb-16">
-      <section className="grid gap-8 py-6 lg:grid-cols-[1fr_24rem] lg:items-end">
+      <section className="py-6">
         <SectionHeader
-          eyebrow="di Dr Nicolò Tesio"
+          eyebrow="Dr Nicolò Tesio"
           title="Appunti di Pediatria"
           description="Webapp personale per appunti, risorse e strumenti clinici pediatrici. Progettata per essere chiara, aggiornable, prudente sulle fonti e pronta a crescere senza backend complesso."
         />
-        <div className="rounded-lg border border-teal-200 bg-teal-50 p-5 text-sm leading-6 text-teal-950 dark:border-teal-900 dark:bg-teal-950 dark:text-teal-100">
-          Ogni calcolo clinico deve includere unita, fonte, data di aggiornamento e avviso di verifica. I dataset non validati restano esplicitamente non configurati.
-        </div>
       </section>
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {sections.map((section) => {
@@ -61,6 +58,12 @@ export default function HomePage() {
             />
           );
         })}
+      </section>
+      <section className="mt-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <h2 className="text-xl font-semibold text-slate-950 dark:text-white">Info</h2>
+        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+          Questa webapp è un progetto personale di Dr Nicolò Tesio, pensato per avere rapidamente a disposizione informazioni e tool clinici utili nella pratica pediatrica.
+        </p>
       </section>
     </div>
   );

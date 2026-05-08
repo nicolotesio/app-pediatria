@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Activity, Baby, BookOpenText, Calculator, Home, LifeBuoy, Search } from "lucide-react";
+import { Baby, BookOpenText, Calculator, ExternalLink, HeartPulse, Home, LifeBuoy, Search } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const navItems = [
@@ -7,7 +7,7 @@ const navItems = [
   { href: "/emergenze", label: "Emergenze", icon: LifeBuoy },
   { href: "/calcolatori", label: "Calcolatori", icon: Calculator },
   { href: "/appunti", label: "Appunti", icon: BookOpenText },
-  { href: "/risorse", label: "Risorse", icon: Activity },
+  { href: "/risorse", label: "Risorse", icon: ExternalLink },
   { href: "/genitori", label: "Genitori", icon: Baby },
   { href: "/cerca", label: "Cerca", icon: Search }
 ];
@@ -18,10 +18,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <Link href="/" className="flex items-center gap-3">
-            <span className="grid size-10 place-items-center rounded-lg bg-teal-700 text-sm font-bold text-white">PN</span>
+            <span className="grid size-10 place-items-center rounded-lg border border-teal-200 bg-white text-teal-700 shadow-sm dark:border-teal-800 dark:bg-slate-900 dark:text-teal-300">
+              <HeartPulse className="size-6" aria-hidden="true" strokeWidth={2.2} />
+            </span>
             <span>
               <span className="block text-base font-semibold">Appunti di Pediatria</span>
-              <span className="block text-xs text-slate-500 dark:text-slate-400">di Dr Nicolò Tesio</span>
+              <span className="block text-xs text-slate-500 dark:text-slate-400">Dr Nicolò Tesio</span>
             </span>
           </Link>
           <div className="flex items-center gap-2">
