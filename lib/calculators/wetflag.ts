@@ -1,0 +1,90 @@
+import { clinicalSources } from "@/lib/sources/clinicalSources";
+
+export type WetflagResult = {
+  ageYears: number;
+  estimatedWeightKg: number;
+  defibrillationEnergyJ: number;
+  endotrachealTubeMm: {
+    cuffed: number;
+    uncuffed: number;
+  };
+  fluidBolusMl: number;
+  adrenaline: {
+    micrograms: number;
+    mlOfOneInTenThousand: number;
+  };
+  glucose: {
+    grams: number;
+    d10Ml: number;
+  };
+  warnings: string[];
+  safetyNotes: string[];
+};
+
+export const wetflagMetadata = {
+  source: clinicalSources[0].reference,
+  updatedAt: clinicalSources[0].updatedAt,
+  validity: "Eta 1-10 anni, stime iniziali in emergenza. Usare peso reale appena disponibile.",
+  units: "anni, kg, J, mm ID, ml, microgrammi, grammi"
+};
+
+const MIN_AGE = 1;
+const MAX_AGE = 10;
+
+export function calculateWetflag(ageYears: number): WetflagResult {
+  if (!Number.isFinite(ageYears)) {
+    throw new Error("Eta non valida");
+  }
+
+  const warnings: string[] = [];
+  if (ageYears < MIN_AGE || ageYears > MAX_AGE) {
+    warnings.push(`Eta fuori range validato (${MIN_AGE}-${MAX_AGE} anni): risultati da verificare con particolare cautela.`);
+  }
+
+  if (ageYears < 0) {
+    throw new Error("Eta non puo essere negativa");
+  }
+
+  const estimatedWeightKg = round1((ageYears + 4) * 2);
+  const defibrillationEnergyJ = round1(4 * estimatedWeightKg);
+  const uncuffedTube = round1(ageYears / 4 + 4);
+  const cuffedTube = round1(ageYears / 4 + 3.5);
+  const fluidBolusMl = Math.round(20 * estimatedWeightKg);
+  const adrenalineMicrograms = round1(10 * estimatedWeightKg);
+  const adrenalineMl = round2(0.1 * estimatedWeightKg);
+  const glucoseD10Ml = round1(5 * estimatedWeightKg);
+  const glucoseGrams = round2(glucoseD10Ml * 0.1);
+
+  return {
+    ageYears,
+    estimatedWeightKg,
+    defibrillationEnergyJ,
+    endotrachealTubeMm: {
+      cuffed: cuffedTube,
+      uncuffed: uncuffedTube
+    },
+    fluidBolusMl,
+    adrenaline: {
+      micrograms: adrenalineMicrograms,
+      mlOfOneInTenThousand: adrenalineMl
+    },
+    glucose: {
+      grams: glucoseGrams,
+      d10Ml: glucoseD10Ml
+    },
+    warnings,
+    safetyNotes: [
+      "Usare peso reale, nastro di Broselow o stima locale appena disponibili.",
+      "Confermare concentrazioni dei farmaci prima della somministrazione.",
+      "Defibrillazione, tubo e fluidi richiedono rivalutazione clinica continua."
+    ]
+  };
+}
+
+function round1(value: number) {
+  return Math.round(value * 10) / 10;
+}
+
+function round2(value: number) {
+  return Math.round(value * 100) / 100;
+}
