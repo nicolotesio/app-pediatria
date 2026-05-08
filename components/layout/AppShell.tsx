@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Baby, BookOpenText, Calculator, ExternalLink, HeartPulse, Home, LifeBuoy, Search } from "lucide-react";
+import { Baby, BookOpenText, Calculator, ExternalLink, Home, LifeBuoy, Search } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const navItems = [
@@ -18,8 +18,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
           <Link href="/" className="flex items-center gap-3">
-            <span className="grid size-10 place-items-center rounded-lg border border-teal-200 bg-white text-teal-700 shadow-sm dark:border-teal-800 dark:bg-slate-900 dark:text-teal-300">
-              <HeartPulse className="size-6" aria-hidden="true" strokeWidth={2.2} />
+            <span className="relative grid size-10 place-items-center rounded-lg border border-teal-200 bg-teal-50 text-teal-700 shadow-sm dark:border-teal-800 dark:bg-slate-900 dark:text-teal-300">
+              <Baby className="size-6" aria-hidden="true" strokeWidth={2.1} />
+              <span className="absolute right-1.5 top-1.5 h-2.5 w-2.5 rounded-full bg-rose-400 ring-2 ring-teal-50 dark:ring-slate-900" />
             </span>
             <span>
               <span className="block text-base font-semibold">Appunti di Pediatria</span>
