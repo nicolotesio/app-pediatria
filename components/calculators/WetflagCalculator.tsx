@@ -157,8 +157,8 @@ function ResultItem({
   rows?: Array<{ label: string; value: string }>;
 }) {
   return (
-    <div className="flex min-h-24 rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
-      <div className="flex w-full items-center gap-3">
+    <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
+      <div className="flex min-h-16 items-center gap-3">
         {initial ? <span className={`grid size-8 shrink-0 place-items-center rounded-lg text-sm font-bold shadow-sm ${resultToneClasses[tone]}`}>{initial}</span> : null}
         <div className="min-w-0 flex-1">
           {rows ? (
