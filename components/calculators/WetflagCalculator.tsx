@@ -52,45 +52,68 @@ export function WetflagCalculator() {
             </label>
             <dl className="grid gap-3 sm:grid-cols-2">
               <ResultItem
+                initial="W"
+                tone="blue"
                 label="Peso"
                 value={`${result.estimatedWeightKg} kg`}
                 calculation={selectorValue.estimateWeightFromAge ? `(${result.ageYears} + 4) x 2 = ${result.estimatedWeightKg} kg` : "Peso inserito manualmente."}
                 showCalculation={showCalculations}
               />
               <ResultItem
-                label="Energia defibrillazione"
+                initial="E"
+                tone="amber"
+                label="Energia defibrillazione (iniziale)"
                 value={`${result.defibrillationEnergyJ} J`}
-                calculation={`4 J/kg x ${result.estimatedWeightKg} kg = ${result.defibrillationEnergyJ} J`}
+                calculation={`4 J/kg x ${result.estimatedWeightKg} kg = ${result.defibrillationEnergyJ} J (max 12-200 J sulla base del tipo di defibrillatore)`}
                 showCalculation={showCalculations}
               />
               <ResultItem
+                initial="T"
+                tone="red"
                 label="Tubo ET cuffiato"
                 value={`${result.endotrachealTubeMm.cuffed} mm ID`}
                 calculation={`${result.ageYears} / 4 + 3,5 = ${result.endotrachealTubeMm.cuffed} mm ID`}
                 showCalculation={showCalculations}
               />
               <ResultItem
+                initial="T"
+                tone="red"
                 label="Tubo ET non cuffiato"
                 value={`${result.endotrachealTubeMm.uncuffed} mm ID`}
                 calculation={`${result.ageYears} / 4 + 4 = ${result.endotrachealTubeMm.uncuffed} mm ID`}
                 showCalculation={showCalculations}
               />
               <ResultItem
+                initial="F"
+                tone="cyan"
                 label="Fluid bolus"
-                value={`${result.fluidBolusMl} ml`}
-                calculation={`20 ml/kg x ${result.estimatedWeightKg} kg = ${result.fluidBolusMl} ml`}
+                value={`10 ml/kg: ${result.fluidBolusOptionsMl.tenPerKg} ml; 20 ml/kg: ${result.fluidBolusOptionsMl.twentyPerKg} ml`}
+                calculation={`10 ml/kg x ${result.estimatedWeightKg} kg = ${Math.round(10 * result.estimatedWeightKg)} ml, max 500 ml -> ${result.fluidBolusOptionsMl.tenPerKg} ml; 20 ml/kg x ${result.estimatedWeightKg} kg = ${Math.round(20 * result.estimatedWeightKg)} ml, max 500 ml -> ${result.fluidBolusOptionsMl.twentyPerKg} ml`}
                 showCalculation={showCalculations}
               />
               <ResultItem
+                initial="L"
+                tone="violet"
+                label="Lorazepam"
+                value={`${result.lorazepam.mg} mg`}
+                calculation={`0,1 mg/kg x ${result.estimatedWeightKg} kg = ${roundForDisplay(0.1 * result.estimatedWeightKg)} mg, max 4 mg -> ${result.lorazepam.mg} mg`}
+                showCalculation={showCalculations}
+              />
+              <ResultItem
+                initial="A"
+                tone="red"
                 label="Adrenalina"
-                value={`${result.adrenaline.micrograms} microg; ${result.adrenaline.mlOfOneInTenThousand} ml di 1:10.000`}
-                calculation={`10 microg/kg x ${result.estimatedWeightKg} kg = ${result.adrenaline.micrograms} microg; 0,1 ml/kg x ${result.estimatedWeightKg} kg = ${result.adrenaline.mlOfOneInTenThousand} ml`}
+                value={`${result.adrenaline.micrograms} µg; ${result.adrenaline.mlOfOneInTenThousand} ml di 1:10.000`}
+                note="Da ripetere ogni 3-5 minuti."
+                calculation={`10 µg/kg x ${result.estimatedWeightKg} kg = ${result.adrenaline.micrograms} µg; 0,1 ml/kg x ${result.estimatedWeightKg} kg = ${result.adrenaline.mlOfOneInTenThousand} ml`}
                 showCalculation={showCalculations}
               />
               <ResultItem
+                initial="G"
+                tone="green"
                 label="Glucosio"
                 value={`${result.glucose.grams} g; ${result.glucose.d10Ml} ml D10`}
-                calculation={`5 ml/kg x ${result.estimatedWeightKg} kg = ${result.glucose.d10Ml} ml D10; ${result.glucose.d10Ml} ml x 0,1 g/ml = ${result.glucose.grams} g`}
+                calculation={`2 ml/kg x ${result.estimatedWeightKg} kg = ${result.glucose.d10Ml} ml D10; ${result.glucose.d10Ml} ml x 0,1 g/ml = ${result.glucose.grams} g`}
                 showCalculation={showCalculations}
               />
             </dl>
@@ -125,11 +148,44 @@ function SummaryCard({ result, estimateWeightFromAge }: { result: NonNullable<Re
   );
 }
 
-function ResultItem({ label, value, calculation, showCalculation }: { label: string; value: string; calculation?: string; showCalculation?: boolean }) {
+type ResultTone = "blue" | "amber" | "red" | "cyan" | "violet" | "green";
+
+const resultToneClasses: Record<ResultTone, string> = {
+  blue: "bg-blue-600 text-white",
+  amber: "bg-amber-600 text-white",
+  red: "bg-red-600 text-white",
+  cyan: "bg-cyan-600 text-white",
+  violet: "bg-violet-600 text-white",
+  green: "bg-emerald-600 text-white"
+};
+
+function ResultItem({
+  label,
+  value,
+  calculation,
+  showCalculation,
+  initial,
+  tone = "blue",
+  note
+}: {
+  label: string;
+  value: string;
+  calculation?: string;
+  showCalculation?: boolean;
+  initial?: string;
+  tone?: ResultTone;
+  note?: string;
+}) {
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
-      <dt className="text-sm text-slate-500 dark:text-slate-400">{label}</dt>
-      <dd className="mt-1 text-lg font-semibold text-slate-950 dark:text-white">{value}</dd>
+      <div className="flex items-start gap-3">
+        {initial ? <span className={`grid size-8 shrink-0 place-items-center rounded-lg text-sm font-bold shadow-sm ${resultToneClasses[tone]}`}>{initial}</span> : null}
+        <div className="min-w-0">
+          <dt className="text-sm text-slate-500 dark:text-slate-400">{label}</dt>
+          <dd className="mt-1 text-lg font-semibold text-slate-950 dark:text-white">{value}</dd>
+          {note ? <dd className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{note}</dd> : null}
+        </div>
+      </div>
       {showCalculation && calculation ? (
         <dd className="mt-3 rounded-md bg-blue-50 px-3 py-2 text-sm leading-6 text-blue-950 dark:bg-blue-950/40 dark:text-blue-100">
           {calculation}
@@ -137,4 +193,8 @@ function ResultItem({ label, value, calculation, showCalculation }: { label: str
       ) : null}
     </div>
   );
+}
+
+function roundForDisplay(value: number) {
+  return Math.round(value * 100) / 100;
 }

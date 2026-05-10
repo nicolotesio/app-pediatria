@@ -10,10 +10,13 @@ describe("calculateWetflag", () => {
     expect(result.endotrachealTubeMm.uncuffed).toBe(5);
     expect(result.endotrachealTubeMm.cuffed).toBe(4.5);
     expect(result.fluidBolusMl).toBe(320);
+    expect(result.fluidBolusOptionsMl.tenPerKg).toBe(160);
+    expect(result.fluidBolusOptionsMl.twentyPerKg).toBe(320);
+    expect(result.lorazepam.mg).toBe(1.6);
     expect(result.adrenaline.micrograms).toBe(160);
     expect(result.adrenaline.mlOfOneInTenThousand).toBe(1.6);
-    expect(result.glucose.d10Ml).toBe(80);
-    expect(result.glucose.grams).toBe(8);
+    expect(result.glucose.d10Ml).toBe(32);
+    expect(result.glucose.grams).toBe(3.2);
     expect(result.warnings).toHaveLength(0);
   });
 
@@ -24,6 +27,14 @@ describe("calculateWetflag", () => {
     expect(result.defibrillationEnergyJ).toBe(80);
     expect(result.fluidBolusMl).toBe(400);
     expect(result.endotrachealTubeMm.uncuffed).toBe(5);
+  });
+
+  it("limita fluidi e lorazepam al massimo previsto", () => {
+    const result = calculateWetflag(12, 70);
+
+    expect(result.fluidBolusOptionsMl.tenPerKg).toBe(500);
+    expect(result.fluidBolusOptionsMl.twentyPerKg).toBe(500);
+    expect(result.lorazepam.mg).toBe(4);
   });
 
   it("segnala eta fuori range", () => {

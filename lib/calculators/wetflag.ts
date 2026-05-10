@@ -9,6 +9,13 @@ export type WetflagResult = {
     uncuffed: number;
   };
   fluidBolusMl: number;
+  fluidBolusOptionsMl: {
+    tenPerKg: number;
+    twentyPerKg: number;
+  };
+  lorazepam: {
+    mg: number;
+  };
   adrenaline: {
     micrograms: number;
     mlOfOneInTenThousand: number;
@@ -30,6 +37,8 @@ export const wetflagMetadata = {
 
 const MIN_AGE = 1;
 const MAX_AGE = 10;
+const MAX_FLUID_BOLUS_ML = 500;
+const MAX_LORAZEPAM_MG = 4;
 
 export function calculateWetflag(ageYears: number, weightKg = estimateWeightForAge(ageYears)): WetflagResult {
   if (!Number.isFinite(ageYears)) {
@@ -53,10 +62,12 @@ export function calculateWetflag(ageYears: number, weightKg = estimateWeightForA
   const defibrillationEnergyJ = round1(4 * estimatedWeightKg);
   const uncuffedTube = round1(ageYears / 4 + 4);
   const cuffedTube = round1(ageYears / 4 + 3.5);
-  const fluidBolusMl = Math.round(20 * estimatedWeightKg);
+  const fluidBolusTenMl = cap(Math.round(10 * estimatedWeightKg), MAX_FLUID_BOLUS_ML);
+  const fluidBolusTwentyMl = cap(Math.round(20 * estimatedWeightKg), MAX_FLUID_BOLUS_ML);
+  const lorazepamMg = round2(cap(0.1 * estimatedWeightKg, MAX_LORAZEPAM_MG));
   const adrenalineMicrograms = round1(10 * estimatedWeightKg);
   const adrenalineMl = round2(0.1 * estimatedWeightKg);
-  const glucoseD10Ml = round1(5 * estimatedWeightKg);
+  const glucoseD10Ml = round1(2 * estimatedWeightKg);
   const glucoseGrams = round2(glucoseD10Ml * 0.1);
 
   return {
@@ -67,7 +78,14 @@ export function calculateWetflag(ageYears: number, weightKg = estimateWeightForA
       cuffed: cuffedTube,
       uncuffed: uncuffedTube
     },
-    fluidBolusMl,
+    fluidBolusMl: fluidBolusTwentyMl,
+    fluidBolusOptionsMl: {
+      tenPerKg: fluidBolusTenMl,
+      twentyPerKg: fluidBolusTwentyMl
+    },
+    lorazepam: {
+      mg: lorazepamMg
+    },
     adrenaline: {
       micrograms: adrenalineMicrograms,
       mlOfOneInTenThousand: adrenalineMl
@@ -95,4 +113,8 @@ function round1(value: number) {
 
 function round2(value: number) {
   return Math.round(value * 100) / 100;
+}
+
+function cap(value: number, max: number) {
+  return Math.min(value, max);
 }
