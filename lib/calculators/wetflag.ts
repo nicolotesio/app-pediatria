@@ -7,6 +7,7 @@ export type WetflagResult = {
   endotrachealTubeMm: {
     cuffed: number;
     uncuffed: number;
+    oralDepthCm: number;
   };
   fluidBolusMl: number;
   fluidBolusOptionsMl: {
@@ -62,6 +63,7 @@ export function calculateWetflag(ageYears: number, weightKg = estimateWeightForA
   const defibrillationEnergyJ = round1(4 * estimatedWeightKg);
   const uncuffedTube = round1(ageYears / 4 + 4);
   const cuffedTube = round1(ageYears / 4 + 3.5);
+  const oralTubeDepthCm = round1(ageYears / 2 + 12);
   const fluidBolusTenMl = cap(Math.round(10 * estimatedWeightKg), MAX_FLUID_BOLUS_ML);
   const fluidBolusTwentyMl = cap(Math.round(20 * estimatedWeightKg), MAX_FLUID_BOLUS_ML);
   const lorazepamMg = round2(cap(0.1 * estimatedWeightKg, MAX_LORAZEPAM_MG));
@@ -76,7 +78,8 @@ export function calculateWetflag(ageYears: number, weightKg = estimateWeightForA
     defibrillationEnergyJ,
     endotrachealTubeMm: {
       cuffed: cuffedTube,
-      uncuffed: uncuffedTube
+      uncuffed: uncuffedTube,
+      oralDepthCm: oralTubeDepthCm
     },
     fluidBolusMl: fluidBolusTwentyMl,
     fluidBolusOptionsMl: {

@@ -76,27 +76,32 @@ export function WetflagCalculator() {
                 tone="amber"
                 label="Energia defibrillazione (iniziale)"
                 value={`${result.defibrillationEnergyJ} J`}
-                calculation={`4 J/kg x ${result.estimatedWeightKg} kg = ${result.defibrillationEnergyJ} J (max 12-200 J sulla base del tipo di defibrillatore)`}
+                calculation={`4 J/kg x ${result.estimatedWeightKg} kg = ${result.defibrillationEnergyJ} J (max 120-200 J sulla base del tipo di defibrillatore)`}
                 showCalculation={showCalculations}
               />
               <ResultItem
                 initial="T"
                 tone="red"
                 label="Tubo ET"
-                value={`Cuffiato: ${result.endotrachealTubeMm.cuffed} mm ID; non cuffiato: ${result.endotrachealTubeMm.uncuffed} mm ID`}
+                value={`Cuffiato: ${result.endotrachealTubeMm.cuffed} mm ID; non cuffiato: ${result.endotrachealTubeMm.uncuffed} mm ID; profondità orale: ${result.endotrachealTubeMm.oralDepthCm} cm`}
                 rows={[
                   { label: "Cuffiato", value: `${result.endotrachealTubeMm.cuffed} mm ID` },
-                  { label: "Non cuffiato", value: `${result.endotrachealTubeMm.uncuffed} mm ID` }
+                  { label: "Non cuffiato", value: `${result.endotrachealTubeMm.uncuffed} mm ID` },
+                  { label: "Profondità orale", value: `${result.endotrachealTubeMm.oralDepthCm} cm` }
                 ]}
-                calculation={`${result.ageYears} / 4 + 3,5 = ${result.endotrachealTubeMm.cuffed} mm ID (cuffiato); ${result.ageYears} / 4 + 4 = ${result.endotrachealTubeMm.uncuffed} mm ID (non cuffiato)`}
+                calculation={`${result.ageYears} / 4 + 3,5 = ${result.endotrachealTubeMm.cuffed} mm ID cuffiato; ${result.ageYears} / 4 + 4 = ${result.endotrachealTubeMm.uncuffed} mm ID non cuffiato; ${result.ageYears} / 2 + 12 = ${result.endotrachealTubeMm.oralDepthCm} cm profondità orale`}
                 showCalculation={showCalculations}
               />
               <ResultItem
                 initial="F"
                 tone="cyan"
                 label="Fluid bolus"
-                value={`10 ml/kg: ${result.fluidBolusOptionsMl.tenPerKg} ml; 20 ml/kg: ${result.fluidBolusOptionsMl.twentyPerKg} ml`}
-                calculation={`10 ml/kg x ${result.estimatedWeightKg} kg = ${Math.round(10 * result.estimatedWeightKg)} ml, max 500 ml -> ${result.fluidBolusOptionsMl.tenPerKg} ml; 20 ml/kg x ${result.estimatedWeightKg} kg = ${Math.round(20 * result.estimatedWeightKg)} ml, max 500 ml -> ${result.fluidBolusOptionsMl.twentyPerKg} ml`}
+                value={`Emergenza medica: ${result.fluidBolusOptionsMl.twentyPerKg} ml; trauma: ${result.fluidBolusOptionsMl.tenPerKg} ml`}
+                rows={[
+                  { label: "Emergenza medica (20 ml/kg)", value: `${result.fluidBolusOptionsMl.twentyPerKg} ml` },
+                  { label: "Trauma (10 ml/kg)", value: `${result.fluidBolusOptionsMl.tenPerKg} ml` }
+                ]}
+                calculation={`20 ml/kg x ${result.estimatedWeightKg} kg = ${Math.round(20 * result.estimatedWeightKg)} ml, max 500 ml -> ${result.fluidBolusOptionsMl.twentyPerKg} ml; 10 ml/kg x ${result.estimatedWeightKg} kg = ${Math.round(10 * result.estimatedWeightKg)} ml, max 500 ml -> ${result.fluidBolusOptionsMl.tenPerKg} ml`}
                 showCalculation={showCalculations}
               />
               <ResultItem
@@ -153,7 +158,7 @@ function ResultItem({
 }) {
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
-      <div className="flex items-start gap-3">
+      <div className="flex items-center gap-3">
         {initial ? <span className={`grid size-8 shrink-0 place-items-center rounded-lg text-sm font-bold shadow-sm ${resultToneClasses[tone]}`}>{initial}</span> : null}
         <div className="min-w-0 flex-1">
           {rows ? (

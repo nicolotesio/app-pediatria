@@ -9,6 +9,7 @@ describe("calculateWetflag", () => {
     expect(result.defibrillationEnergyJ).toBe(64);
     expect(result.endotrachealTubeMm.uncuffed).toBe(5);
     expect(result.endotrachealTubeMm.cuffed).toBe(4.5);
+    expect(result.endotrachealTubeMm.oralDepthCm).toBe(14);
     expect(result.fluidBolusMl).toBe(320);
     expect(result.fluidBolusOptionsMl.tenPerKg).toBe(160);
     expect(result.fluidBolusOptionsMl.twentyPerKg).toBe(320);
