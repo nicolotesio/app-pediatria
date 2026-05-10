@@ -37,12 +37,7 @@ const sections = [
 export default function HomePage() {
   return (
     <div className="pb-16">
-      <section className="py-6">
-        <p className="max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-          Una webapp personale per tenere a portata di mano appunti, risorse selezionate e strumenti clinici utili nella pratica pediatrica quotidiana, con contenuti organizzati per consultazione rapida e aggiornamento progressivo.
-        </p>
-      </section>
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="grid gap-4 pt-2 sm:grid-cols-2 lg:grid-cols-3">
         {sections.map((section) => {
           const Icon = section.icon;
           return (
