@@ -63,7 +63,7 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1, ageMax = 12, we
             step={1}
             value={value.ageYears}
             onChange={(event) => updateAge(Number(event.target.value))}
-            className="h-2 w-full accent-teal-600"
+            className="h-2 w-full accent-blue-600"
           />
           <div className="flex justify-between text-sm text-slate-500 dark:text-slate-400">
             <span>{formatYears(ageMin)}</span>
@@ -82,7 +82,7 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1, ageMax = 12, we
                   type="checkbox"
                   checked={value.estimateWeightFromAge}
                   onChange={(event) => updateEstimate(event.target.checked)}
-                  className="size-4 rounded border-slate-300 accent-teal-600"
+                  className="size-4 rounded border-slate-300 accent-blue-600"
                 />
                 Stima da eta
               </label>
@@ -98,7 +98,7 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1, ageMax = 12, we
             value={value.weightKg}
             disabled={value.estimateWeightFromAge}
             onChange={(event) => updateWeight(Number(event.target.value))}
-            className="h-2 w-full accent-teal-600 disabled:cursor-not-allowed disabled:opacity-60"
+            className="h-2 w-full accent-blue-600 disabled:cursor-not-allowed disabled:opacity-60"
           />
           <div className="flex justify-between text-sm text-slate-500 dark:text-slate-400">
             <span>{weightMin} kg</span>

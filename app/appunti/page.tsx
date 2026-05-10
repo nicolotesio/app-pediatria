@@ -24,7 +24,7 @@ export default function NotesPage() {
             title={note.title}
             meta={
               <div className="flex flex-wrap gap-2">
-                <Badge tone="teal">{note.category}</Badge>
+                <Badge tone="blue">{note.category}</Badge>
                 <Badge>Agg. {note.updatedAt}</Badge>
               </div>
             }

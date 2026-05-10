@@ -24,7 +24,7 @@ export default function ParentsPage() {
             description={sheet.content}
             meta={
               <div className="flex flex-wrap gap-2">
-                <Badge tone="teal">{sheet.category}</Badge>
+                <Badge tone="blue">{sheet.category}</Badge>
                 <Badge>Agg. {sheet.updatedAt}</Badge>
               </div>
             }

@@ -15,7 +15,7 @@ const config: Config = {
           muted: "#64748b",
           line: "#d7dee8",
           surface: "#f6f8fb",
-          teal: "#0f766e",
+          teal: "#2563eb",
           blue: "#2563eb",
           amber: "#b45309",
           red: "#b91c1c"

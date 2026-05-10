@@ -31,8 +31,8 @@ export default function CalculatorsPage() {
             description={calculator.description}
             meta={
               <div className="flex items-center justify-between gap-3">
-                <Calculator className="size-5 text-teal-700 dark:text-teal-300" />
-                <Badge tone={calculator.status === "Disponibile" ? "teal" : "amber"}>{calculator.status}</Badge>
+                <Calculator className="size-5 text-blue-700 dark:text-blue-300" />
+                <Badge tone={calculator.status === "Disponibile" ? "blue" : "amber"}>{calculator.status}</Badge>
               </div>
             }
           />

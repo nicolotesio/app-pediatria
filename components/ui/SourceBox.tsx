@@ -11,7 +11,7 @@ export function SourceBox({ source, updatedAt, validity, units }: SourceBoxProps
   return (
     <aside className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
       <div className="flex gap-3">
-        <ShieldCheck className="mt-0.5 size-5 shrink-0 text-teal-700 dark:text-teal-300" />
+        <ShieldCheck className="mt-0.5 size-5 shrink-0 text-blue-700 dark:text-blue-300" />
         <dl className="grid gap-2 text-sm">
           <div>
             <dt className="font-semibold text-slate-950 dark:text-white">Fonte/riferimento</dt>

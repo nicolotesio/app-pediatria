@@ -20,12 +20,12 @@ export default function ResourcesPage() {
             description={resource.description}
             meta={
               <div className="flex flex-wrap items-center gap-2">
-                <Badge tone="teal">{resource.category}</Badge>
+                <Badge tone="blue">{resource.category}</Badge>
                 <ExternalLink className="size-4 text-slate-400" />
               </div>
             }
           >
-            <a href={resource.url} target="_blank" rel="noreferrer" className="text-sm font-semibold text-teal-700 hover:text-teal-900 dark:text-teal-300">
+            <a href={resource.url} target="_blank" rel="noreferrer" className="text-sm font-semibold text-blue-700 hover:text-blue-900 dark:text-blue-300">
               Apri risorsa
             </a>
             {resource.personalNote ? <p className="mt-3 text-sm text-slate-600 dark:text-slate-300">Nota personale: {resource.personalNote}</p> : null}

@@ -54,7 +54,8 @@ export default function HomePage() {
               href={section.href}
               title={section.title}
               description={section.description}
-              meta={<Icon className="size-6 text-teal-700 dark:text-teal-300" />}
+              inlineHeader
+              meta={<Icon className="size-6 text-blue-700 dark:text-blue-300" />}
             />
           );
         })}

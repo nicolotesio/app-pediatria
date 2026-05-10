@@ -16,15 +16,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6">
-          <Link href="/" className="flex items-center gap-3">
-            <span className="relative grid size-10 place-items-center rounded-lg border border-teal-200 bg-teal-50 text-teal-700 shadow-sm dark:border-teal-800 dark:bg-slate-900 dark:text-teal-300">
-              <Baby className="size-6" aria-hidden="true" strokeWidth={2.1} />
-              <span className="absolute right-1.5 top-1.5 h-2.5 w-2.5 rounded-full bg-rose-400 ring-2 ring-teal-50 dark:ring-slate-900" />
-            </span>
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
+          <Link href="/" className="flex items-center">
             <span>
-              <span className="block text-base font-semibold">Appunti di Pediatria</span>
-              <span className="block text-xs text-slate-500 dark:text-slate-400">Dr Nicolò Tesio</span>
+              <span className="block text-xl font-semibold leading-tight sm:text-2xl">
+                Appunti di <span className="text-blue-700 dark:text-blue-300">Pediatria</span>
+              </span>
+              <span className="block text-sm text-slate-500 dark:text-slate-400">Dr Nicolò Tesio</span>
             </span>
           </Link>
           <div className="flex items-center gap-2">
@@ -35,7 +33,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-900 dark:hover:text-white"
+                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:bg-blue-50 hover:text-blue-800 dark:text-slate-300 dark:hover:bg-blue-950 dark:hover:text-blue-100"
                   >
                     <Icon className="size-4" />
                     {item.label}
@@ -53,8 +51,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           {navItems.slice(0, 6).map((item) => {
             const Icon = item.icon;
             return (
-              <Link key={item.href} href={item.href} className="flex flex-col items-center gap-1 px-1 py-2 text-[11px] text-slate-600 dark:text-slate-300">
-                <Icon className="size-4" />
+              <Link key={item.href} href={item.href} className="flex min-h-16 flex-col items-center justify-center gap-1 px-1 py-3 text-xs font-medium text-slate-600 dark:text-slate-300">
+                <Icon className="size-5" />
                 {item.label}
               </Link>
             );

@@ -19,9 +19,9 @@ export function SearchPageClient() {
       ) : (
         <div className="grid gap-3">
           {results.map((item) => (
-            <Link key={`${item.type}-${item.id}`} href={item.href} className="rounded-lg border border-slate-200 bg-white p-4 hover:border-teal-300 dark:border-slate-800 dark:bg-slate-900">
+            <Link key={`${item.type}-${item.id}`} href={item.href} className="rounded-lg border border-slate-200 bg-white p-4 hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900">
               <div className="mb-2 flex flex-wrap gap-2">
-                <Badge tone="teal">{item.type}</Badge>
+                <Badge tone="blue">{item.type}</Badge>
                 <Badge>{item.category}</Badge>
               </div>
               <h2 className="font-semibold text-slate-950 dark:text-white">{item.title}</h2>
