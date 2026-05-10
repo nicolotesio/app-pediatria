@@ -76,7 +76,7 @@ export function WetflagCalculator() {
                 tone="amber"
                 label="Energia defibrillatore (iniziale)"
                 value={`${result.defibrillationEnergyJ} J`}
-                calculation={`4 J/kg x ${result.estimatedWeightKg} kg = ${result.defibrillationEnergyJ} J (max 120-200 J sulla base del tipo di defibrillatore)`}
+                calculation={`4 J/kg x ${result.estimatedWeightKg} kg = ${roundForDisplay(4 * result.estimatedWeightKg)} J, max 200 J -> ${result.defibrillationEnergyJ} J`}
                 showCalculation={showCalculations}
               />
               <ResultItem
@@ -178,9 +178,8 @@ function ResultItem({
               <dd className="text-left text-lg font-semibold leading-snug text-slate-950 sm:text-right dark:text-white">
                 {valueParts
                   ? valueParts.map((part) => (
-                      <span key={part} className="block sm:inline">
+                      <span key={part} className="block">
                         {part}
-                        {part !== valueParts[valueParts.length - 1] ? <span className="hidden sm:inline">; </span> : null}
                       </span>
                     ))
                   : value}

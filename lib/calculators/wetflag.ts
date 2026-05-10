@@ -38,6 +38,7 @@ export const wetflagMetadata = {
 
 const MIN_AGE = 1;
 const MAX_AGE = 12;
+const MAX_DEFIBRILLATION_ENERGY_J = 200;
 const MAX_FLUID_BOLUS_ML = 500;
 const MAX_LORAZEPAM_MG = 4;
 
@@ -60,7 +61,7 @@ export function calculateWetflag(ageYears: number, weightKg = estimateWeightForA
   }
 
   const estimatedWeightKg = round1(weightKg);
-  const defibrillationEnergyJ = round1(4 * estimatedWeightKg);
+  const defibrillationEnergyJ = cap(round1(4 * estimatedWeightKg), MAX_DEFIBRILLATION_ENERGY_J);
   const uncuffedTube = round1(ageYears / 4 + 4);
   const cuffedTube = round1(ageYears / 4 + 3.5);
   const oralTubeDepthCm = round1(ageYears / 2 + 12);

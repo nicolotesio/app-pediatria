@@ -33,6 +33,7 @@ describe("calculateWetflag", () => {
   it("limita fluidi e lorazepam al massimo previsto", () => {
     const result = calculateWetflag(12, 70);
 
+    expect(result.defibrillationEnergyJ).toBe(200);
     expect(result.fluidBolusOptionsMl.tenPerKg).toBe(500);
     expect(result.fluidBolusOptionsMl.twentyPerKg).toBe(500);
     expect(result.lorazepam.mg).toBe(4);
