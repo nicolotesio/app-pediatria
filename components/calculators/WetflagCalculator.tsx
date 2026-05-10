@@ -6,6 +6,17 @@ import { CalculatorLayout } from "@/components/CalculatorLayout";
 import { AgeWeightSelector, estimatePediatricWeightKg, type AgeWeightValue } from "@/components/calculators/AgeWeightSelector";
 import { WarningBox } from "@/components/ui/WarningBox";
 
+type ResultTone = "blue" | "amber" | "red" | "cyan" | "violet" | "green";
+
+const resultToneClasses: Record<ResultTone, string> = {
+  blue: "bg-blue-600 text-white",
+  amber: "bg-amber-600 text-white",
+  red: "bg-red-600 text-white",
+  cyan: "bg-cyan-600 text-white",
+  violet: "bg-violet-600 text-white",
+  green: "bg-emerald-600 text-white"
+};
+
 export function WetflagCalculator() {
   const [selectorValue, setSelectorValue] = useState<AgeWeightValue>({
     ageYears: 4,
@@ -29,6 +40,8 @@ export function WetflagCalculator() {
       validity={wetflagMetadata.validity}
       units={wetflagMetadata.units}
       unframed
+      showSource={false}
+      warning="Stime rapide per emergenza pediatrica. Verificare sempre peso reale, concentrazioni disponibili, protocolli locali e risposta clinica prima di somministrare farmaci, fluidi o energia."
     >
       <div className="grid gap-5">
         <AgeWeightSelector value={selectorValue} onChange={setSelectorValue} />
@@ -37,11 +50,10 @@ export function WetflagCalculator() {
           <WarningBox>Selezionare età e peso validi per visualizzare i risultati.</WarningBox>
         ) : (
           <div className="grid gap-4">
-            <SummaryCard result={result} estimateWeightFromAge={selectorValue.estimateWeightFromAge} />
             {result.warnings.map((warning) => (
               <WarningBox key={warning}>{warning}</WarningBox>
             ))}
-            <label className="flex w-fit items-center gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200">
+            <label className="flex w-fit cursor-pointer items-center gap-3 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-800 shadow-sm transition hover:border-blue-300 hover:bg-blue-100 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-100 dark:hover:bg-blue-950">
               <input
                 type="checkbox"
                 checked={showCalculations}
@@ -56,7 +68,7 @@ export function WetflagCalculator() {
                 tone="blue"
                 label="Peso"
                 value={`${result.estimatedWeightKg} kg`}
-                calculation={selectorValue.estimateWeightFromAge ? `(${result.ageYears} + 4) x 2 = ${result.estimatedWeightKg} kg` : "Peso inserito manualmente."}
+                calculation={selectorValue.estimateWeightFromAge ? getWeightCalculation(result.ageYears, result.estimatedWeightKg) : "Peso inserito manualmente."}
                 showCalculation={showCalculations}
               />
               <ResultItem
@@ -70,17 +82,13 @@ export function WetflagCalculator() {
               <ResultItem
                 initial="T"
                 tone="red"
-                label="Tubo ET cuffiato"
-                value={`${result.endotrachealTubeMm.cuffed} mm ID`}
-                calculation={`${result.ageYears} / 4 + 3,5 = ${result.endotrachealTubeMm.cuffed} mm ID`}
-                showCalculation={showCalculations}
-              />
-              <ResultItem
-                initial="T"
-                tone="red"
-                label="Tubo ET non cuffiato"
-                value={`${result.endotrachealTubeMm.uncuffed} mm ID`}
-                calculation={`${result.ageYears} / 4 + 4 = ${result.endotrachealTubeMm.uncuffed} mm ID`}
+                label="Tubo ET"
+                value={`Cuffiato: ${result.endotrachealTubeMm.cuffed} mm ID; non cuffiato: ${result.endotrachealTubeMm.uncuffed} mm ID`}
+                rows={[
+                  { label: "Cuffiato", value: `${result.endotrachealTubeMm.cuffed} mm ID` },
+                  { label: "Non cuffiato", value: `${result.endotrachealTubeMm.uncuffed} mm ID` }
+                ]}
+                calculation={`${result.ageYears} / 4 + 3,5 = ${result.endotrachealTubeMm.cuffed} mm ID (cuffiato); ${result.ageYears} / 4 + 4 = ${result.endotrachealTubeMm.uncuffed} mm ID (non cuffiato)`}
                 showCalculation={showCalculations}
               />
               <ResultItem
@@ -117,47 +125,12 @@ export function WetflagCalculator() {
                 showCalculation={showCalculations}
               />
             </dl>
-            <div className="rounded-lg bg-slate-50 p-4 dark:bg-slate-950">
-              <h3 className="font-semibold text-slate-950 dark:text-white">Note di sicurezza</h3>
-              <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                {result.safetyNotes.map((note) => (
-                  <li key={note}>{note}</li>
-                ))}
-              </ul>
-            </div>
           </div>
         )}
       </div>
     </CalculatorLayout>
   );
 }
-
-function SummaryCard({ result, estimateWeightFromAge }: { result: NonNullable<ReturnType<typeof calculateWetflag>>; estimateWeightFromAge: boolean }) {
-  return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
-      <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">Riepilogo</h3>
-      <p className="mt-3 text-xl font-semibold text-slate-950 dark:text-white">
-        Età: {result.ageYears} anni | Peso: {result.estimatedWeightKg} kg
-      </p>
-      {estimateWeightFromAge ? (
-        <p className="mt-3 border-t border-slate-200 pt-3 text-sm leading-6 text-slate-600 dark:border-slate-800 dark:text-slate-300">
-          Peso calcolato con formula: (età + 4) x 2.
-        </p>
-      ) : null}
-    </div>
-  );
-}
-
-type ResultTone = "blue" | "amber" | "red" | "cyan" | "violet" | "green";
-
-const resultToneClasses: Record<ResultTone, string> = {
-  blue: "bg-blue-600 text-white",
-  amber: "bg-amber-600 text-white",
-  red: "bg-red-600 text-white",
-  cyan: "bg-cyan-600 text-white",
-  violet: "bg-violet-600 text-white",
-  green: "bg-emerald-600 text-white"
-};
 
 function ResultItem({
   label,
@@ -166,7 +139,8 @@ function ResultItem({
   showCalculation,
   initial,
   tone = "blue",
-  note
+  note,
+  rows
 }: {
   label: string;
   value: string;
@@ -175,24 +149,59 @@ function ResultItem({
   initial?: string;
   tone?: ResultTone;
   note?: string;
+  rows?: Array<{ label: string; value: string }>;
 }) {
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
       <div className="flex items-start gap-3">
         {initial ? <span className={`grid size-8 shrink-0 place-items-center rounded-lg text-sm font-bold shadow-sm ${resultToneClasses[tone]}`}>{initial}</span> : null}
-        <div className="min-w-0">
-          <dt className="text-sm text-slate-500 dark:text-slate-400">{label}</dt>
-          <dd className="mt-1 text-lg font-semibold text-slate-950 dark:text-white">{value}</dd>
+        <div className="min-w-0 flex-1">
+          {rows ? (
+            <>
+              <dt className="text-sm text-slate-500 dark:text-slate-400">{label}</dt>
+              <dd className="mt-2 grid gap-2">
+                {rows.map((row) => (
+                  <div key={row.label} className="flex items-center justify-between gap-4">
+                    <span className="text-sm text-slate-600 dark:text-slate-300">{row.label}</span>
+                    <span className="text-right text-lg font-semibold text-slate-950 dark:text-white">{row.value}</span>
+                  </div>
+                ))}
+              </dd>
+            </>
+          ) : (
+            <div className="flex items-start justify-between gap-4">
+              <dt className="text-sm text-slate-500 dark:text-slate-400">{label}</dt>
+              <dd className="text-right text-lg font-semibold text-slate-950 dark:text-white">{value}</dd>
+            </div>
+          )}
           {note ? <dd className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{note}</dd> : null}
         </div>
       </div>
       {showCalculation && calculation ? (
         <dd className="mt-3 rounded-md bg-blue-50 px-3 py-2 text-sm leading-6 text-blue-950 dark:bg-blue-950/40 dark:text-blue-100">
-          {calculation}
+          {formatCalculation(calculation).map((line) => (
+            <span key={line} className="block">
+              {line}
+            </span>
+          ))}
         </dd>
       ) : null}
     </div>
   );
+}
+
+function getWeightCalculation(ageYears: number, estimatedWeightKg: number) {
+  if (ageYears <= 5) return `2 x ${ageYears} + 8 = ${estimatedWeightKg} kg`;
+  return `3 x ${ageYears} + 7 = ${estimatedWeightKg} kg`;
+}
+
+function formatCalculation(calculation: string) {
+  return calculation
+    .replaceAll("; ", ";\n")
+    .replaceAll(" (", "\n(")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
 }
 
 function roundForDisplay(value: number) {

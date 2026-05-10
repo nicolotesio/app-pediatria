@@ -38,9 +38,16 @@ describe("calculateWetflag", () => {
   });
 
   it("segnala eta fuori range", () => {
-    const result = calculateWetflag(12);
+    const result = calculateWetflag(13);
 
     expect(result.warnings[0]).toContain("fuori range");
+  });
+
+  it("stima il peso con formula 6-12 anni", () => {
+    const result = calculateWetflag(6);
+
+    expect(result.estimatedWeightKg).toBe(25);
+    expect(result.warnings).toHaveLength(0);
   });
 
   it("rifiuta eta negativa", () => {

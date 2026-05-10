@@ -16,7 +16,8 @@ type AgeWeightSelectorProps = {
 };
 
 export function estimatePediatricWeightKg(ageYears: number) {
-  return Math.round((ageYears + 4) * 2);
+  if (ageYears <= 5) return Math.round(2 * ageYears + 8);
+  return Math.round(3 * ageYears + 7);
 }
 
 export function AgeWeightSelector({ value, onChange, ageMin = 1, ageMax = 12, weightMin = 10, weightMax = 70 }: AgeWeightSelectorProps) {
@@ -60,7 +61,7 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1, ageMax = 12, we
             type="range"
             min={ageMin}
             max={ageMax}
-            step={1}
+            step={0.5}
             value={value.ageYears}
             onChange={(event) => updateAge(Number(event.target.value))}
             className="h-2 w-full accent-blue-600"
@@ -115,5 +116,6 @@ function clamp(value: number, min: number, max: number) {
 }
 
 function formatYears(value: number) {
-  return value === 1 ? "1 anno" : `${value} anni`;
+  const formatted = Number.isInteger(value) ? String(value) : String(value).replace(".", ",");
+  return value === 1 ? "1 anno" : `${formatted} anni`;
 }
