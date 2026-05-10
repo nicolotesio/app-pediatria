@@ -19,10 +19,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
           <Link href="/" className="flex items-center">
             <span>
-              <span className="block text-xl font-semibold leading-tight sm:text-2xl">
+              <span className="block text-2xl font-semibold leading-tight sm:text-3xl">
                 Appunti di <span className="text-blue-700 dark:text-blue-300">Pediatria</span>
               </span>
-              <span className="block text-sm text-slate-500 dark:text-slate-400">Dr Nicolò Tesio</span>
+              <span className="block text-sm text-slate-500 sm:text-base dark:text-slate-400">Dr Nicolò Tesio</span>
             </span>
           </Link>
           <div className="flex items-center gap-2">
