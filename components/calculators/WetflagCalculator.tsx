@@ -27,6 +27,7 @@ export function WetflagCalculator() {
       updatedAt={wetflagMetadata.updatedAt}
       validity={wetflagMetadata.validity}
       units={wetflagMetadata.units}
+      unframed
     >
       <div className="grid gap-5">
         <AgeWeightSelector value={selectorValue} onChange={setSelectorValue} />

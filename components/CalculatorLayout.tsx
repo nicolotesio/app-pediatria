@@ -9,12 +9,13 @@ type CalculatorLayoutProps = {
   validity: string;
   units: string;
   children: React.ReactNode;
+  unframed?: boolean;
 };
 
-export function CalculatorLayout({ title, description, source, updatedAt, validity, units, children }: CalculatorLayoutProps) {
+export function CalculatorLayout({ title, description, source, updatedAt, validity, units, children, unframed = false }: CalculatorLayoutProps) {
   return (
     <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
-      <div className="rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+      <div className={unframed ? undefined : "rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"}>
         {title ? <h2 className="text-2xl font-semibold text-slate-950 dark:text-white">{title}</h2> : null}
         {description ? <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{description}</p> : null}
         <div className={title || description ? "mt-5" : undefined}>{children}</div>
