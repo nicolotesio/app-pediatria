@@ -115,6 +115,7 @@ export function WetflagCalculator() {
                 tone="red"
                 label="Adrenalina"
                 value={`${result.adrenaline.micrograms} µg; ${result.adrenaline.mlOfOneInTenThousand} ml di 1:10.000`}
+                valueParts={[`${result.adrenaline.micrograms} µg`, `${result.adrenaline.mlOfOneInTenThousand} ml di 1:10.000`]}
                 calculation={`10 µg/kg x ${result.estimatedWeightKg} kg = ${result.adrenaline.micrograms} µg; 0,1 ml/kg x ${result.estimatedWeightKg} kg = ${result.adrenaline.mlOfOneInTenThousand} ml; Da ripetere ogni 3-5 minuti.`}
                 showCalculation={showCalculations}
               />
@@ -123,6 +124,7 @@ export function WetflagCalculator() {
                 tone="green"
                 label="Glucosio"
                 value={`${result.glucose.grams} g; ${result.glucose.d10Ml} ml D10`}
+                valueParts={[`${result.glucose.grams} g`, `${result.glucose.d10Ml} ml D10`]}
                 calculation={`2 ml/kg x ${result.estimatedWeightKg} kg = ${result.glucose.d10Ml} ml D10; ${result.glucose.d10Ml} ml x 0,1 g/ml = ${result.glucose.grams} g`}
                 showCalculation={showCalculations}
               />
@@ -137,6 +139,7 @@ export function WetflagCalculator() {
 function ResultItem({
   label,
   value,
+  valueParts,
   calculation,
   showCalculation,
   initial,
@@ -145,6 +148,7 @@ function ResultItem({
 }: {
   label: string;
   value?: string;
+  valueParts?: string[];
   calculation?: string;
   showCalculation?: boolean;
   initial?: string;
@@ -169,9 +173,18 @@ function ResultItem({
               </dd>
             </div>
           ) : (
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
+            <div className="grid items-center gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:gap-4">
               <dt className="text-sm text-slate-500 dark:text-slate-400">{label}</dt>
-              <dd className="text-right text-lg font-semibold text-slate-950 dark:text-white">{value}</dd>
+              <dd className="text-left text-lg font-semibold leading-snug text-slate-950 sm:text-right dark:text-white">
+                {valueParts
+                  ? valueParts.map((part) => (
+                      <span key={part} className="block sm:inline">
+                        {part}
+                        {part !== valueParts[valueParts.length - 1] ? <span className="hidden sm:inline">; </span> : null}
+                      </span>
+                    ))
+                  : value}
+              </dd>
             </div>
           )}
         </div>
