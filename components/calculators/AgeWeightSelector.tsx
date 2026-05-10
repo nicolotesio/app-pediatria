@@ -51,7 +51,7 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1, ageMax = 12, we
         <div className="grid gap-3">
           <div className="flex items-center justify-between gap-4">
             <label htmlFor="age-years" className="text-base font-semibold text-slate-950 dark:text-white">
-              Eta
+              Età
             </label>
             <output className="text-xl font-semibold text-slate-950 dark:text-white">{formatYears(value.ageYears)}</output>
           </div>
@@ -84,7 +84,7 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1, ageMax = 12, we
                   onChange={(event) => updateEstimate(event.target.checked)}
                   className="size-4 rounded border-slate-300 accent-blue-600"
                 />
-                Stima da eta
+                Stima da età
               </label>
             </div>
             <output className="text-xl font-semibold text-slate-950 dark:text-white">{value.weightKg} kg</output>

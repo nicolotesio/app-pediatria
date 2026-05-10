@@ -23,8 +23,6 @@ export function WetflagCalculator() {
 
   return (
     <CalculatorLayout
-      title="Calcolatore WETFLAG"
-      description="Stime rapide per emergenza pediatrica basate su eta. I valori sono un supporto iniziale e non sostituiscono peso reale, protocolli locali e giudizio clinico."
       source={wetflagMetadata.source}
       updatedAt={wetflagMetadata.updatedAt}
       validity={wetflagMetadata.validity}
@@ -34,22 +32,15 @@ export function WetflagCalculator() {
         <AgeWeightSelector value={selectorValue} onChange={setSelectorValue} />
 
         {!result ? (
-          <WarningBox>Selezionare eta e peso validi per visualizzare i risultati.</WarningBox>
+          <WarningBox>Selezionare età e peso validi per visualizzare i risultati.</WarningBox>
         ) : (
           <div className="grid gap-4">
-            <ClinicalNotice
-              title="Neonati e basso peso"
-              text="Eta inferiore a 1 anno o peso inferiore a 10 kg: considerare linee guida neonatali ALS o fare riferimento a RCUK."
-            />
-            <ClinicalNotice
-              title="Bambini grandi e adolescenti"
-              text="Nei bambini con peso corporeo elevato, considerare il dosaggio sul peso ideale per i farmaci idrofili. Per eta superiore a 12 anni possono essere utilizzati algoritmi per adulti, secondo giudizio clinico."
-            />
+            <SummaryCard result={result} estimateWeightFromAge={selectorValue.estimateWeightFromAge} />
             {result.warnings.map((warning) => (
               <WarningBox key={warning}>{warning}</WarningBox>
             ))}
             <dl className="grid gap-3 sm:grid-cols-2">
-              <ResultItem label="Peso stimato" value={`${result.estimatedWeightKg} kg`} />
+              <ResultItem label="Peso" value={`${result.estimatedWeightKg} kg`} />
               <ResultItem label="Energia defibrillazione" value={`${result.defibrillationEnergyJ} J`} />
               <ResultItem label="Tubo ET cuffiato" value={`${result.endotrachealTubeMm.cuffed} mm ID`} />
               <ResultItem label="Tubo ET non cuffiato" value={`${result.endotrachealTubeMm.uncuffed} mm ID`} />
@@ -57,12 +48,6 @@ export function WetflagCalculator() {
               <ResultItem label="Adrenalina" value={`${result.adrenaline.micrograms} microg; ${result.adrenaline.mlOfOneInTenThousand} ml di 1:10.000`} />
               <ResultItem label="Glucosio" value={`${result.glucose.grams} g; ${result.glucose.d10Ml} ml D10`} />
             </dl>
-            <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
-              <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">Riepilogo</h3>
-              <p className="mt-3 text-xl font-semibold text-slate-950 dark:text-white">
-                Eta: {result.ageYears} anni | Peso: {result.estimatedWeightKg} kg
-              </p>
-            </div>
             <div className="rounded-lg bg-slate-50 p-4 dark:bg-slate-950">
               <h3 className="font-semibold text-slate-950 dark:text-white">Note di sicurezza</h3>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-slate-600 dark:text-slate-300">
@@ -78,16 +63,18 @@ export function WetflagCalculator() {
   );
 }
 
-function ClinicalNotice({ title, text }: { title: string; text: string }) {
+function SummaryCard({ result, estimateWeightFromAge }: { result: NonNullable<ReturnType<typeof calculateWetflag>>; estimateWeightFromAge: boolean }) {
   return (
-    <div className="rounded-lg border border-sky-200 bg-sky-50 p-4 text-sky-950 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-100">
-      <div className="flex items-start gap-3">
-        <span className="grid size-7 shrink-0 place-items-center rounded-md bg-sky-200 text-sm font-bold text-sky-950 dark:bg-sky-900 dark:text-sky-100">i</span>
-        <div>
-          <h3 className="font-semibold">{title}</h3>
-          <p className="mt-2 text-sm leading-6">{text}</p>
-        </div>
-      </div>
+    <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-950">
+      <h3 className="text-sm font-medium text-slate-500 dark:text-slate-400">Riepilogo</h3>
+      <p className="mt-3 text-xl font-semibold text-slate-950 dark:text-white">
+        Età: {result.ageYears} anni | Peso: {result.estimatedWeightKg} kg
+      </p>
+      {estimateWeightFromAge ? (
+        <p className="mt-3 border-t border-slate-200 pt-3 text-sm leading-6 text-slate-600 dark:border-slate-800 dark:text-slate-300">
+          Peso calcolato con formula: (età + 4) x 2.
+        </p>
+      ) : null}
     </div>
   );
 }
