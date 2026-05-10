@@ -6,11 +6,7 @@ import { parentSheetCategories, parentSheets } from "@/data/parentSheets";
 export default function ParentsPage() {
   return (
     <div className="grid gap-6 pb-16">
-      <SectionHeader
-        eyebrow="Genitori"
-        title="Schede informative"
-        description="Materiali semplici e non tecnici, pensati come base modificabile per counselling con i genitori."
-      />
+      <SectionHeader title="GENITORI" />
       <div className="flex flex-wrap gap-2">
         {parentSheetCategories.map((category) => (
           <Badge key={category} tone="blue">{category}</Badge>

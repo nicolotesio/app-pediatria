@@ -1,26 +1,33 @@
-import { WetflagCalculator } from "@/components/calculators/WetflagCalculator";
+import { Calculator, Syringe } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { WarningBox } from "@/components/ui/WarningBox";
 import { Badge } from "@/components/ui/Badge";
 
 export default function EmergenciesPage() {
   return (
-    <div className="grid gap-8 pb-16">
-      <SectionHeader
-        eyebrow="Emergenze"
-        title="Strumenti di supporto clinico"
-        description="Verificare sempre dosi, linee guida locali e condizioni del paziente."
-      />
-      <WarningBox>
-        Strumenti di supporto clinico. Verificare sempre dosi, linee guida locali e condizioni del paziente.
-      </WarningBox>
-      <WetflagCalculator />
-      <Card
-        title="Dosi farmaci emergenza secondo algoritmi PALS"
-        description="Placeholder intenzionale: dosaggi e algoritmi non configurati. Aggiungere solo tabelle validate, fonti, data di aggiornamento, range e controlli."
-        meta={<Badge tone="amber">Non configurato</Badge>}
-      />
+    <div className="pb-16">
+      <SectionHeader title="EMERGENZE" />
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Card
+          href="/emergenze/wetflag"
+          title="Calcolatore WETFLAG"
+          description="Stime rapide per emergenza pediatrica."
+          inlineHeader
+          meta={<Calculator className="size-6 text-blue-700 dark:text-blue-300" />}
+        />
+        <Card
+          href="/emergenze/farmaci"
+          title="Calcolatore farmaci in emergenza"
+          description="Dosi e preparazioni per farmaci usati in emergenza."
+          inlineHeader
+          meta={
+            <div className="flex items-center gap-2">
+              <Syringe className="size-6 text-blue-700 dark:text-blue-300" />
+              <Badge tone="amber">In preparazione</Badge>
+            </div>
+          }
+        />
+      </div>
     </div>
   );
 }

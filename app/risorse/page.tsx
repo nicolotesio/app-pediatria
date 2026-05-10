@@ -7,11 +7,7 @@ import { resources } from "@/data/resources";
 export default function ResourcesPage() {
   return (
     <div className="pb-16">
-      <SectionHeader
-        eyebrow="Risorse"
-        title="Link utili"
-        description="Raccolta modificabile di risorse per consultazione rapida, con categoria e note personali."
-      />
+      <SectionHeader title="RISORSE" />
       <div className="grid gap-4 lg:grid-cols-2">
         {resources.map((resource) => (
           <Card

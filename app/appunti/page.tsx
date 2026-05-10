@@ -7,11 +7,7 @@ import { noteCategories, notes } from "@/data/notes";
 export default function NotesPage() {
   return (
     <div className="grid gap-6 pb-16">
-      <SectionHeader
-        eyebrow="Appunti"
-        title="Appunti clinici"
-        description="Categorie modificabili, tag, fonti e contenuti Markdown/MDX pronti per essere estesi."
-      />
+      <SectionHeader title="APPUNTI" />
       <div className="flex flex-wrap gap-2">
         {noteCategories.map((category) => (
           <Badge key={category} tone="blue">{category}</Badge>
