@@ -1,6 +1,5 @@
 import { Baby, BookOpenText, Calculator, ExternalLink, LifeBuoy } from "lucide-react";
 import { Card } from "@/components/ui/Card";
-import { SectionHeader } from "@/components/ui/SectionHeader";
 
 const sections = [
   {
@@ -39,11 +38,9 @@ export default function HomePage() {
   return (
     <div className="pb-16">
       <section className="py-6">
-        <SectionHeader
-          eyebrow="Dr Nicolò Tesio"
-          title="Appunti di Pediatria"
-          description="Webapp personale per appunti, risorse e strumenti clinici pediatrici. Progettata per essere chiara, aggiornable, prudente sulle fonti e pronta a crescere senza backend complesso."
-        />
+        <p className="max-w-3xl text-lg leading-8 text-slate-600 dark:text-slate-300">
+          Una webapp personale per tenere a portata di mano appunti, risorse selezionate e strumenti clinici utili nella pratica pediatrica quotidiana, con contenuti organizzati per consultazione rapida e aggiornamento progressivo.
+        </p>
       </section>
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {sections.map((section) => {
