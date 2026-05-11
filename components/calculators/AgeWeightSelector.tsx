@@ -16,13 +16,14 @@ type AgeWeightSelectorProps = {
 };
 
 export function estimatePediatricWeightKg(ageYears: number) {
-  if (ageYears <= 5) return Math.round(2 * ageYears + 8);
+  if (ageYears < 1) return round1(0.5 * ageToMonths(ageYears) + 4);
+  if (ageYears < 6) return Math.round(2 * ageYears + 8);
   return Math.round(3 * ageYears + 7);
 }
 
-export function AgeWeightSelector({ value, onChange, ageMin = 1, ageMax = 12, weightMin = 10, weightMax = 70 }: AgeWeightSelectorProps) {
+export function AgeWeightSelector({ value, onChange, ageMin = 1 / 12, ageMax = 12, weightMin = 3, weightMax = 70 }: AgeWeightSelectorProps) {
   const updateAge = (nextAge: number) => {
-    const ageYears = clamp(nextAge, ageMin, ageMax);
+    const ageYears = normalizeAgeForSelector(clamp(nextAge, ageMin, ageMax));
     onChange({
       ...value,
       ageYears,
@@ -33,7 +34,7 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1, ageMax = 12, we
   const updateWeight = (nextWeight: number) => {
     onChange({
       ...value,
-      weightKg: clamp(nextWeight, weightMin, weightMax),
+      weightKg: normalizeWeightForSelector(clamp(nextWeight, weightMin, weightMax)),
       estimateWeightFromAge: false
     });
   };
@@ -54,21 +55,21 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1, ageMax = 12, we
             <label htmlFor="age-years" className="text-base font-semibold text-slate-950 dark:text-white">
               Età
             </label>
-            <output className="text-xl font-semibold text-slate-950 dark:text-white">{formatYears(value.ageYears)}</output>
+            <output className="text-xl font-semibold text-slate-950 dark:text-white">{formatAge(value.ageYears)}</output>
           </div>
           <input
             id="age-years"
             type="range"
             min={ageMin}
             max={ageMax}
-            step={0.5}
+            step={1 / 12}
             value={value.ageYears}
             onChange={(event) => updateAge(Number(event.target.value))}
             className="h-2 w-full accent-blue-600"
           />
           <div className="flex justify-between text-sm text-slate-500 dark:text-slate-400">
-            <span>{formatYears(ageMin)}</span>
-            <span>{formatYears(ageMax)}</span>
+            <span>{formatAge(ageMin)}</span>
+            <span>{formatAge(ageMax)}</span>
           </div>
         </div>
 
@@ -95,7 +96,7 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1, ageMax = 12, we
             type="range"
             min={weightMin}
             max={weightMax}
-            step={1}
+            step={0.5}
             value={value.weightKg}
             disabled={value.estimateWeightFromAge}
             onChange={(event) => updateWeight(Number(event.target.value))}
@@ -115,7 +116,42 @@ function clamp(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
 
-function formatYears(value: number) {
-  const formatted = Number.isInteger(value) ? String(value) : String(value).replace(".", ",");
-  return value === 1 ? "1 anno" : `${formatted} anni`;
+function ageToMonths(ageYears: number) {
+  return Math.round(ageYears * 12);
+}
+
+function ageToYears(ageMonths: number) {
+  return ageMonths / 12;
+}
+
+function normalizeAgeForSelector(ageYears: number) {
+  const ageMonths = ageToMonths(ageYears);
+  if (ageMonths < 24) return ageToYears(ageMonths);
+  return ageToYears(Math.round(ageMonths / 6) * 6);
+}
+
+function normalizeWeightForSelector(weightKg: number) {
+  if (weightKg <= 10) return Math.round(weightKg * 2) / 2;
+  return Math.round(weightKg);
+}
+
+function formatAge(value: number) {
+  const totalMonths = ageToMonths(value);
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+  const parts: string[] = [];
+
+  if (years > 0) {
+    parts.push(years === 1 ? "1 anno" : `${years} anni`);
+  }
+
+  if (months > 0) {
+    parts.push(months === 1 ? "1 mese" : `${months} mesi`);
+  }
+
+  return parts.join(" e ") || "0 mesi";
+}
+
+function round1(value: number) {
+  return Math.round(value * 10) / 10;
 }

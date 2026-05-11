@@ -40,9 +40,37 @@ describe("calculateWetflag", () => {
   });
 
   it("segnala eta fuori range", () => {
-    const result = calculateWetflag(13);
+    const result = calculateWetflag(0);
 
     expect(result.warnings[0]).toContain("fuori range");
+  });
+
+  it("stima il peso con formula sotto 1 anno", () => {
+    const result = calculateWetflag(11 / 12);
+
+    expect(result.estimatedWeightKg).toBe(9.5);
+    expect(result.warnings).toHaveLength(0);
+  });
+
+  it("include 1 mese nel range validato", () => {
+    const result = calculateWetflag(1 / 12);
+
+    expect(result.estimatedWeightKg).toBe(4.5);
+    expect(result.warnings).toHaveLength(0);
+  });
+
+  it("include 1 mese anche con valore decimale del selettore", () => {
+    const result = calculateWetflag(0.083);
+
+    expect(result.estimatedWeightKg).toBe(4.5);
+    expect(result.warnings).toHaveLength(0);
+  });
+
+  it("stima il peso con formula 1-5 anni fino a 5 anni e 11 mesi", () => {
+    const result = calculateWetflag(71 / 12);
+
+    expect(result.estimatedWeightKg).toBe(20);
+    expect(result.warnings).toHaveLength(0);
   });
 
   it("stima il peso con formula 6-12 anni", () => {

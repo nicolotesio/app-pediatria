@@ -32,11 +32,11 @@ export type WetflagResult = {
 export const wetflagMetadata = {
   source: clinicalSources[0].reference,
   updatedAt: clinicalSources[0].updatedAt,
-  validity: "Eta 1-12 anni, stime iniziali in emergenza. Usare peso reale appena disponibile.",
+  validity: "Eta 1 mese-12 anni, stime iniziali in emergenza. Usare peso reale appena disponibile.",
   units: "anni, kg, J, mm ID, ml, microgrammi, grammi"
 };
 
-const MIN_AGE = 1;
+const MIN_AGE = 1 / 12;
 const MAX_AGE = 12;
 const MAX_DEFIBRILLATION_ENERGY_J = 200;
 const MAX_FLUID_BOLUS_ML = 500;
@@ -56,8 +56,9 @@ export function calculateWetflag(ageYears: number, weightKg = estimateWeightForA
   }
 
   const warnings: string[] = [];
-  if (ageYears < MIN_AGE || ageYears > MAX_AGE) {
-    warnings.push(`Eta fuori range validato (${MIN_AGE}-${MAX_AGE} anni): risultati da verificare con particolare cautela.`);
+  const ageMonths = Math.round(ageYears * 12);
+  if (ageMonths < Math.round(MIN_AGE * 12) || ageMonths > Math.round(MAX_AGE * 12)) {
+    warnings.push("Eta fuori range validato (1 mese-12 anni): risultati da verificare con particolare cautela.");
   }
 
   const estimatedWeightKg = round1(weightKg);
@@ -108,9 +109,9 @@ export function calculateWetflag(ageYears: number, weightKg = estimateWeightForA
 }
 
 export function estimateWeightForAge(ageYears: number) {
-  if (ageYears < 1) return round1(0.5 * ageYears * 12 + 4);
-  if (ageYears <= 5) return round1(2 * ageYears + 8);
-  return round1(3 * ageYears + 7);
+  if (ageYears < 1) return round1(0.5 * Math.round(ageYears * 12) + 4);
+  if (ageYears < 6) return Math.round(2 * ageYears + 8);
+  return Math.round(3 * ageYears + 7);
 }
 
 function round1(value: number) {

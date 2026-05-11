@@ -35,7 +35,7 @@ export function CalculatorLayout({
       </div>
       <div className="space-y-4">
         {showSource && source && updatedAt && validity && units ? <SourceBox source={source} updatedAt={updatedAt} validity={validity} units={units} /> : null}
-        <WarningBox title="Verifica clinica obbligatoria">
+        <WarningBox title={null}>
           {warning ?? "Strumento di supporto clinico. Verificare sempre dosi, linee guida locali, peso reale e condizioni del paziente."}
         </WarningBox>
       </div>
