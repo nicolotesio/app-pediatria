@@ -89,7 +89,7 @@ export function WetflagCalculator() {
                   { label: "interno tubo non cuffiato", value: `${result.endotrachealTubeMm.uncuffed} mm`, symbol: "⌀" },
                   { label: "Profondità orale", value: `${result.endotrachealTubeMm.oralDepthCm} cm` }
                 ]}
-                calculation={`${result.ageYears} / 4 + 3,5 = ${result.endotrachealTubeMm.cuffed} mm ID cuffiato; ${result.ageYears} / 4 + 4 = ${result.endotrachealTubeMm.uncuffed} mm ID non cuffiato; ${result.ageYears} / 2 + 12 = ${result.endotrachealTubeMm.oralDepthCm} cm profondità orale`}
+                calculation={`${formatAgeForCalculation(result.ageYears)} / 4 + 3,5 = ${result.endotrachealTubeMm.cuffed} mm ID cuffiato; ${formatAgeForCalculation(result.ageYears)} / 4 + 4 = ${result.endotrachealTubeMm.uncuffed} mm ID non cuffiato; ${formatAgeForCalculation(result.ageYears)} / 2 + 12 = ${result.endotrachealTubeMm.oralDepthCm} cm profondità orale`}
                 showCalculation={showCalculations}
               />
               <ResultItem
@@ -209,9 +209,9 @@ function renderValueParts(valueParts: string[]) {
 }
 
 function getWeightCalculation(ageYears: number, estimatedWeightKg: number) {
-  if (ageYears < 1) return `0,5 x ${Math.round(ageYears * 12)} mesi + 4 = ${estimatedWeightKg} kg`;
-  if (ageYears < 6) return `2 x ${ageYears} + 8 = ${estimatedWeightKg} kg`;
-  return `3 x ${ageYears} + 7 = ${estimatedWeightKg} kg`;
+  if (ageYears < 1) return `0,5 x ${Math.round(ageYears * 12)} mesi (${formatAgeForCalculation(ageYears)}) + 4 = ${estimatedWeightKg} kg`;
+  if (ageYears < 6) return `2 x ${formatAgeForCalculation(ageYears)} + 8 = ${estimatedWeightKg} kg`;
+  return `3 x ${formatAgeForCalculation(ageYears)} + 7 = ${estimatedWeightKg} kg`;
 }
 
 function formatCalculation(calculation: string) {
@@ -225,4 +225,12 @@ function formatCalculation(calculation: string) {
 
 function roundForDisplay(value: number) {
   return Math.round(value * 100) / 100;
+}
+
+function formatAgeForCalculation(ageYears: number) {
+  return `${round1ForDisplay(ageYears).toString().replace(".", ",")} anni`;
+}
+
+function round1ForDisplay(value: number) {
+  return Math.round(value * 10) / 10;
 }

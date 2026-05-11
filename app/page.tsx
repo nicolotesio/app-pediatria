@@ -1,4 +1,5 @@
 import { Baby, BookOpenText, Calculator, ExternalLink, LifeBuoy } from "lucide-react";
+import { HomeSearchBox } from "@/components/HomeSearchBox";
 import { Card } from "@/components/ui/Card";
 
 const sections = [
@@ -36,8 +37,9 @@ const sections = [
 
 export default function HomePage() {
   return (
-    <div className="pb-16">
-      <section className="grid gap-4 pt-2 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-5 pb-16">
+      <HomeSearchBox />
+      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {sections.map((section) => {
           const Icon = section.icon;
           return (
@@ -52,9 +54,8 @@ export default function HomePage() {
           );
         })}
       </section>
-      <section className="mt-8 rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <h2 className="text-xl font-semibold text-slate-950 dark:text-white">Info</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">
+      <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <p className="max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">
           Questa webapp è un progetto personale di Dr Nicolò Tesio, pensato per avere rapidamente a disposizione informazioni e tool clinici utili nella pratica pediatrica.
         </p>
       </section>

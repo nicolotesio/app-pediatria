@@ -28,7 +28,7 @@ export const resources: Resource[] = [
     title: "INTERGROWTH-21st",
     description: "Risorse su crescita fetale e neonatale. Dataset non ancora configurato.",
     url: "https://intergrowth21.tghn.org/",
-    category: "Neonatologia"
+    category: "Crescita"
   },
   {
     id: "peditools",

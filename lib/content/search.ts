@@ -4,7 +4,7 @@ import { resources } from "@/data/resources";
 
 export type SearchItem = {
   id: string;
-  type: "Appunto" | "Risorsa" | "Genitori";
+  type: "Appunto" | "Risorsa" | "Genitori" | "Calcolatore";
   title: string;
   description: string;
   href: string;
@@ -12,6 +12,22 @@ export type SearchItem = {
 };
 
 export const searchIndex: SearchItem[] = [
+  {
+    id: "wetflag",
+    type: "Calcolatore",
+    title: "WETFLAG",
+    description: "Calcolatore rapido per emergenza pediatrica: peso, energia, tubo ET, fluidi, lorazepam, adrenalina e glucosio.",
+    href: "/emergenze/wetflag",
+    category: "Emergenze"
+  },
+  {
+    id: "farmaci-emergenza",
+    type: "Calcolatore",
+    title: "Farmaci in emergenza",
+    description: "Calcolatore per posologia dei farmaci usati in emergenza pediatrica.",
+    href: "/emergenze/farmaci",
+    category: "Emergenze"
+  },
   ...notes.map((note) => ({
     id: note.id,
     type: "Appunto" as const,
