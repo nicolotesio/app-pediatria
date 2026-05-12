@@ -1,4 +1,5 @@
-import { ExternalLink, Headphones, Newspaper, Stethoscope, TrendingUp } from "lucide-react";
+import Link from "next/link";
+import { ExternalLink, Headphones, MessageSquarePlus, Newspaper, Stethoscope, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { resources, type Resource } from "@/data/resources";
@@ -27,6 +28,16 @@ export default function ResourcesPage() {
   return (
     <div className="grid gap-5 pb-16">
       <SectionHeader title="RISORSE" />
+      <Link
+        href="/feedback"
+        className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-blue-950 shadow-sm transition hover:border-blue-300 hover:bg-blue-100 dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-100 dark:hover:bg-blue-950"
+      >
+        <MessageSquarePlus className="mt-0.5 size-5 shrink-0" />
+        <span>
+          <span className="block text-sm font-semibold">Suggerisci una miglioria</span>
+          <span className="mt-1 block text-xs leading-5 text-blue-900 dark:text-blue-100">Invia feedback, errori o idee per nuovi contenuti.</span>
+        </span>
+      </Link>
       <div className="grid gap-4">
         {groupedResources.map((group) => (
           <ResourceGroup key={group.category} category={group.category} resources={group.resources} />

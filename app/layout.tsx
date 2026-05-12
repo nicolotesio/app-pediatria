@@ -19,7 +19,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="it" suppressHydrationWarning>
       <body className={inter.className}>
-        <AppShell>{children}</AppShell>
+        <div id="app-shell">
+          <AppShell>{children}</AppShell>
+        </div>
         <ServiceWorkerRegister />
       </body>
     </html>

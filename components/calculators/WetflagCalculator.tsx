@@ -42,6 +42,7 @@ export function WetflagCalculator() {
       units={wetflagMetadata.units}
       unframed
       showSource={false}
+      warningPlacement="bottom"
       warning="Calcoli rapidi per emergenza pediatrica. Confermare sempre peso reale, dosaggi, concentrazioni disponibili, protocolli locali e valutazione clinica prima della somministrazione."
     >
       <div className="grid gap-5">
@@ -85,11 +86,11 @@ export function WetflagCalculator() {
                 tone="red"
                 label="Tubo ET"
                 rows={[
-                  { label: "interno tubo cuffiato", value: `${result.endotrachealTubeMm.cuffed} mm`, symbol: "⌀" },
-                  { label: "interno tubo non cuffiato", value: `${result.endotrachealTubeMm.uncuffed} mm`, symbol: "⌀" },
+                  { label: "⌀ interno tubo cuffiato", value: `${result.endotrachealTubeMm.cuffed} mm` },
+                  { label: "⌀ interno tubo non cuffiato", value: `${result.endotrachealTubeMm.uncuffed} mm` },
                   { label: "Profondità orale", value: `${result.endotrachealTubeMm.oralDepthCm} cm` }
                 ]}
-                calculation={`${formatAgeForCalculation(result.ageYears)} / 4 + 3,5 = ${result.endotrachealTubeMm.cuffed} mm ID cuffiato; ${formatAgeForCalculation(result.ageYears)} / 4 + 4 = ${result.endotrachealTubeMm.uncuffed} mm ID non cuffiato; ${formatAgeForCalculation(result.ageYears)} / 2 + 12 = ${result.endotrachealTubeMm.oralDepthCm} cm profondità orale`}
+                calculation={`${formatAgeForCalculation(result.ageYears)} / 4 + 3,5 = ${result.endotrachealTubeMm.cuffed} mm ⌀ interno tubo cuffiato; ${formatAgeForCalculation(result.ageYears)} / 4 + 4 = ${result.endotrachealTubeMm.uncuffed} mm ⌀ interno tubo non cuffiato; ${formatAgeForCalculation(result.ageYears)} / 2 + 12 = ${result.endotrachealTubeMm.oralDepthCm} cm profondità orale`}
                 showCalculation={showCalculations}
               />
               <ResultItem

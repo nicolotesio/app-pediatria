@@ -28,6 +28,14 @@ export const searchIndex: SearchItem[] = [
     href: "/emergenze/farmaci",
     category: "Emergenze"
   },
+  {
+    id: "feedback",
+    type: "Risorsa",
+    title: "Feedback",
+    description: "Invia migliorie, errori o idee per nuovi contenuti dell'app.",
+    href: "/feedback",
+    category: "Risorse"
+  },
   ...notes.map((note) => ({
     id: note.id,
     type: "Appunto" as const,

@@ -35,6 +35,7 @@ export function EmergencyDrugsCalculator() {
     <CalculatorLayout
       unframed
       showSource={false}
+      warningPlacement="bottom"
       warning="Calcoli rapidi per emergenza pediatrica. Confermare sempre peso reale, dosaggi, concentrazioni disponibili, protocolli locali e valutazione clinica prima della somministrazione."
     >
       <div className="grid gap-5">
