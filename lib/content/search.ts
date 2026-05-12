@@ -36,6 +36,14 @@ export const searchIndex: SearchItem[] = [
     href: "/feedback",
     category: "Risorse"
   },
+  {
+    id: "informazioni",
+    type: "Risorsa",
+    title: "Informazioni",
+    description: "Dettagli sul progetto, feedback e note di utilizzo dell'app.",
+    href: "/informazioni",
+    category: "Risorse"
+  },
   ...notes.map((note) => ({
     id: note.id,
     type: "Appunto" as const,

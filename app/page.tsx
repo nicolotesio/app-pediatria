@@ -1,4 +1,4 @@
-import { Baby, BookOpenText, Calculator, ExternalLink, LifeBuoy } from "lucide-react";
+import { Baby, BookOpenText, Calculator, ExternalLink, Info, LifeBuoy } from "lucide-react";
 import { HomeSearchBox } from "@/components/HomeSearchBox";
 import { Card } from "@/components/ui/Card";
 
@@ -32,6 +32,12 @@ const sections = [
     description: "Schede semplici per comunicazione e counselling.",
     href: "/genitori",
     icon: Baby
+  },
+  {
+    title: "Informazioni",
+    description: "Dettagli sul progetto, feedback e note di utilizzo.",
+    href: "/informazioni",
+    icon: Info
   }
 ];
 
@@ -53,11 +59,6 @@ export default function HomePage() {
             />
           );
         })}
-      </section>
-      <section className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <p className="max-w-3xl text-sm leading-6 text-slate-600 dark:text-slate-300">
-          Questa webapp è un progetto personale di Dr Nicolò Tesio, pensato per avere rapidamente a disposizione informazioni e tool clinici utili nella pratica pediatrica.
-        </p>
       </section>
     </div>
   );
