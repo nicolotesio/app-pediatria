@@ -109,29 +109,29 @@ export const resources: Resource[] = [
   },
   {
     id: "spotify-podcast-6alg13n",
-    title: "Podcast pediatrico",
-    description: "Podcast Spotify per aggiornamento clinico pediatrico.",
+    title: "Pediatrics On Call",
+    description: "Podcast dell'American Academy of Pediatrics con aggiornamenti clinici e discussioni pediatriche.",
     url: "https://open.spotify.com/show/6alg13nFB89i6x2gQLdr8b?si=f93ffb122c2c437c",
     category: "Podcast"
   },
   {
     id: "spotify-podcast-6pcwg2",
-    title: "Podcast pediatrico",
-    description: "Podcast Spotify per aggiornamento clinico pediatrico.",
+    title: "The Cribsiders",
+    description: "Podcast di aggiornamento pediatrico con taglio clinico pratico.",
     url: "https://open.spotify.com/show/6pcWg2l8FEKh44wIV3RMVz?si=dca54b3da01041b9",
     category: "Podcast"
   },
   {
     id: "spotify-podcast-0ivsle",
-    title: "Podcast pediatrico",
-    description: "Podcast Spotify per aggiornamento clinico pediatrico.",
+    title: "Pediagogy",
+    description: "Podcast pediatrico per ripasso e apprendimento clinico.",
     url: "https://open.spotify.com/show/0IvSleRkY7kabfbqr9RuCL?si=cf766895248b4201",
     category: "Podcast"
   },
   {
     id: "spotify-podcast-1knyupr",
-    title: "Podcast pediatrico",
-    description: "Podcast Spotify per aggiornamento clinico pediatrico.",
+    title: "Pedscases.com",
+    description: "Podcast con casi e contenuti didattici pediatrici.",
     url: "https://open.spotify.com/show/1KnYuprLi8HXWFE7t75TRK?si=cf986998f3e345a9",
     category: "Podcast"
   }
