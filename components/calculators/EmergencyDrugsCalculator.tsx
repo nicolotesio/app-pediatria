@@ -22,7 +22,6 @@ export function EmergencyDrugsCalculator() {
     weightKg: estimatePediatricWeightKg(4),
     estimateWeightFromAge: true
   });
-  const [showCalculations, setShowCalculations] = useState(false);
 
   const result = useMemo(() => {
     try {
@@ -45,19 +44,9 @@ export function EmergencyDrugsCalculator() {
           <WarningBox>Selezionare età e peso validi per visualizzare i risultati.</WarningBox>
         ) : (
           <div className="grid gap-4">
-            <label className="flex w-fit cursor-pointer items-center gap-3 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-800 shadow-sm transition hover:border-blue-300 hover:bg-blue-100 dark:border-blue-900 dark:bg-blue-950/50 dark:text-blue-100 dark:hover:bg-blue-950">
-              <input
-                type="checkbox"
-                checked={showCalculations}
-                onChange={(event) => setShowCalculations(event.target.checked)}
-                className="size-4 rounded border-slate-300 accent-blue-600"
-              />
-              Mostra calcoli
-            </label>
-
             <div className="grid gap-5">
               {result.sections.map((section) => (
-                <DrugSectionCard key={section.id} section={section} showCalculations={showCalculations} />
+                <DrugSectionCard key={section.id} section={section} />
               ))}
             </div>
           </div>
@@ -67,8 +56,9 @@ export function EmergencyDrugsCalculator() {
   );
 }
 
-function DrugSectionCard({ section, showCalculations }: { section: DrugSection; showCalculations: boolean }) {
-  const [isOpen, setIsOpen] = useState(true);
+function DrugSectionCard({ section }: { section: DrugSection }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [showCalculations, setShowCalculations] = useState(false);
 
   return (
     <section className="grid gap-3">
@@ -98,6 +88,15 @@ function DrugSectionCard({ section, showCalculations }: { section: DrugSection; 
             ))}
           </div>
         ) : null}
+
+        <button
+          type="button"
+          onClick={() => setShowCalculations((value) => !value)}
+          className="mt-3 inline-flex w-fit items-center gap-1 rounded-md px-0 py-1 text-xs font-semibold text-blue-700 transition hover:text-blue-900 dark:text-blue-300 dark:hover:text-blue-100"
+        >
+          {showCalculations ? "Nascondi calcoli" : "Mostra calcoli"}
+          <ChevronDown className={`size-4 transition ${showCalculations ? "rotate-180" : ""}`} />
+        </button>
 
         {showCalculations ? (
           <div className="mt-3 rounded-md bg-blue-50 px-3 py-2 text-sm leading-6 text-blue-950 dark:bg-blue-950/40 dark:text-blue-100">
