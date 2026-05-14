@@ -3,6 +3,15 @@
 import { useMemo, useState } from "react";
 import { Gauge, Ruler, Scale } from "lucide-react";
 import {
+  bmiFemale,
+  bmiMale,
+  heightFemale,
+  heightMale,
+  type SiedpLmsRow,
+  weightFemale,
+  weightMale
+} from "@/data/siedp2006";
+import {
   calculateAgeDecimalFromDates,
   calculateSiedpBmi,
   calculateSiedpMetric,
@@ -21,6 +30,7 @@ import { WarningBox } from "@/components/ui/WarningBox";
 type AgeMode = "slider" | "dates";
 
 type SubmittedResult = {
+  sex: SiedpSex;
   ageYears: number;
   weight: SiedpMetricResult | null;
   height: SiedpMetricResult | null;
@@ -89,6 +99,7 @@ export function SiedpGrowthCalculator() {
 
     try {
       setSubmittedResult({
+        sex: sex as SiedpSex,
         ageYears: effectiveAge,
         weight: hasWeight ? calculateSiedpMetric("weight", sex as SiedpSex, effectiveAge, parsedWeight) : null,
         height: hasHeight ? calculateSiedpMetric("height", sex as SiedpSex, effectiveAge, parsedHeight) : null,
@@ -240,6 +251,8 @@ export function SiedpGrowthCalculator() {
 }
 
 function Results({ result }: { result: SubmittedResult }) {
+  const [showCharts, setShowCharts] = useState(false);
+
   return (
     <section className="grid gap-3">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -282,7 +295,143 @@ function Results({ result }: { result: SubmittedResult }) {
           <MissingResultCard icon={<Gauge className="size-5" />} label="BMI" value="Non calcolabile" />
         )}
       </div>
+      <button
+        type="button"
+        onClick={() => setShowCharts((value) => !value)}
+        className="w-fit rounded-md border border-blue-200 bg-white px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 dark:border-blue-900 dark:bg-slate-950 dark:text-blue-300 dark:hover:bg-blue-950/40"
+      >
+        {showCharts ? "Nascondi grafici" : "Visualizza grafici"}
+      </button>
+      {showCharts ? <GrowthCharts result={result} /> : null}
     </section>
+  );
+}
+
+function GrowthCharts({ result }: { result: SubmittedResult }) {
+  return (
+    <section className="grid gap-4">
+      <h3 className="text-lg font-bold text-slate-950 dark:text-white">Grafici sperimentali</h3>
+      <div className="grid gap-4">
+        {result.weight ? (
+          <GrowthChart
+            title="Peso per età"
+            yLabel="Peso"
+            unit="kg"
+            rows={getRows("weight", result.sex)}
+            patient={{ age: result.ageYears, value: result.weight.value }}
+          />
+        ) : null}
+        {result.height ? (
+          <GrowthChart
+            title="Altezza per età"
+            yLabel="Altezza"
+            unit="cm"
+            rows={getRows("height", result.sex)}
+            patient={{ age: result.ageYears, value: result.height.value }}
+          />
+        ) : null}
+        {result.bmi ? (
+          <GrowthChart
+            title="BMI per età"
+            yLabel="BMI"
+            unit="kg/m²"
+            rows={getRows("bmi", result.sex)}
+            patient={{ age: result.ageYears, value: result.bmi.value }}
+            showBmiThresholds
+          />
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
+function GrowthChart({
+  title,
+  yLabel,
+  unit,
+  rows,
+  patient,
+  showBmiThresholds = false
+}: {
+  title: string;
+  yLabel: string;
+  unit: string;
+  rows: SiedpLmsRow[];
+  patient: { age: number; value: number };
+  showBmiThresholds?: boolean;
+}) {
+  const width = 760;
+  const height = 320;
+  const padding = { top: 24, right: 24, bottom: 38, left: 48 };
+  const ageMin = 2;
+  const ageMax = 20;
+  const series = [
+    { label: "+2 DS", values: rows.map((row) => point(row, 2)), color: "#dc2626", width: 1.5 },
+    { label: "+1 DS", values: rows.map((row) => point(row, 1)), color: "#f59e0b", width: 1.3 },
+    { label: "M", values: rows.map((row) => point(row, 0)), color: "#2563eb", width: 2.2 },
+    { label: "-1 DS", values: rows.map((row) => point(row, -1)), color: "#f59e0b", width: 1.3 },
+    { label: "-2 DS", values: rows.map((row) => point(row, -2)), color: "#dc2626", width: 1.5 }
+  ];
+  const bmiThresholds = showBmiThresholds
+    ? [
+        { label: "Sovrappeso", values: rows.filter((row) => row.ow !== undefined).map((row) => ({ age: row.age, value: row.ow as number })), color: "#0891b2" },
+        { label: "Obesità", values: rows.filter((row) => row.ob !== undefined).map((row) => ({ age: row.age, value: row.ob as number })), color: "#be123c" }
+      ]
+    : [];
+  const allValues = [
+    ...series.flatMap((item) => item.values.map((itemPoint) => itemPoint.value)),
+    ...bmiThresholds.flatMap((item) => item.values.map((itemPoint) => itemPoint.value)),
+    patient.value
+  ];
+  const rawMin = Math.min(...allValues);
+  const rawMax = Math.max(...allValues);
+  const yPadding = Math.max((rawMax - rawMin) * 0.08, 1);
+  const yMin = rawMin - yPadding;
+  const yMax = rawMax + yPadding;
+
+  const x = (age: number) => padding.left + ((age - ageMin) / (ageMax - ageMin)) * (width - padding.left - padding.right);
+  const y = (value: number) => padding.top + ((yMax - value) / (yMax - yMin)) * (height - padding.top - padding.bottom);
+  const pathFor = (values: Array<{ age: number; value: number }>) => values.map((itemPoint, index) => `${index === 0 ? "M" : "L"} ${x(itemPoint.age).toFixed(1)} ${y(itemPoint.value).toFixed(1)}`).join(" ");
+  const patientX = x(patient.age);
+  const patientY = y(patient.value);
+  const yTicks = makeTicks(yMin, yMax);
+
+  return (
+    <article className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+        <h4 className="text-base font-bold text-slate-950 dark:text-white">{title}</h4>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-slate-600 dark:text-slate-300">
+          {series.map((item) => <Legend key={item.label} color={item.color} label={item.label} />)}
+          {bmiThresholds.map((item) => <Legend key={item.label} color={item.color} label={item.label} dashed />)}
+        </div>
+      </div>
+      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={title} className="h-auto w-full overflow-visible">
+        <rect x={padding.left} y={padding.top} width={width - padding.left - padding.right} height={height - padding.top - padding.bottom} className="fill-slate-50 dark:fill-slate-900" rx="6" />
+        {yTicks.map((tick) => (
+          <g key={tick}>
+            <line x1={padding.left} x2={width - padding.right} y1={y(tick)} y2={y(tick)} className="stroke-slate-200 dark:stroke-slate-800" />
+            <text x={padding.left - 8} y={y(tick) + 4} textAnchor="end" className="fill-slate-500 text-[11px] dark:fill-slate-400">{formatChartNumber(tick)}</text>
+          </g>
+        ))}
+        {[2, 5, 10, 15, 20].map((tick) => (
+          <g key={tick}>
+            <line x1={x(tick)} x2={x(tick)} y1={padding.top} y2={height - padding.bottom} className="stroke-slate-200 dark:stroke-slate-800" />
+            <text x={x(tick)} y={height - 12} textAnchor="middle" className="fill-slate-500 text-[11px] dark:fill-slate-400">{tick}</text>
+          </g>
+        ))}
+        {series.map((item) => (
+          <path key={item.label} d={pathFor(item.values)} fill="none" stroke={item.color} strokeWidth={item.width} strokeLinecap="round" strokeLinejoin="round" />
+        ))}
+        {bmiThresholds.map((item) => (
+          <path key={item.label} d={pathFor(item.values)} fill="none" stroke={item.color} strokeWidth="1.7" strokeDasharray="6 5" strokeLinecap="round" strokeLinejoin="round" />
+        ))}
+        <line x1={patientX} x2={patientX} y1={padding.top} y2={height - padding.bottom} className="stroke-blue-500/30" strokeDasharray="4 4" />
+        <circle cx={patientX} cy={patientY} r="6" className="fill-blue-600 stroke-white stroke-2 dark:stroke-slate-950" />
+        <text x={patientX + 9} y={patientY - 8} className="fill-blue-700 text-[12px] font-semibold dark:fill-blue-300">{formatChartNumber(patient.value)} {unit}</text>
+        <text x={(padding.left + width - padding.right) / 2} y={height - 2} textAnchor="middle" className="fill-slate-500 text-[11px] dark:fill-slate-400">Età (anni)</text>
+        <text x="12" y={(padding.top + height - padding.bottom) / 2} textAnchor="middle" transform={`rotate(-90 12 ${(padding.top + height - padding.bottom) / 2})`} className="fill-slate-500 text-[11px] dark:fill-slate-400">{yLabel} ({unit})</text>
+      </svg>
+    </article>
   );
 }
 
@@ -426,4 +575,62 @@ function parseDecimalInput(value: string) {
 
 function dedupe(values: string[]) {
   return Array.from(new Set(values));
+}
+
+function getRows(parameter: "weight" | "height" | "bmi", sex: SiedpSex) {
+  if (parameter === "weight") return sex === "male" ? weightMale : weightFemale;
+  if (parameter === "height") return sex === "male" ? heightMale : heightFemale;
+  return sex === "male" ? bmiMale : bmiFemale;
+}
+
+function point(row: SiedpLmsRow, zScore: number) {
+  return {
+    age: row.age,
+    value: lmsValue(row.L, row.M, row.S, zScore)
+  };
+}
+
+function lmsValue(l: number, m: number, s: number, zScore: number) {
+  if (Math.abs(l) < 1e-9) {
+    return m * Math.exp(s * zScore);
+  }
+
+  return m * (1 + l * s * zScore) ** (1 / l);
+}
+
+function makeTicks(min: number, max: number) {
+  const range = max - min;
+  const rawStep = range / 4;
+  const magnitude = 10 ** Math.floor(Math.log10(rawStep));
+  const normalized = rawStep / magnitude;
+  const step = (normalized <= 1 ? 1 : normalized <= 2 ? 2 : normalized <= 5 ? 5 : 10) * magnitude;
+  const first = Math.ceil(min / step) * step;
+  const ticks: number[] = [];
+
+  for (let tick = first; tick <= max + step * 0.1; tick += step) {
+    ticks.push(roundChartTick(tick));
+  }
+
+  return ticks.length >= 2 ? ticks : [min, max].map(roundChartTick);
+}
+
+function roundChartTick(value: number) {
+  return Math.round(value * 10) / 10;
+}
+
+function formatChartNumber(value: number) {
+  return value.toLocaleString("it-IT", {
+    maximumFractionDigits: value >= 100 ? 0 : 1
+  });
+}
+
+function Legend({ color, label, dashed = false }: { color: string; label: string; dashed?: boolean }) {
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <svg width="22" height="6" aria-hidden="true" className="shrink-0 overflow-visible">
+        <line x1="1" x2="21" y1="3" y2="3" stroke={color} strokeWidth="2" strokeLinecap="round" strokeDasharray={dashed ? "5 4" : undefined} />
+      </svg>
+      {label}
+    </span>
+  );
 }
