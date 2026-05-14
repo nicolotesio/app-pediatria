@@ -1,4 +1,4 @@
-const CACHE_NAME = "pedianotes-v6";
+const CACHE_NAME = "pedianotes-v7";
 const CORE_ASSETS = [
   "/manifest.webmanifest",
   "/icon-192.png",
