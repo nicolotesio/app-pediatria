@@ -8,10 +8,12 @@ type CalculatorLayoutProps = {
   updatedAt?: string;
   validity?: string;
   units?: string;
+  sourceTitle?: string;
+  sourceNote?: string;
   children: React.ReactNode;
   unframed?: boolean;
   showSource?: boolean;
-  warning?: React.ReactNode;
+  warning?: React.ReactNode | null;
   warningPlacement?: "side" | "bottom";
 };
 
@@ -22,13 +24,15 @@ export function CalculatorLayout({
   updatedAt,
   validity,
   units,
+  sourceTitle,
+  sourceNote,
   children,
   unframed = false,
   showSource = true,
   warning,
   warningPlacement = "side"
 }: CalculatorLayoutProps) {
-  const warningBox = (
+  const warningBox = warning === null ? null : (
     <WarningBox title={null}>
       {warning ?? "Strumento di supporto clinico. Verificare sempre dosi, linee guida locali, peso reale e condizioni del paziente."}
     </WarningBox>
@@ -42,7 +46,7 @@ export function CalculatorLayout({
           {description ? <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{description}</p> : null}
           <div className={title || description ? "mt-5" : undefined}>{children}</div>
         </div>
-        {showSource && source && updatedAt && validity && units ? <SourceBox source={source} updatedAt={updatedAt} validity={validity} units={units} /> : null}
+        {showSource && source && updatedAt ? <SourceBox source={source} updatedAt={updatedAt} validity={validity} units={units} title={sourceTitle} note={sourceNote} /> : null}
         {warningBox}
       </section>
     );
@@ -56,7 +60,7 @@ export function CalculatorLayout({
         <div className={title || description ? "mt-5" : undefined}>{children}</div>
       </div>
       <div className="space-y-4">
-        {showSource && source && updatedAt && validity && units ? <SourceBox source={source} updatedAt={updatedAt} validity={validity} units={units} /> : null}
+        {showSource && source && updatedAt ? <SourceBox source={source} updatedAt={updatedAt} validity={validity} units={units} title={sourceTitle} note={sourceNote} /> : null}
         {warningBox}
       </div>
     </section>

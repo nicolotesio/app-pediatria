@@ -1,38 +1,41 @@
-import { Calculator } from "lucide-react";
+import { Calculator, Stethoscope, TrendingUp } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Badge } from "@/components/ui/Badge";
 
 const calculators = [
-  { title: "WETFLAG", status: "Disponibile", href: "/emergenze/wetflag", description: "Stime rapide per emergenza pediatrica." },
-  { title: "Centili nascita INTERGROWTH-21st", status: "Dataset non ancora configurato", description: "Interfaccia pronta, dataset assente." },
-  { title: "Curve WHO 0-2 anni", status: "Dataset non ancora configurato", description: "In attesa di dataset ufficiale validato." },
-  { title: "Curve CDC 2-18 anni", status: "Dataset non ancora configurato", description: "In attesa di dataset ufficiale validato." },
-  { title: "BMI pediatrico", status: "Non configurato", description: "Richiede curve/percentili validati." },
-  { title: "Superficie corporea", status: "Non configurato", description: "Formula da selezionare e validare." },
-  { title: "eGFR pediatrico", status: "Non configurato", description: "Formula e unita di creatinina da configurare." },
-  { title: "Sodio corretto", status: "Non configurato", description: "Formula da configurare con fonte." }
+  { title: "Curve SIEDP 2006", href: "/calcolatori/crescita-siedp-2006", description: "Valutazione peso, altezza e BMI per la popolazione italiana dai 2 ai 20 anni.", icon: TrendingUp },
+  { title: "WETFLAG", href: "/emergenze/wetflag", description: "Stime rapide per emergenza pediatrica.", icon: Stethoscope },
+  { title: "Centili nascita INTERGROWTH-21st", description: "Interfaccia pronta, dataset assente.", icon: Calculator, unavailable: true },
+  { title: "Curve WHO 0-2 anni", description: "In attesa di dataset ufficiale validato.", icon: Calculator, unavailable: true },
+  { title: "Curve CDC 2-18 anni", description: "In attesa di dataset ufficiale validato.", icon: Calculator, unavailable: true },
+  { title: "BMI pediatrico", description: "Richiede curve/percentili validati.", icon: Calculator, unavailable: true },
+  { title: "Superficie corporea", description: "Formula da selezionare e validare.", icon: Calculator, unavailable: true },
+  { title: "eGFR pediatrico", description: "Formula e unita di creatinina da configurare.", icon: Calculator, unavailable: true },
+  { title: "Sodio corretto", description: "Formula da configurare con fonte.", icon: Calculator, unavailable: true }
 ];
 
 export default function CalculatorsPage() {
   return (
     <div className="pb-16">
       <SectionHeader title="CALCOLATORI" />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {calculators.map((calculator) => (
+      <div className="grid gap-4 sm:grid-cols-2">
+        {calculators.map((calculator) => {
+          const Icon = calculator.icon;
+
+          return (
           <Card
             key={calculator.title}
             href={calculator.href}
             title={calculator.title}
             description={calculator.description}
-            meta={
-              <div className="flex items-center justify-between gap-3">
-                <Calculator className="size-5 text-blue-700 dark:text-blue-300" />
-                <Badge tone={calculator.status === "Disponibile" ? "blue" : "amber"}>{calculator.status}</Badge>
-              </div>
-            }
-          />
-        ))}
+            inlineHeader
+            meta={<Icon className="size-6 text-blue-700 dark:text-blue-300" />}
+          >
+            {calculator.unavailable ? <Badge tone="amber">Non disponibile</Badge> : null}
+          </Card>
+          );
+        })}
       </div>
     </div>
   );

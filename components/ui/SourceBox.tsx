@@ -5,17 +5,20 @@ type SourceBoxProps = {
   updatedAt: string;
   validity?: string;
   units?: string;
+  title?: string;
+  note?: string;
 };
 
-export function SourceBox({ source, updatedAt, validity, units }: SourceBoxProps) {
+export function SourceBox({ source, updatedAt, validity, units, title = "Fonte", note }: SourceBoxProps) {
   return (
     <aside className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
       <div className="flex gap-3">
         <ShieldCheck className="mt-0.5 size-5 shrink-0 text-blue-700 dark:text-blue-300" />
         <dl className="grid gap-2 text-sm">
           <div>
-            <dt className="font-semibold text-slate-950 dark:text-white">Fonte/riferimento</dt>
+            <dt className="font-semibold text-slate-950 dark:text-white">{title}</dt>
             <dd className="text-slate-600 dark:text-slate-300">{source}</dd>
+            {note ? <dd className="mt-1 text-slate-600 dark:text-slate-300">{note}</dd> : null}
           </div>
           <div className="grid gap-2 sm:grid-cols-3">
             <div>
