@@ -12,7 +12,14 @@ export const metadata: Metadata = {
     template: "%s | Appunti di Pediatria"
   },
   description: "Webapp personale di Dr Nicolò Tesio per appunti, risorse e strumenti clinici in pediatria.",
-  manifest: "/manifest.webmanifest"
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" }
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }]
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

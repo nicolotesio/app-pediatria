@@ -1,5 +1,5 @@
-const CACHE_NAME = "pedianotes-v2";
-const CORE_ASSETS = ["/manifest.webmanifest", "/icon.svg"];
+const CACHE_NAME = "pedianotes-v3";
+const CORE_ASSETS = ["/manifest.webmanifest", "/icon-192.png", "/icon-512.png", "/apple-touch-icon.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(CORE_ASSETS)));
