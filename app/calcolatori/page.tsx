@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/Badge";
 const calculators = [
   { title: "Curve SIEDP 2006", href: "/calcolatori/crescita-siedp-2006", description: "Valutazione peso, altezza e BMI per la popolazione italiana dai 2 ai 20 anni.", icon: TrendingUp },
   { title: "WETFLAG", href: "/emergenze/wetflag", description: "Stime rapide per emergenza pediatrica.", icon: Stethoscope },
-  { title: "Centili nascita INTERGROWTH-21st", description: "Interfaccia pronta, dataset assente.", icon: Calculator, unavailable: true },
+  { title: "Centili nascita INTERGROWTH-21st", href: "/calcolatori/intergrowth-21", description: "DS e centili alla nascita per peso, lunghezza e circonferenza cranica.", icon: Calculator },
   { title: "Curve WHO 0-2 anni", description: "In attesa di dataset ufficiale validato.", icon: Calculator, unavailable: true },
   { title: "Curve CDC 2-18 anni", description: "In attesa di dataset ufficiale validato.", icon: Calculator, unavailable: true },
   { title: "BMI pediatrico", description: "Richiede curve/percentili validati.", icon: Calculator, unavailable: true },

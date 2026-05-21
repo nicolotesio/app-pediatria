@@ -1,7 +1,7 @@
 import { ShieldCheck } from "lucide-react";
 
 type SourceBoxProps = {
-  source: string;
+  source: React.ReactNode;
   updatedAt: string;
   validity?: string;
   units?: string;

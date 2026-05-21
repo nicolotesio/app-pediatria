@@ -361,7 +361,7 @@ function GrowthChart({
   showBmiThresholds?: boolean;
 }) {
   const width = 760;
-  const height = 320;
+  const height = 428;
   const padding = { top: 24, right: 24, bottom: 38, left: 48 };
   const ageMin = 2;
   const ageMax = 20;

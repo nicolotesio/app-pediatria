@@ -4,7 +4,7 @@ import { WarningBox } from "@/components/ui/WarningBox";
 type CalculatorLayoutProps = {
   title?: string;
   description?: string;
-  source?: string;
+  source?: React.ReactNode;
   updatedAt?: string;
   validity?: string;
   units?: string;
