@@ -8,7 +8,7 @@ export default function IntergrowthBirthPage() {
     <div className="grid gap-2 pb-16">
       <SectionHeader
         title="Centili nascita INTERGROWTH-21st"
-        description="Strumento per calcolare DS e centili alla nascita secondo le tabelle INTERGROWTH-21st per peso, lunghezza e circonferenza cranica."
+        description="Valutazione auxologica neonatale con standard internazionali INTERGROWTH-21st per peso, lunghezza e circonferenza cranica alla nascita."
       />
       <IntergrowthBirthCalculator />
       <Link

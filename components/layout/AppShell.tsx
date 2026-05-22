@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { Baby, BookOpenText, Calculator, ExternalLink, Home, LifeBuoy, Search } from "lucide-react";
+import { Ambulance, Baby, BookOpenText, Calculator, ExternalLink, Home, Search } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const navItems = [
   { href: "/", label: "Home", icon: Home },
-  { href: "/emergenze", label: "Emergenze", icon: LifeBuoy },
+  { href: "/emergenze", label: "Emergenze", icon: Ambulance },
   { href: "/calcolatori", label: "Calcolatori", icon: Calculator },
   { href: "/appunti", label: "Appunti", icon: BookOpenText },
   { href: "/risorse", label: "Risorse", icon: ExternalLink },

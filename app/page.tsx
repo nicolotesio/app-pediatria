@@ -1,4 +1,4 @@
-import { Baby, BookOpenText, Calculator, ExternalLink, Info, LifeBuoy } from "lucide-react";
+import { Ambulance, Baby, BookOpenText, Calculator, ExternalLink, Info } from "lucide-react";
 import { HomeSearchBox } from "@/components/HomeSearchBox";
 import { Card } from "@/components/ui/Card";
 
@@ -7,7 +7,7 @@ const sections = [
     title: "Emergenze",
     description: "Strumenti clinici rapidi con fonti, unita, range e avvisi di sicurezza.",
     href: "/emergenze",
-    icon: LifeBuoy
+    icon: Ambulance
   },
   {
     title: "Calcolatori",

@@ -27,10 +27,10 @@ const parameterMeta: Record<IntergrowthParameter, { label: string; unit: string;
 const intergrowthReferences = (
   <ol className="list-decimal space-y-2 pl-5">
     <li>
-      Villar J, Cheikh Ismail L, Victora CG, Ohuma EO, Bertino E, Altman DG, et al. International standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional Study of the INTERGROWTH-21st Project. Lancet. 2014 Sep 6;384(9946):857-68. doi: 10.1016/S0140-6736(14)60932-6. PMID: 25209487.
+      Villar J, Cheikh Ismail L, Victora CG, et al. International standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional Study of the INTERGROWTH-21st Project. Lancet. 2014 Sep 6;384(9946):857-68. doi: 10.1016/S0140-6736(14)60932-6.
     </li>
     <li>
-      Villar J, Giuliani F, Fenton TR, Ohuma EO, Ismail LC, Kennedy SH; INTERGROWTH-21st Consortium. INTERGROWTH-21st very preterm size at birth reference charts. Lancet. 2016 Feb 27;387(10021):844-5. doi: 10.1016/S0140-6736(16)00384-6. Erratum in: Lancet. 2016 Mar 5;387(10022):944. doi: 10.1016/S0140-6736(16)00571-7. PMID: 26898853.
+      Villar J, Giuliani F, Fenton TR, et al. INTERGROWTH-21st very preterm size at birth reference charts. Lancet. 2016 Feb 27;387(10021):844-5. doi: 10.1016/S0140-6736(16)00384-6. Erratum in: Lancet. 2016 Mar 5;387(10022):944. doi: 10.1016/S0140-6736(16)00571-7.
     </li>
   </ol>
 );
@@ -241,8 +241,8 @@ function ResultCard({ result }: { result: IntergrowthMetricResult }) {
         </p>
       </div>
       <dl className="grid grid-cols-2 gap-3">
-        <Metric label="DS / Z-score" value={result.zScoreLabel} alert={alert} />
         <Metric label="Centile" value={result.percentileLabel} alert={alert} />
+        <Metric label="Z-score" value={result.zScoreLabel} alert={alert} />
       </dl>
       {alert ? (
         <div className="w-fit rounded-full bg-rose-50 px-3 py-1 text-sm font-semibold text-rose-800 ring-1 ring-rose-200 dark:bg-rose-950/40 dark:text-rose-100 dark:ring-rose-900">
@@ -365,7 +365,7 @@ function ButtonGrid({ label, values, selected, onSelect }: { label: string; valu
             key={value}
             type="button"
             onClick={() => onSelect(value)}
-            className={`grid size-10 place-items-center border text-sm font-semibold transition sm:size-11 sm:text-base ${
+            className={`grid size-9 place-items-center border text-sm font-semibold transition sm:size-10 ${
               selected === value
                 ? "border-orange-400 bg-orange-400 text-white"
                 : "border-slate-200 bg-slate-50 text-slate-900 hover:border-orange-300 hover:bg-orange-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-100"
@@ -533,8 +533,8 @@ function buildExportHtml(result: IntergrowthAllResults) {
     <tr>
       <td>${escapeHtml(item.label)}</td>
       <td>${escapeHtml(formatNumber(item.value, item.parameter === "weight" ? 0 : 1))} ${escapeHtml(item.unit)}</td>
-      <td>${escapeHtml(item.zScoreLabel)}</td>
       <td>${escapeHtml(item.percentileLabel)}</td>
+      <td>${escapeHtml(item.zScoreLabel)}</td>
       <td>${escapeHtml(item.interpretation)}</td>
     </tr>
   `).join("");
@@ -575,7 +575,7 @@ function buildExportHtml(result: IntergrowthAllResults) {
   </dl>
   <table>
     <thead>
-      <tr><th>Parametro</th><th>Valore</th><th>DS / Z-score</th><th>Centile</th><th>Interpretazione</th></tr>
+      <tr><th>Parametro</th><th>Valore</th><th>Centile</th><th>Z-score</th><th>Interpretazione</th></tr>
     </thead>
     <tbody>${rows}</tbody>
   </table>
