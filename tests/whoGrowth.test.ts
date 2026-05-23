@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import rawWhoGrowthData from "../public/data/who-growth.json";
-import { calculateAgeDaysFromDates, calculateWhoGrowth, getWhoRows, type WhoGrowthData } from "../lib/calculators/whoGrowth";
+import { calculateAgeDaysFromDates, calculateCorrectedAgeDays, calculateWhoGrowth, getWhoRows, type WhoGrowthData } from "../lib/calculators/whoGrowth";
 
 const whoGrowthData = rawWhoGrowthData as unknown as WhoGrowthData;
 
@@ -34,5 +34,13 @@ describe("calculateWhoGrowth", () => {
 
   it("calcola eta in giorni dalle date", () => {
     expect(calculateAgeDaysFromDates("2024-01-01", "2024-01-31")).toBe(30);
+  });
+
+  it("calcola eta corretta per prematurita", () => {
+    expect(calculateCorrectedAgeDays(90, 32, 0)).toBe(34);
+  });
+
+  it("non accetta eta corretta negativa", () => {
+    expect(() => calculateCorrectedAgeDays(10, 32, 0)).toThrow("non può essere negativa");
   });
 });

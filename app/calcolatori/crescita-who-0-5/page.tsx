@@ -7,8 +7,8 @@ export default function WhoGrowthPage() {
   return (
     <div className="grid gap-2 pb-16">
       <SectionHeader
-        title="Curve WHO 0-5 anni"
-        description="Valutazione auxologica pediatrica secondo gli standard WHO Child Growth Standards da 0 a 5 anni."
+        title="WHO Child Growth Standards"
+        description="Valutazione antropometrica secondo gli standard internazionali WHO per bambini da 0 a 5 anni."
       />
       <WhoGrowthCalculator />
       <Link

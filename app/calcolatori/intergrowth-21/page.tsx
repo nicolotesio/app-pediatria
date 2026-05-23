@@ -7,8 +7,8 @@ export default function IntergrowthBirthPage() {
   return (
     <div className="grid gap-2 pb-16">
       <SectionHeader
-        title="Centili nascita INTERGROWTH-21st"
-        description="Valutazione auxologica neonatale con standard internazionali INTERGROWTH-21st per peso, lunghezza e circonferenza cranica alla nascita."
+        title="INTERGROWTH-21st"
+        description="Valutazione antropometrica neonatale secondo gli standard internazionali INTERGROWTH-21st."
       />
       <IntergrowthBirthCalculator />
       <Link

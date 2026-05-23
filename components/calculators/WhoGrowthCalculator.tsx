@@ -2,11 +2,12 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type React from "react";
-import { Download } from "lucide-react";
+import { Baby, Gauge, Proportions, Ruler, Scale } from "lucide-react";
 import { CalculatorLayout } from "@/components/CalculatorLayout";
 import { WarningBox } from "@/components/ui/WarningBox";
 import {
   calculateAgeDaysFromDates,
+  calculateCorrectedAgeDays,
   calculateWhoGrowth,
   formatWhoAge,
   getWhoRows,
@@ -19,6 +20,12 @@ import {
 } from "@/lib/calculators/whoGrowth";
 
 type AgeMode = "slider" | "dates";
+type SubmittedWhoResult = WhoGrowthResult & {
+  chronologicalAgeDays: number;
+  ageMode: AgeMode;
+  correctedAgeUsed: boolean;
+  gestationalAgeLabel?: string;
+};
 
 const maxAgeDays = 1856;
 const daysPerMonth = 30.4375;
@@ -34,8 +41,12 @@ export function WhoGrowthCalculator() {
   const [weightKg, setWeightKg] = useState("");
   const [statureCm, setStatureCm] = useState("");
   const [headCircumferenceCm, setHeadCircumferenceCm] = useState("");
-  const [submittedResult, setSubmittedResult] = useState<WhoGrowthResult | null>(null);
+  const [useCorrectedAge, setUseCorrectedAge] = useState(false);
+  const [gestationalWeeks, setGestationalWeeks] = useState("");
+  const [gestationalDays, setGestationalDays] = useState("");
+  const [submittedResult, setSubmittedResult] = useState<SubmittedWhoResult | null>(null);
   const [submittedErrors, setSubmittedErrors] = useState<string[]>([]);
+  const [showCharts, setShowCharts] = useState(false);
   const [whoData, setWhoData] = useState<WhoGrowthData | null>(null);
   const [whoDataError, setWhoDataError] = useState<string | null>(null);
 
@@ -77,7 +88,7 @@ export function WhoGrowthCalculator() {
     try {
       const calculatedDays = calculateAgeDaysFromDates(birthDate, measurementDate);
       const error = calculatedDays > maxAgeDays ? "Età consentita solo tra 0 e 5 anni" : null;
-      return { ageDays: calculatedDays, label: formatWhoAge(calculatedDays), error };
+      return { ageDays: calculatedDays, label: formatDateAgeLabel(calculatedDays), error };
     } catch (error) {
       return {
         ageDays: manualAgeDays,
@@ -86,6 +97,36 @@ export function WhoGrowthCalculator() {
       };
     }
   }, [ageMode, ageTotalMonths, birthDate, manualAgeDays, measurementDate]);
+
+  const canUseCorrectedAge = agePreview.ageDays <= maxAgeDays;
+  const correctedAgePreview = useMemo(() => {
+    if (!canUseCorrectedAge || !useCorrectedAge || gestationalWeeks.trim() === "" || gestationalDays.trim() === "") {
+      return null;
+    }
+
+    const weeks = Number(gestationalWeeks);
+    const days = Number(gestationalDays);
+    if (!Number.isInteger(weeks) || !Number.isInteger(days)) {
+      return { ageDays: null, label: null, error: "Inserire età gestazionale in settimane e giorni interi" };
+    }
+
+    try {
+      const ageDays = calculateCorrectedAgeDays(agePreview.ageDays, weeks, days);
+      return {
+        ageDays,
+        label: formatCorrectedAge(ageDays, ageMode),
+        error: null
+      };
+    } catch (error) {
+      return {
+        ageDays: null,
+        label: null,
+        error: error instanceof Error ? error.message : "Età gestazionale non valida"
+      };
+    }
+  }, [ageMode, agePreview.ageDays, canUseCorrectedAge, gestationalDays, gestationalWeeks, useCorrectedAge]);
+
+  const effectiveAgeDaysForUi = correctedAgePreview?.ageDays ?? agePreview.ageDays;
 
   const resetSubmittedOutput = () => {
     setSubmittedResult(null);
@@ -102,8 +143,35 @@ export function WhoGrowthCalculator() {
     if (!sex) errors.push("Selezionare il sesso");
     if (agePreview.error) errors.push(agePreview.error);
     if (weightKg.trim() === "" || !Number.isFinite(parsedWeight) || parsedWeight <= 0) errors.push("Inserire un peso valido in kg");
-    if (statureCm.trim() === "" || !Number.isFinite(parsedStature) || parsedStature <= 0) errors.push("Inserire una lunghezza/altezza valida in cm");
+    if (statureCm.trim() === "" || !Number.isFinite(parsedStature) || parsedStature <= 0) errors.push("Inserire una lunghezza/statura valida in cm");
     if (headCircumferenceCm.trim() === "" || !Number.isFinite(parsedHead) || parsedHead <= 0) errors.push("Inserire una circonferenza cranica valida in cm");
+
+    let effectiveAgeDays = agePreview.ageDays;
+    let correctedAgeUsed = false;
+    let gestationalAgeLabel: string | undefined;
+
+    if (useCorrectedAge && canUseCorrectedAge) {
+      const parsedWeeks = Number(gestationalWeeks);
+      const parsedDays = Number(gestationalDays);
+
+      if (gestationalWeeks.trim() === "" || !Number.isInteger(parsedWeeks)) {
+        errors.push("Inserire le settimane gestazionali alla nascita");
+      }
+
+      if (gestationalDays.trim() === "" || !Number.isInteger(parsedDays)) {
+        errors.push("Inserire i giorni gestazionali alla nascita");
+      }
+
+      if (Number.isInteger(parsedWeeks) && Number.isInteger(parsedDays)) {
+        try {
+          effectiveAgeDays = calculateCorrectedAgeDays(agePreview.ageDays, parsedWeeks, parsedDays);
+          correctedAgeUsed = true;
+          gestationalAgeLabel = `${parsedWeeks}+${parsedDays}`;
+        } catch (error) {
+          errors.push(error instanceof Error ? error.message : "Età gestazionale non valida");
+        }
+      }
+    }
 
     if (errors.length > 0) {
       setSubmittedErrors(dedupe(errors));
@@ -112,7 +180,13 @@ export function WhoGrowthCalculator() {
     }
 
     try {
-      setSubmittedResult(calculateWhoGrowth(whoData as WhoGrowthData, sex as WhoSex, agePreview.ageDays, parsedWeight, parsedStature, parsedHead));
+      setSubmittedResult({
+        ...calculateWhoGrowth(whoData as WhoGrowthData, sex as WhoSex, effectiveAgeDays, parsedWeight, parsedStature, parsedHead),
+        chronologicalAgeDays: agePreview.ageDays,
+        ageMode,
+        correctedAgeUsed,
+        gestationalAgeLabel
+      });
       setSubmittedErrors([]);
     } catch (error) {
       setSubmittedErrors([error instanceof Error ? error.message : "Impossibile calcolare i centili WHO"]);
@@ -122,7 +196,19 @@ export function WhoGrowthCalculator() {
 
   return (
     <CalculatorLayout
-      source={whoGrowthMetadata.source}
+      source={
+        <>
+          WHO Child Growth Standards (2006), dati disponibili sul sito{" "}
+          <a
+            href="https://www.who.int/tools/child-growth-standards"
+            target="_blank"
+            rel="noreferrer"
+            className="font-semibold text-blue-700 underline underline-offset-2 dark:text-blue-300"
+          >
+            www.who.int/tools/child-growth-standards
+          </a>
+        </>
+      }
       updatedAt={whoGrowthMetadata.updatedAt}
       sourceTitle="Riferimenti bibliografici"
       unframed
@@ -208,12 +294,57 @@ export function WhoGrowthCalculator() {
             </div>
           )}
 
+          {canUseCorrectedAge ? (
+            <div className="grid gap-3">
+              <button
+                type="button"
+                aria-pressed={useCorrectedAge}
+                onClick={() => {
+                  setUseCorrectedAge((value) => !value);
+                  resetSubmittedOutput();
+                }}
+                className={`rounded-md border px-3 py-2 text-sm font-semibold transition ${
+                  useCorrectedAge
+                    ? "border-blue-600 bg-blue-600 text-white"
+                    : "border-slate-200 bg-white text-slate-700 hover:border-blue-300 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-blue-800"
+                }`}
+              >
+                Calcola età corretta per prematurità
+              </button>
+              {useCorrectedAge ? (
+                <div className="rounded-md border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900/40">
+                  <div className="grid gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+                    <SmallIntegerField id="who-gestational-weeks" label="Settimane gestazionali" min={22} max={36} value={gestationalWeeks} onChange={(value) => {
+                      setGestationalWeeks(value);
+                      resetSubmittedOutput();
+                    }} />
+                    <SmallIntegerField id="who-gestational-days" label="Giorni gestazionali" min={0} max={6} value={gestationalDays} onChange={(value) => {
+                      setGestationalDays(value);
+                      resetSubmittedOutput();
+                    }} />
+                    {correctedAgePreview?.label ? (
+                      <p className="rounded-md bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm dark:bg-slate-950 dark:text-slate-200">
+                        Età corretta: <span className="font-semibold text-slate-950 dark:text-white">{correctedAgePreview.label}</span>
+                      </p>
+                    ) : null}
+                  </div>
+                  {correctedAgePreview?.error ? (
+                    <WarningBox>
+                      {correctedAgePreview.error}
+                      {correctedAgePreview.error.includes("negativa") ? " La misurazione risulta precedente alla data presunta del termine; il calcolatore WHO non accetta età inferiori a 0 giorni." : ""}
+                    </WarningBox>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
+
           <div className="grid gap-4 sm:grid-cols-3">
             <NumberField id="who-weight" label="Peso" unit="kg" value={weightKg} onChange={(value) => {
               setWeightKg(value);
               resetSubmittedOutput();
             }} />
-            <NumberField id="who-stature" label={agePreview.ageDays <= 730 ? "Lunghezza" : "Altezza"} unit="cm" value={statureCm} onChange={(value) => {
+            <NumberField id="who-stature" label={effectiveAgeDaysForUi <= 730 ? "Lunghezza" : "Statura"} unit="cm" value={statureCm} onChange={(value) => {
               setStatureCm(value);
               resetSubmittedOutput();
             }} />
@@ -232,16 +363,6 @@ export function WhoGrowthCalculator() {
             >
               {whoData ? "Calcola" : "Caricamento dati"}
             </button>
-            {submittedResult ? (
-              <button
-                type="button"
-                onClick={() => exportWhoResult(submittedResult)}
-                className="inline-flex items-center gap-2 rounded-md border border-blue-200 bg-white px-4 py-2.5 text-sm font-semibold text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 dark:border-blue-900 dark:bg-slate-950 dark:text-blue-300 dark:hover:bg-blue-950/40"
-              >
-                <Download className="size-4" />
-                Esporta
-              </button>
-            ) : null}
           </div>
         </section>
 
@@ -257,8 +378,15 @@ export function WhoGrowthCalculator() {
 
         {submittedResult ? (
           <section className="grid gap-4">
-            <ResultsTable result={submittedResult} />
-            <GrowthCharts data={whoData} result={submittedResult} />
+            <ResultsCards result={submittedResult} />
+            <button
+              type="button"
+              onClick={() => setShowCharts((value) => !value)}
+              className="w-fit rounded-md border border-blue-200 bg-white px-4 py-2 text-sm font-semibold text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 dark:border-blue-900 dark:bg-slate-950 dark:text-blue-300 dark:hover:bg-blue-950/40"
+            >
+              {showCharts ? "Nascondi grafici" : "Visualizza grafici"}
+            </button>
+            {showCharts ? <GrowthCharts data={whoData} result={submittedResult} /> : null}
           </section>
         ) : null}
       </div>
@@ -266,35 +394,92 @@ export function WhoGrowthCalculator() {
   );
 }
 
-function ResultsTable({ result }: { result: WhoGrowthResult }) {
+function ResultsCards({ result }: { result: SubmittedWhoResult }) {
   return (
-    <section className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">
-      <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-slate-200 text-sm dark:divide-slate-800">
-          <thead className="bg-slate-50 dark:bg-slate-900">
-            <tr>
-              {["Parametro", "Valore", "Z-score", "Percentile"].map((header) => (
-                <th key={header} scope="col" className="px-4 py-3 text-left font-semibold text-slate-950 dark:text-white">{header}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-slate-200 dark:divide-slate-800">
-            {result.results.map((item) => {
-              const alert = Math.abs(item.zScore) > 2;
-              return (
-                <tr key={item.key} className={alert ? "bg-rose-50/70 dark:bg-rose-950/30" : undefined}>
-                  <td className="px-4 py-3 font-semibold text-slate-950 dark:text-white">{item.label}</td>
-                  <td className="px-4 py-3 text-slate-700 dark:text-slate-200">{item.key === "weightForLength" ? "" : formatMetricValue(item)}</td>
-                  <td className={`px-4 py-3 font-semibold ${alert ? "text-rose-800 dark:text-rose-100" : "text-slate-700 dark:text-slate-200"}`}>{formatSigned(item.zScore)}</td>
-                  <td className="px-4 py-3 text-slate-700 dark:text-slate-200">{formatPercentile(item.percentile)}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+    <section className="grid gap-4">
+      <WhoResultSummary result={result} />
+      <div className="grid gap-4 md:grid-cols-2">
+        {result.results.map((item) => (
+          <ResultCard key={item.key} item={item} />
+        ))}
       </div>
     </section>
   );
+}
+
+function WhoResultSummary({ result }: { result: SubmittedWhoResult }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-950">
+      <dl className="flex flex-wrap gap-x-6 gap-y-2">
+        <div className="flex gap-2">
+          <dt className="font-semibold text-slate-950 dark:text-white">Sesso</dt>
+          <dd className="text-slate-700 dark:text-slate-200">{result.sex === "male" ? "Maschio" : "Femmina"}</dd>
+        </div>
+        {result.correctedAgeUsed ? (
+          <>
+            <div className="flex gap-2">
+              <dt className="font-semibold text-slate-950 dark:text-white">Età corretta</dt>
+              <dd className="text-slate-700 dark:text-slate-200">{formatCorrectedAge(result.ageDays, result.ageMode)}</dd>
+            </div>
+            <div className="flex gap-2">
+              <dt className="font-semibold text-slate-950 dark:text-white">Età anagrafica</dt>
+              <dd className="text-slate-700 dark:text-slate-200">{formatChronologicalAge(result.chronologicalAgeDays, result.ageMode)}</dd>
+            </div>
+          </>
+        ) : (
+          <div className="flex gap-2">
+            <dt className="font-semibold text-slate-950 dark:text-white">Età</dt>
+            <dd className="text-slate-700 dark:text-slate-200">{formatAgeYearsMonths(result.ageDays)}</dd>
+          </div>
+        )}
+      </dl>
+      {result.correctedAgeUsed && result.gestationalAgeLabel ? (
+        <p className="mt-2 text-slate-600 dark:text-slate-300">Età gestazionale alla nascita: {result.gestationalAgeLabel}</p>
+      ) : null}
+    </div>
+  );
+}
+
+function ResultCard({ item }: { item: WhoMetricResult }) {
+  const alert = Math.abs(item.zScore) > 2;
+  const Icon = getMetricIcon(item.key);
+
+  return (
+    <article className={`rounded-lg border bg-white p-4 shadow-sm dark:bg-slate-950 ${alert ? "border-rose-300 ring-1 ring-rose-200 dark:border-rose-800 dark:ring-rose-950" : "border-slate-200 dark:border-slate-800"}`}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-md ${alert ? "bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-200" : "bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-200"}`}>
+            <Icon className="h-5 w-5" aria-hidden="true" />
+          </span>
+          <h3 className="text-base font-semibold text-slate-950 dark:text-white">{item.label}</h3>
+        </div>
+        {item.key !== "weightForLength" ? (
+          <p className="shrink-0 text-sm font-semibold text-slate-600 dark:text-slate-300">{formatMetricValue(item)}</p>
+        ) : null}
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-3">
+        <MetricTile label="Centile" value={formatPercentile(item.percentile)} alert={alert} />
+        <MetricTile label="Z-score" value={formatSigned(item.zScore)} alert={alert} />
+      </div>
+    </article>
+  );
+}
+
+function MetricTile({ label, value, alert }: { label: string; value: string; alert: boolean }) {
+  return (
+    <div className={`rounded-md px-3 py-2 ${alert ? "bg-rose-50 ring-1 ring-rose-200 dark:bg-rose-950/40 dark:ring-rose-900" : "bg-slate-50 dark:bg-slate-900"}`}>
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">{label}</p>
+      <p className={`mt-1 text-lg font-bold ${alert ? "text-rose-800 dark:text-rose-100" : "text-slate-950 dark:text-white"}`}>{value}</p>
+    </div>
+  );
+}
+
+function getMetricIcon(key: WhoMetricResult["key"]) {
+  if (key === "weight") return Scale;
+  if (key === "lengthHeight") return Ruler;
+  if (key === "headCircumference") return Baby;
+  if (key === "weightForLength") return Proportions;
+  return Gauge;
 }
 
 function GrowthCharts({ data, result }: { data: WhoGrowthData | null; result: WhoGrowthResult }) {
@@ -335,16 +520,19 @@ function GrowthChart({ data, result, metric }: { data: WhoGrowthData; result: Wh
   const pathFor = (values: Array<{ x: number; value: number }>) => values.map((point, index) => `${index === 0 ? "M" : "L"} ${x(point.x).toFixed(1)} ${y(point.value).toFixed(1)}`).join(" ");
   const xTicks = makeXTicks(metric.dataset, result.mode);
   const yTicks = makeTicks(yMin, yMax);
+  const plotMidX = padding.left + (width - padding.left - padding.right) / 2;
+  const labelOffset = x(patientX) > plotMidX ? -9 : 9;
+  const labelAnchor = x(patientX) > plotMidX ? "end" : "start";
 
   return (
     <article className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-        <h4 className="text-base font-bold text-slate-950 dark:text-white">{metric.label}</h4>
+        <h4 className="text-base font-bold text-slate-950 dark:text-white">{getWhoChartTitle(metric, result.mode)}</h4>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-slate-600 dark:text-slate-300">
           {series.map((item) => <Legend key={item.label} color={item.color} label={item.label} />)}
         </div>
       </div>
-      <svg data-who-export-chart viewBox={`0 0 ${width} ${height}`} role="img" aria-label={metric.label} className="h-auto w-full overflow-visible">
+      <svg data-who-export-chart viewBox={`0 0 ${width} ${height}`} role="img" aria-label={getWhoChartTitle(metric, result.mode)} className="h-auto w-full overflow-visible">
         <rect x={padding.left} y={padding.top} width={width - padding.left - padding.right} height={height - padding.top - padding.bottom} className="fill-slate-50 dark:fill-slate-900" rx="6" />
         {yTicks.map((tick) => (
           <g key={tick}>
@@ -355,7 +543,7 @@ function GrowthChart({ data, result, metric }: { data: WhoGrowthData; result: Wh
         {xTicks.map((tick) => (
           <g key={tick}>
             <line x1={x(tick)} x2={x(tick)} y1={padding.top} y2={height - padding.bottom} className="stroke-slate-200 dark:stroke-slate-800" />
-            <text x={x(tick)} y={height - 22} textAnchor="middle" className="fill-slate-500 text-[11px] dark:fill-slate-400">{formatXTick(tick, metric.dataset)}</text>
+            <text x={x(tick)} y={height - 22} textAnchor="middle" className="fill-slate-500 text-[11px] dark:fill-slate-400">{formatXTick(tick, metric.dataset, result.mode)}</text>
           </g>
         ))}
         {series.map((item) => (
@@ -363,7 +551,7 @@ function GrowthChart({ data, result, metric }: { data: WhoGrowthData; result: Wh
         ))}
         <line x1={x(patientX)} x2={x(patientX)} y1={padding.top} y2={height - padding.bottom} className="stroke-blue-500/30" strokeDasharray="4 4" />
         <circle cx={x(patientX)} cy={y(metric.value)} r="6" className="fill-blue-600 stroke-white stroke-2 dark:stroke-slate-950" />
-        <text x={x(patientX) + 9} y={y(metric.value) - 8} className="fill-blue-700 text-[12px] font-semibold dark:fill-blue-300">{formatChartPointLabel(metric)}</text>
+        <text x={x(patientX) + labelOffset} y={y(metric.value) - 8} textAnchor={labelAnchor} className="fill-blue-700 text-[12px] font-semibold dark:fill-blue-300">{formatChartPointLabel(metric)}</text>
         <text x={(padding.left + width - padding.right) / 2} y={height - 4} textAnchor="middle" className="fill-slate-500 text-[11px] dark:fill-slate-400">{getXAxisTitle(metric.dataset, result.mode)}</text>
         <text x="12" y={(padding.top + height - padding.bottom) / 2} textAnchor="middle" transform={`rotate(-90 12 ${(padding.top + height - padding.bottom) / 2})`} className="fill-slate-500 text-[11px] dark:fill-slate-400">{metric.label} ({metric.unit})</text>
       </svg>
@@ -374,7 +562,7 @@ function GrowthChart({ data, result, metric }: { data: WhoGrowthData; result: Wh
 function getChartRows(data: WhoGrowthData, dataset: WhoDataset, sex: WhoSex, mode: WhoGrowthResult["mode"]) {
   const rows = [...getWhoRows(data, dataset, sex)];
   if (dataset === "wfl") return rows;
-  const min = mode === "under2" ? 0 : 730;
+  const min = mode === "under2" ? 0 : 731;
   const max = mode === "under2" ? 730 : maxAgeDays;
   return rows.filter((row) => row.x >= min && row.x <= max);
 }
@@ -382,17 +570,26 @@ function getChartRows(data: WhoGrowthData, dataset: WhoDataset, sex: WhoSex, mod
 function makeXTicks(dataset: WhoDataset, mode: WhoGrowthResult["mode"]) {
   if (dataset === "wfl") return Array.from({ length: 14 }, (_, index) => 45 + index * 5);
   if (mode === "under2") return [0, 183, 365, 548, 730];
-  return [730, 1096, 1461, 1826];
+  return [731, 1096, 1461, 1826];
 }
 
-function formatXTick(value: number, dataset: WhoDataset) {
+function formatXTick(value: number, dataset: WhoDataset, mode: WhoGrowthResult["mode"]) {
   if (dataset === "wfl") return value.toLocaleString("it-IT", { maximumFractionDigits: 0 });
+  if (mode === "over2") return (value / 365.25).toLocaleString("it-IT", { maximumFractionDigits: 0 });
   return (value / daysPerMonth).toLocaleString("it-IT", { maximumFractionDigits: 0 });
 }
 
 function getXAxisTitle(dataset: WhoDataset, mode: WhoGrowthResult["mode"]) {
   if (dataset === "wfl") return "Lunghezza (cm)";
   return mode === "under2" ? "Età (mesi)" : "Età (anni)";
+}
+
+function getWhoChartTitle(metric: WhoMetricResult, mode: WhoGrowthResult["mode"]) {
+  if (metric.key === "weight") return "Peso per età";
+  if (metric.key === "lengthHeight") return mode === "under2" ? "Lunghezza per età" : "Statura per età";
+  if (metric.key === "headCircumference") return "Circonferenza cranica per età";
+  if (metric.key === "weightForLength") return "Peso per lunghezza";
+  return "BMI per età";
 }
 
 function FieldGroup({ label, children }: { label: string; children: React.ReactNode }) {
@@ -432,6 +629,25 @@ function NumberField({ id, label, unit, value, onChange }: { id: string; label: 
   );
 }
 
+function SmallIntegerField({ id, label, min, max, value, onChange }: { id: string; label: string; min: number; max: number; value: string; onChange: (value: string) => void }) {
+  return (
+    <label htmlFor={id} className="grid gap-2">
+      <span className="text-base font-semibold text-slate-950 dark:text-white">{label}</span>
+      <input
+        id={id}
+        type="number"
+        inputMode="numeric"
+        min={min}
+        max={max}
+        step={1}
+        value={value}
+        onChange={(event) => onChange(event.target.value)}
+        className="rounded-md border border-slate-200 bg-white px-3 py-2 text-base text-slate-950 outline-none transition focus:border-blue-500 dark:border-slate-800 dark:bg-slate-950 dark:text-white"
+      />
+    </label>
+  );
+}
+
 function DateField({ id, label, value, onChange }: { id: string; label: string; value: string; onChange: (value: string) => void }) {
   return (
     <label htmlFor={id} className="grid gap-2">
@@ -460,6 +676,21 @@ function formatMetricValue(item: WhoMetricResult) {
 function formatChartPointLabel(item: WhoMetricResult) {
   if (item.key === "weightForLength") return `${formatSigned(item.zScore)} DS`;
   return formatMetricValue(item);
+}
+
+function formatCorrectedAge(ageDays: number, ageMode: AgeMode) {
+  const months = ageDays / daysPerMonth;
+  if (ageMode === "slider") return `${formatNumber(months, 1)} mesi`;
+  return `${ageDays} giorni · ${formatNumber(months, 1)} mesi`;
+}
+
+function formatChronologicalAge(ageDays: number, ageMode: AgeMode) {
+  return formatCorrectedAge(ageDays, ageMode);
+}
+
+function formatAgeYearsMonths(ageDays: number) {
+  const totalMonths = Math.round(ageDays / daysPerMonth);
+  return formatWhoAgeFromTotalMonths(totalMonths);
 }
 
 function formatPercentile(value: number) {
@@ -494,6 +725,27 @@ function formatWhoAgeFromTotalMonths(totalMonths: number) {
   const years = Math.floor(totalMonths / 12);
   const months = totalMonths % 12;
   return `${years} ${years === 1 ? "anno" : "anni"}${months > 0 ? ` ${months} ${months === 1 ? "mese" : "mesi"}` : ""}`;
+}
+
+function formatDateAgeLabel(ageDays: number) {
+  const totalMonths = Math.round(ageDays / daysPerMonth);
+  if (ageDays < 731) return formatMonthsAndDays(ageDays);
+  return formatWhoAgeFromTotalMonths(totalMonths);
+}
+
+function formatMonthsAndDays(ageDays: number) {
+  let months = Math.floor(ageDays / daysPerMonth);
+  let days = Math.round(ageDays - months * daysPerMonth);
+
+  if (days >= 30) {
+    months += 1;
+    days = 0;
+  }
+
+  const parts: string[] = [];
+  if (months > 0) parts.push(`${months} ${months === 1 ? "mese" : "mesi"}`);
+  if (days > 0 || parts.length === 0) parts.push(`${days} ${days === 1 ? "giorno" : "giorni"}`);
+  return parts.join(" ");
 }
 
 function formatChartNumber(value: number) {
@@ -563,7 +815,7 @@ function buildWhoExportHtml(result: WhoGrowthResult, chartSvgs: string[]) {
       ${svg}
     </section>
   `).join("");
-  const statureLabel = result.mode === "under2" ? "Lunghezza" : "Altezza";
+  const statureLabel = result.mode === "under2" ? "Lunghezza" : "Statura";
 
   return `<!doctype html>
 <html lang="it">

@@ -39,7 +39,7 @@ export type WhoGrowthResult = {
 
 export const whoGrowthMetadata = {
   updatedAt: "2026-05-23",
-  source: "WHO Child Growth Standards (2006), disponibili sul sito www.who.int/tools/child-growth-standards"
+  source: "WHO Child Growth Standards (2006), dati disponibili sul sito www.who.int/tools/child-growth-standards"
 };
 
 const MAX_AGE_DAYS = 1856;
@@ -49,7 +49,7 @@ const datasetLabels: Record<WhoDataset, string> = {
   wfa: "Weight-for-age",
   lhfa: "Length/height-for-age",
   hcfa: "Head circumference-for-age",
-  wfl: "Weight-for-length",
+  wfl: "Peso per lunghezza",
   bfa: "BMI"
 };
 
@@ -60,14 +60,14 @@ export function calculateWhoGrowth(data: WhoGrowthData, sex: WhoSex, ageDays: nu
   const bmi = mode === "over2" ? calculateBmi(weightKg, statureCm) : null;
   const results: WhoMetricResult[] = [
     calculateWhoMetric(data, "weight", "Peso", weightKg, "kg", "wfa", sex, ageDays),
-    calculateWhoMetric(data, "lengthHeight", mode === "under2" ? "Lunghezza" : "Altezza", statureCm, "cm", "lhfa", sex, ageDays),
+    calculateWhoMetric(data, "lengthHeight", mode === "under2" ? "Lunghezza" : "Statura", statureCm, "cm", "lhfa", sex, ageDays),
     calculateWhoMetric(data, "headCircumference", "Circonferenza cranica", headCircumferenceCm, "cm", "hcfa", sex, ageDays)
   ];
 
   // La scelta tra wfl e bfa segue le istruzioni WHO: weight-for-length fino a 730 giorni,
   // BMI-for-age oltre 730 giorni.
   if (mode === "under2") {
-    results.push(calculateWhoMetric(data, "weightForLength", "Weight-for-length", weightKg, "kg", "wfl", sex, statureCm));
+    results.push(calculateWhoMetric(data, "weightForLength", "Peso per lunghezza", weightKg, "kg", "wfl", sex, statureCm));
   } else {
     results.push(calculateWhoMetric(data, "bmi", "BMI", bmi as number, "kg/m²", "bfa", sex, ageDays));
   }
@@ -99,6 +99,29 @@ export function calculateAgeDaysFromDates(birthDate: string, measurementDate: st
   }
 
   return Math.floor((measurement.getTime() - birth.getTime()) / (24 * 60 * 60 * 1000));
+}
+
+export function calculateCorrectedAgeDays(chronologicalAgeDays: number, gestationalWeeks: number, gestationalDays: number) {
+  if (!Number.isInteger(chronologicalAgeDays) || chronologicalAgeDays < 0) {
+    throw new Error("Età cronologica non valida");
+  }
+
+  if (!Number.isInteger(gestationalWeeks) || gestationalWeeks < 22 || gestationalWeeks > 36) {
+    throw new Error("Inserire settimane gestazionali tra 22 e 36");
+  }
+
+  if (!Number.isInteger(gestationalDays) || gestationalDays < 0 || gestationalDays > 6) {
+    throw new Error("Inserire giorni gestazionali tra 0 e 6");
+  }
+
+  const gestationalAgeDays = gestationalWeeks * 7 + gestationalDays;
+  const correctedAgeDays = chronologicalAgeDays - (40 * 7 - gestationalAgeDays);
+
+  if (correctedAgeDays < 0) {
+    throw new Error("L'età corretta non può essere negativa");
+  }
+
+  return correctedAgeDays;
 }
 
 export function formatWhoAge(ageDays: number) {
@@ -186,7 +209,7 @@ function validateInputs(sex: WhoSex, ageDays: number, weightKg: number, statureC
   if (sex !== "male" && sex !== "female") throw new Error("Selezionare il sesso");
   if (!Number.isInteger(ageDays) || ageDays < 0 || ageDays > MAX_AGE_DAYS) throw new Error("Età consentita solo tra 0 e 5 anni");
   if (!Number.isFinite(weightKg) || weightKg <= 0) throw new Error("Inserire un peso valido in kg");
-  if (!Number.isFinite(statureCm) || statureCm <= 0) throw new Error("Inserire una lunghezza/altezza valida in cm");
+  if (!Number.isFinite(statureCm) || statureCm <= 0) throw new Error("Inserire una lunghezza/statura valida in cm");
   if (!Number.isFinite(headCircumferenceCm) || headCircumferenceCm <= 0) throw new Error("Inserire una circonferenza cranica valida in cm");
 }
 

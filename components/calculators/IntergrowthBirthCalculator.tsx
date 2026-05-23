@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type React from "react";
-import { Baby, Download, Ruler, Scale } from "lucide-react";
+import { Baby, Ruler, Scale } from "lucide-react";
 import { CalculatorLayout } from "@/components/CalculatorLayout";
 import { WarningBox } from "@/components/ui/WarningBox";
 import {
@@ -25,14 +25,27 @@ const parameterMeta: Record<IntergrowthParameter, { label: string; unit: string;
 };
 
 const intergrowthReferences = (
-  <ol className="list-decimal space-y-2 pl-5">
-    <li>
-      Villar J, Cheikh Ismail L, Victora CG, et al. International standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional Study of the INTERGROWTH-21st Project. Lancet. 2014 Sep 6;384(9946):857-68. doi: 10.1016/S0140-6736(14)60932-6.
-    </li>
-    <li>
-      Villar J, Giuliani F, Fenton TR, et al. INTERGROWTH-21st very preterm size at birth reference charts. Lancet. 2016 Feb 27;387(10021):844-5. doi: 10.1016/S0140-6736(16)00384-6. Erratum in: Lancet. 2016 Mar 5;387(10022):944. doi: 10.1016/S0140-6736(16)00571-7.
-    </li>
-  </ol>
+  <div className="grid gap-3">
+    <ol className="list-decimal space-y-2 pl-5">
+      <li>
+        Villar J, Cheikh Ismail L, Victora CG, et al. International standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional Study of the INTERGROWTH-21st Project. Lancet. 2014 Sep 6;384(9946):857-68. doi: 10.1016/S0140-6736(14)60932-6.
+      </li>
+      <li>
+        Villar J, Giuliani F, Fenton TR, et al. INTERGROWTH-21st very preterm size at birth reference charts. Lancet. 2016 Feb 27;387(10021):844-5. doi: 10.1016/S0140-6736(16)00384-6. Erratum in: Lancet. 2016 Mar 5;387(10022):944. doi: 10.1016/S0140-6736(16)00571-7.
+      </li>
+    </ol>
+    <p>
+      Dati e calcolatore ufficiale INTERGROWTH-21st disponibili sul sito{" "}
+      <a
+        href="https://intergrowth21.ndog.ox.ac.uk/"
+        target="_blank"
+        rel="noreferrer"
+        className="font-semibold text-blue-700 underline underline-offset-2 dark:text-blue-300"
+      >
+        https://intergrowth21.ndog.ox.ac.uk/
+      </a>
+    </p>
+  </div>
 );
 
 export function IntergrowthBirthCalculator() {
@@ -165,16 +178,6 @@ export function IntergrowthBirthCalculator() {
             >
               Calcola
             </button>
-            {submittedResult ? (
-              <button
-                type="button"
-                onClick={() => exportResult(submittedResult)}
-                className="inline-flex items-center gap-2 rounded-md border border-blue-200 bg-white px-4 py-2.5 text-sm font-semibold text-blue-700 shadow-sm transition hover:border-blue-300 hover:bg-blue-50 dark:border-blue-900 dark:bg-slate-950 dark:text-blue-300 dark:hover:bg-blue-950/40"
-              >
-                <Download className="size-4" />
-                Esporta
-              </button>
-            ) : null}
           </div>
         </section>
 
@@ -207,10 +210,7 @@ export function IntergrowthBirthCalculator() {
 function Results({ result }: { result: IntergrowthAllResults }) {
   return (
     <section className="grid gap-3">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-xl font-bold text-slate-950 dark:text-white">Risultati</h2>
-        <span className="text-base font-semibold text-slate-700 dark:text-slate-200">Età gestazionale {result.gestationalAgeKey}</span>
-      </div>
+      <ResultSummary sex={result.sex} gestationalAge={result.gestationalAgeKey} />
       <div className="grid gap-3 lg:grid-cols-3">
         {result.results.map((item) => (
           <ResultCard key={item.parameter} result={item} />
@@ -220,19 +220,32 @@ function Results({ result }: { result: IntergrowthAllResults }) {
   );
 }
 
+function ResultSummary({ sex, gestationalAge }: { sex: IntergrowthSex; gestationalAge: string }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-950">
+      <dl className="flex flex-wrap gap-x-6 gap-y-2">
+        <div className="flex gap-2">
+          <dt className="font-semibold text-slate-950 dark:text-white">Sesso</dt>
+          <dd className="text-slate-700 dark:text-slate-200">{sex === "male" ? "Maschio" : "Femmina"}</dd>
+        </div>
+        <div className="flex gap-2">
+          <dt className="font-semibold text-slate-950 dark:text-white">Età gestazionale</dt>
+          <dd className="text-slate-700 dark:text-slate-200">{gestationalAge}</dd>
+        </div>
+      </dl>
+    </div>
+  );
+}
+
 function ResultCard({ result }: { result: IntergrowthMetricResult }) {
   const alert = result.zScore === null || result.zScore < -2 || result.zScore > 2;
   const meta = parameterMeta[result.parameter];
-  const alertLabel = result.zScore === null
-    ? "fuori range tabellare"
-    : result.zScore > 2
-      ? "sopra +2 DS"
-      : "sotto -2 DS";
+  const showRangeAlert = result.zScore === null;
 
   return (
-    <article className="grid gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-sm font-semibold text-blue-700 dark:text-blue-300">
+    <article className={`grid gap-4 rounded-lg border bg-white p-4 shadow-sm dark:bg-slate-950 ${alert ? "border-rose-300 ring-1 ring-rose-200 dark:border-rose-800 dark:ring-rose-950" : "border-slate-200 dark:border-slate-800"}`}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start gap-2 text-sm font-semibold text-blue-700 dark:text-blue-300">
           {meta.icon}
           <span>{result.label}</span>
         </div>
@@ -244,9 +257,9 @@ function ResultCard({ result }: { result: IntergrowthMetricResult }) {
         <Metric label="Centile" value={result.percentileLabel} alert={alert} />
         <Metric label="Z-score" value={result.zScoreLabel} alert={alert} />
       </dl>
-      {alert ? (
+      {showRangeAlert ? (
         <div className="w-fit rounded-full bg-rose-50 px-3 py-1 text-sm font-semibold text-rose-800 ring-1 ring-rose-200 dark:bg-rose-950/40 dark:text-rose-100 dark:ring-rose-900">
-          {alertLabel}
+          Fuori range tabellare
         </div>
       ) : null}
     </article>
@@ -256,7 +269,6 @@ function ResultCard({ result }: { result: IntergrowthMetricResult }) {
 function GrowthCharts({ result }: { result: IntergrowthAllResults }) {
   return (
     <section className="grid gap-4">
-      <h3 className="text-lg font-bold text-slate-950 dark:text-white">Grafici</h3>
       <div className="grid gap-4">
         {result.results.map((item) => (
           <GrowthChart key={item.parameter} metric={item} sex={result.sex} weeks={result.weeks} days={result.days} />
@@ -310,16 +322,19 @@ function GrowthChart({ metric, sex, weeks, days }: { metric: IntergrowthMetricRe
   const patientX = x(patientAge);
   const patientY = y(metric.value);
   const yTicks = makeMetricTicks(metric.parameter, yMin, yMax);
+  const plotMidX = padding.left + (width - padding.left - padding.right) / 2;
+  const labelOffset = patientX > plotMidX ? -9 : 9;
+  const labelAnchor = patientX > plotMidX ? "end" : "start";
 
   return (
     <article className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-        <h4 className="text-base font-bold text-slate-950 dark:text-white">{metric.label} per età gestazionale</h4>
+        <h4 className="text-base font-bold text-slate-950 dark:text-white">{getIntergrowthChartTitle(metric.parameter)}</h4>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-slate-600 dark:text-slate-300">
           {series.map((item) => <Legend key={item.label} color={item.color} label={item.label} />)}
         </div>
       </div>
-      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={`${metric.label} per età gestazionale`} className="h-auto w-full overflow-visible">
+      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={getIntergrowthChartTitle(metric.parameter)} className="h-auto w-full overflow-visible">
         <rect x={padding.left} y={padding.top} width={width - padding.left - padding.right} height={height - padding.top - padding.bottom} className="fill-slate-50 dark:fill-slate-900" rx="6" />
         {yTicks.map((tick) => (
           <g key={tick}>
@@ -338,12 +353,18 @@ function GrowthChart({ metric, sex, weeks, days }: { metric: IntergrowthMetricRe
         ))}
         <line x1={patientX} x2={patientX} y1={padding.top} y2={height - padding.bottom} className="stroke-blue-500/30" strokeDasharray="4 4" />
         <circle cx={patientX} cy={patientY} r="6" className="fill-blue-600 stroke-white stroke-2 dark:stroke-slate-950" />
-        <text x={patientX + 9} y={patientY - 8} className="fill-blue-700 text-[12px] font-semibold dark:fill-blue-300">{formatChartNumber(metric.value)} {metric.unit}</text>
+        <text x={patientX + labelOffset} y={patientY - 8} textAnchor={labelAnchor} className="fill-blue-700 text-[12px] font-semibold dark:fill-blue-300">{formatChartNumber(metric.value)} {metric.unit}</text>
         <text x={(padding.left + width - padding.right) / 2} y={height - 4} textAnchor="middle" className="fill-slate-500 text-[11px] dark:fill-slate-400">Età gestazionale (settimane)</text>
         <text x="12" y={(padding.top + height - padding.bottom) / 2} textAnchor="middle" transform={`rotate(-90 12 ${(padding.top + height - padding.bottom) / 2})`} className="fill-slate-500 text-[11px] dark:fill-slate-400">{metric.label} ({metric.unit})</text>
       </svg>
     </article>
   );
+}
+
+function getIntergrowthChartTitle(parameter: IntergrowthParameter) {
+  if (parameter === "weight") return "Peso per età gestazionale";
+  if (parameter === "length") return "Lunghezza per età gestazionale";
+  return "Circonferenza cranica per età gestazionale";
 }
 
 function FieldGroup({ label, children }: { label: string; children: React.ReactNode }) {

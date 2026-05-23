@@ -8,8 +8,7 @@ export default function CdcGrowthPage() {
     <div className="grid gap-2 pb-16">
       <SectionHeader
         title="Curve CDC 2000"
-        description="Valutazione di peso, statura e BMI secondo le curve CDC 2000 dai 2 ai 20 anni."
-        descriptionClassName="xl:whitespace-nowrap"
+        description="Valutazione antropometrica secondo i riferimenti CDC 2000 per la popolazione pediatrica statunitense di età 2–20 anni."
       />
       <CdcGrowthCalculator />
       <Link

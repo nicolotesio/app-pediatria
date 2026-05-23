@@ -237,7 +237,7 @@ function validateInputs(sex: SiedpSex, ageYears: number, weightKg: number, heigh
   }
 
   if (!Number.isFinite(heightCm) || heightCm <= 0) {
-    throw new Error("Inserire un'altezza valida maggiore di 0 cm");
+    throw new Error("Inserire una statura valida maggiore di 0 cm");
   }
 }
 
@@ -252,7 +252,7 @@ function validateMetricInputs(parameter: SiedpParameter, sex: SiedpSex, ageYears
 
   if (!Number.isFinite(value) || value <= 0) {
     if (parameter === "weight") throw new Error("Inserire un peso valido maggiore di 0 kg");
-    if (parameter === "height") throw new Error("Inserire un'altezza valida maggiore di 0 cm");
+    if (parameter === "height") throw new Error("Inserire una statura valida maggiore di 0 cm");
     throw new Error("Inserire un BMI valido");
   }
 }

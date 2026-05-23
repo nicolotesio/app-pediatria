@@ -8,8 +8,7 @@ export default function SiedpGrowthPage() {
     <div className="grid gap-2 pb-16">
       <SectionHeader
         title="Curve SIEDP 2006"
-        description="Valutazione di peso, statura e BMI secondo le curve SIEDP 2006 per la popolazione italiana dai 2 ai 20 anni."
-        descriptionClassName="xl:whitespace-nowrap"
+        description="Valutazione antropometrica secondo i riferimenti SIEDP 2006 per la popolazione italiana di età 2–20 anni."
       />
       <SiedpGrowthCalculator />
       <Link

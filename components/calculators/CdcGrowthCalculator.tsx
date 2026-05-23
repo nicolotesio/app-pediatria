@@ -247,10 +247,7 @@ function Results({ result }: { result: SubmittedResult }) {
 
   return (
     <section className="grid gap-3">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-xl font-bold text-slate-950 dark:text-white">Risultati</h2>
-        <span className="text-base font-semibold text-slate-700 dark:text-slate-200">{formatCdcAge(result.ageYears)}</span>
-      </div>
+      <ResultSummary sex={result.sex} age={formatCdcAge(result.ageYears)} />
       <div className="grid gap-3 md:grid-cols-3">
         {result.weight ? (
           <ResultCard icon={<Scale className="size-5" />} label="Peso" value={`${formatNumber(result.weight.value, 1)} kg`} percentile={result.weight.percentile} zScore={result.weight.zScore} />
@@ -275,10 +272,6 @@ function Results({ result }: { result: SubmittedResult }) {
                   <span className={`w-fit rounded-full px-3 py-1 text-sm font-semibold ring-1 ${classificationClasses[result.bmi.classification]}`}>
                     {result.bmi.classification}
                   </span>
-                  <span className="rounded-md bg-blue-50 px-3 py-2 text-sm leading-6 text-blue-950 dark:bg-blue-950/40 dark:text-blue-100">
-                    <span className="block">Sovrappeso se BMI &gt;= {formatNumber(result.bmi.overweightThreshold, 1)} kg/m²;</span>
-                    <span className="block">Obesità se BMI &gt;= {formatNumber(result.bmi.obesityThreshold, 1)} kg/m²</span>
-                  </span>
                 </div>
               ) : null
             }
@@ -299,10 +292,26 @@ function Results({ result }: { result: SubmittedResult }) {
   );
 }
 
+function ResultSummary({ sex, age }: { sex: CdcSex; age: string }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-950">
+      <dl className="flex flex-wrap gap-x-6 gap-y-2">
+        <div className="flex gap-2">
+          <dt className="font-semibold text-slate-950 dark:text-white">Sesso</dt>
+          <dd className="text-slate-700 dark:text-slate-200">{sex === "male" ? "Maschio" : "Femmina"}</dd>
+        </div>
+        <div className="flex gap-2">
+          <dt className="font-semibold text-slate-950 dark:text-white">Età</dt>
+          <dd className="text-slate-700 dark:text-slate-200">{age}</dd>
+        </div>
+      </dl>
+    </div>
+  );
+}
+
 function GrowthCharts({ result }: { result: SubmittedResult }) {
   return (
     <section className="grid gap-4">
-      <h3 className="text-lg font-bold text-slate-950 dark:text-white">Grafici</h3>
       <div className="grid gap-4">
         {result.weight ? (
           <GrowthChart
@@ -390,6 +399,9 @@ function GrowthChart({
   const chartClipId = `cdc-chart-${title.toLowerCase().replace(/[^a-z0-9]+/gi, "-")}`;
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
+  const plotMidX = padding.left + chartWidth / 2;
+  const labelOffset = patientX > plotMidX ? -9 : 9;
+  const labelAnchor = patientX > plotMidX ? "end" : "start";
 
   return (
     <article className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950">
@@ -429,7 +441,7 @@ function GrowthChart({
           <line x1={patientX} x2={patientX} y1={padding.top} y2={height - padding.bottom} className="stroke-blue-500/30" strokeDasharray="4 4" />
           <circle cx={patientX} cy={patientY} r="6" className="fill-blue-600 stroke-white stroke-2 dark:stroke-slate-950" />
         </g>
-        <text x={patientX + 9} y={patientY - 8} className="fill-blue-700 text-[12px] font-semibold dark:fill-blue-300">{formatChartNumber(patient.value)} {unit}</text>
+        <text x={patientX + labelOffset} y={patientY - 8} textAnchor={labelAnchor} className="fill-blue-700 text-[12px] font-semibold dark:fill-blue-300">{formatChartNumber(patient.value)} {unit}</text>
         <text x={(padding.left + width - padding.right) / 2} y={height - 4} textAnchor="middle" className="fill-slate-500 text-[11px] dark:fill-slate-400">Età (anni)</text>
         <text x="12" y={(padding.top + height - padding.bottom) / 2} textAnchor="middle" transform={`rotate(-90 12 ${(padding.top + height - padding.bottom) / 2})`} className="fill-slate-500 text-[11px] dark:fill-slate-400">{yLabel} ({unit})</text>
       </svg>
@@ -440,7 +452,7 @@ function GrowthChart({
 function MissingResultCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
     <article className="grid gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-sm font-semibold text-blue-700 dark:text-blue-300">
             {icon}
@@ -471,8 +483,8 @@ function ResultCard({
   const isZScoreOutOfRange = zScore > 2 || zScore < -2;
 
   return (
-    <article className="grid gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-      <div className="flex items-center justify-between gap-3">
+    <article className={`grid gap-4 rounded-lg border bg-white p-4 shadow-sm dark:bg-slate-950 ${isZScoreOutOfRange ? "border-rose-300 ring-1 ring-rose-200 dark:border-rose-800 dark:ring-rose-950" : "border-slate-200 dark:border-slate-800"}`}>
+      <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="flex items-center gap-2 text-sm font-semibold text-blue-700 dark:text-blue-300">
             {icon}
