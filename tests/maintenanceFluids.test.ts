@@ -17,7 +17,6 @@ const baseInputs: FluidInputs = {
   siadhRisk: false,
   overloadRisk: false,
   sodium: null,
-  potassium: null,
   sodiumTarget: 140,
   sodiumAgeGroup: "olderChild",
   fever: false,
@@ -28,15 +27,19 @@ const baseInputs: FluidInputs = {
 
 describe("maintenance fluids", () => {
   it("calcola Holliday-Segar per 5 kg", () => {
-    expect(calculateHollidaySegar(5)).toEqual({ mlDay: 500, mlHour: 20.8, capped: false });
+    expect(calculateHollidaySegar(5)).toEqual({ mlDay: 500, mlHour: 20.8, capped: false, isCapped: false });
   });
 
   it("calcola Holliday-Segar per 12 kg", () => {
-    expect(calculateHollidaySegar(12)).toEqual({ mlDay: 1100, mlHour: 45.8, capped: false });
+    expect(calculateHollidaySegar(12)).toEqual({ mlDay: 1100, mlHour: 45.8, capped: false, isCapped: false });
   });
 
   it("calcola Holliday-Segar per 25 kg", () => {
-    expect(calculateHollidaySegar(25)).toEqual({ mlDay: 1600, mlHour: 66.7, capped: false });
+    expect(calculateHollidaySegar(25)).toEqual({ mlDay: 1600, mlHour: 66.7, capped: false, isCapped: false });
+  });
+
+  it("segnala il cap Holliday-Segar sopra 2000 mL/24h", () => {
+    expect(calculateHollidaySegar(60)).toEqual({ mlDay: 2000, mlHour: 83.3, capped: true, isCapped: true });
   });
 
   it("applica restrizione per rischio SIADH", () => {
@@ -86,6 +89,7 @@ describe("maintenance fluids", () => {
   it("calcola deficit sodio per iponatriemia", () => {
     const result = calculateSodiumCorrection({ weightKg: 10, hydrationStatus: "euvolemic", sodiumAgeGroup: "olderChild", sodium: 130, sodiumTarget: 140 });
     expect(result.sodiumDeficitMEq).toBe(70);
+    expect(result.note).toContain("max 8-10 mEq/L");
   });
 
   it("calcola eccesso sodio per ipernatriemia", () => {
@@ -102,5 +106,16 @@ describe("maintenance fluids", () => {
   it("segnala disidratazione severa come scenario critico", () => {
     const result = calculateMaintenanceFluids({ ...baseInputs, hydrationStatus: "severeDehydration" });
     expect(result.alerts.some((alert) => alert.level === "critical" && alert.message.includes("Disidratazione severa"))).toBe(true);
+  });
+
+  it("segnala uso del peso secco se il peso anamnestico è inferiore", () => {
+    const result = calculateMaintenanceFluids({
+      ...baseInputs,
+      weightKg: 10,
+      actualWeightKg: 12,
+      usesDryWeightForMaintenance: true
+    });
+    expect(result.standardMlDay).toBe(1000);
+    expect(result.alerts.some((alert) => alert.message.includes("peso anamnestico è inferiore"))).toBe(true);
   });
 });

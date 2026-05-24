@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   },
   description: "Webapp personale di Dr Nicolò Tesio per appunti, risorse e strumenti clinici in pediatria.",
   manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Appunti di Pediatria",
+    statusBarStyle: "default"
+  },
   icons: {
     icon: [
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
@@ -20,6 +25,10 @@ export const metadata: Metadata = {
     ],
     shortcut: [{ url: "/favicon-32.png", sizes: "32x32", type: "image/png" }],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }]
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-title": "Appunti di Pediatria"
   }
 };
 

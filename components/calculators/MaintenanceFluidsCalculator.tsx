@@ -38,10 +38,9 @@ export function MaintenanceFluidsCalculator() {
   const [siadhRisk, setSiadhRisk] = useState(false);
   const [overloadRisk, setOverloadRisk] = useState(false);
   const [sodium, setSodium] = useState("");
-  const [potassium, setPotassium] = useState("");
   const [sodiumTarget, setSodiumTarget] = useState("140");
   const [sodiumAgeGroup, setSodiumAgeGroup] = useState<SodiumAgeGroup>("olderChild");
-  const [includeElectrolytes, setIncludeElectrolytes] = useState(false);
+  const [includeNatremia, setIncludeNatremia] = useState(false);
   const [includePreviousLosses, setIncludePreviousLosses] = useState(false);
   const [includeOtherFluids, setIncludeOtherFluids] = useState(false);
   const [includePredictableLosses, setIncludePredictableLosses] = useState(false);
@@ -62,7 +61,6 @@ export function MaintenanceFluidsCalculator() {
     const parsedWeight = parseDecimalInput(weightKg);
     const parsedUsualWeight = parseOptionalDecimal(usualWeightKg);
     const parsedSodium = parseOptionalDecimal(sodium);
-    const parsedPotassium = parseOptionalDecimal(potassium);
     const parsedSodiumTarget = parseOptionalDecimal(sodiumTarget);
     const parsedDiarrhea = parseOptionalDecimal(diarrheaStools);
     const parsedMeasuredLosses = parseOptionalDecimal(measuredLossesMlDay);
@@ -71,10 +69,9 @@ export function MaintenanceFluidsCalculator() {
 
     if (!Number.isFinite(parsedWeight) || parsedWeight <= 0) nextErrors.push("Inserire un peso attuale valido in kg.");
     if (includePreviousLosses && (parsedUsualWeight.error || (parsedUsualWeight.value !== null && parsedUsualWeight.value <= 0))) nextErrors.push("Inserire un peso anamnestico valido oppure lasciare il campo vuoto.");
-    if (includePreviousLosses && parsedUsualWeight.value !== null && Number.isFinite(parsedWeight) && parsedUsualWeight.value < parsedWeight) nextErrors.push("Il peso anamnestico non può essere inferiore al peso attuale per il calcolo delle perdite.");
-    if (includeElectrolytes && parsedSodium.error) nextErrors.push("Inserire una natremia valida oppure lasciare il campo vuoto.");
-    if (includeElectrolytes && parsedPotassium.error) nextErrors.push("Inserire una kaliemia valida oppure lasciare il campo vuoto.");
-    if (includeElectrolytes && (parsedSodiumTarget.error || (parsedSodiumTarget.value !== null && (parsedSodiumTarget.value < 120 || parsedSodiumTarget.value > 160)))) nextErrors.push("Inserire un target di sodio plausibile oppure lasciare 140 mEq/L.");
+    if (includeNatremia && parsedSodium.error) nextErrors.push("Inserire una natremia valida oppure lasciare il campo vuoto.");
+    if (includeNatremia && parsedSodium.value !== null && (parsedSodium.value < 100 || parsedSodium.value > 180)) nextErrors.push("Inserire un valore di natremia biologicamente plausibile (100-180 mEq/L).");
+    if (includeNatremia && (parsedSodiumTarget.error || (parsedSodiumTarget.value !== null && (parsedSodiumTarget.value < 120 || parsedSodiumTarget.value > 160)))) nextErrors.push("Inserire un target di sodio plausibile oppure lasciare 140 mEq/L.");
     if (includePredictableLosses && diarrhea && (parsedDiarrhea.error || (parsedDiarrhea.value !== null && parsedDiarrhea.value < 0))) nextErrors.push("Inserire un numero di scariche valido oppure lasciare il campo vuoto.");
     if (includePreviousLosses && (parsedMeasuredLosses.error || (parsedMeasuredLosses.value !== null && parsedMeasuredLosses.value < 0))) nextErrors.push("Inserire perdite misurate valide oppure lasciare il campo vuoto.");
     if (includeOtherFluids && (parsedOtherFluids.error || (parsedOtherFluids.value !== null && parsedOtherFluids.value < 0))) nextErrors.push("Inserire altri apporti validi oppure lasciare il campo vuoto.");
@@ -85,19 +82,23 @@ export function MaintenanceFluidsCalculator() {
       return;
     }
 
+    const useDryWeightForMaintenance = includePreviousLosses && parsedUsualWeight.value !== null && parsedUsualWeight.value < parsedWeight;
+    const calculationWeight = useDryWeightForMaintenance ? parsedUsualWeight.value : parsedWeight;
+
     const inputs: FluidInputs = {
-      weightKg: parsedWeight,
-      usualWeightKg: includePreviousLosses ? parsedUsualWeight.value : null,
-      hydrationStatus: includePreviousLosses ? hydrationStatus : "euvolemic",
+      weightKg: calculationWeight,
+      actualWeightKg: parsedWeight,
+      usesDryWeightForMaintenance: useDryWeightForMaintenance,
+      usualWeightKg: includePreviousLosses && !useDryWeightForMaintenance ? parsedUsualWeight.value : null,
+      hydrationStatus: includePreviousLosses && !useDryWeightForMaintenance ? hydrationStatus : "euvolemic",
       siadhRisk,
       overloadRisk,
-      sodium: includeElectrolytes ? parsedSodium.value : null,
-      potassium: includeElectrolytes ? parsedPotassium.value : null,
-      sodiumTarget: includeElectrolytes ? parsedSodiumTarget.value : 140,
+      sodium: includeNatremia ? parsedSodium.value : null,
+      sodiumTarget: includeNatremia ? parsedSodiumTarget.value : 140,
       sodiumAgeGroup,
       fever: includePredictableLosses ? fever : false,
       diarrheaStools: includePredictableLosses && diarrhea ? (parsedDiarrhea.value ?? 0) : 0,
-      measuredLossesMlDay: includePreviousLosses ? (parsedMeasuredLosses.value ?? 0) : 0,
+      measuredLossesMlDay: includePreviousLosses && !useDryWeightForMaintenance ? (parsedMeasuredLosses.value ?? 0) : 0,
       otherFluidsMlDay: includeOtherFluids ? (parsedOtherFluids.value ?? 0) : 0
     };
 
@@ -150,17 +151,13 @@ export function MaintenanceFluidsCalculator() {
             </div>
           </InputSection>
 
-          <OptionalSection title="Elettroliti" checked={includeElectrolytes} onChange={(checked) => {
-            setIncludeElectrolytes(checked);
+          <OptionalSection title="Natremia" checked={includeNatremia} onChange={(checked) => {
+            setIncludeNatremia(checked);
             resetOutput();
           }}>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 md:grid-cols-3">
               <NumberField id="fluid-sodium" label="Natremia" unit="mEq/L" value={sodium} onChange={(value) => {
                 setSodium(value);
-                resetOutput();
-              }} optional />
-              <NumberField id="fluid-potassium" label="Kaliemia" unit="mEq/L" value={potassium} onChange={(value) => {
-                setPotassium(value);
                 resetOutput();
               }} optional />
               <SelectField id="fluid-sodium-age" label="Fascia età per VdNa" value={sodiumAgeGroup} onChange={(value) => {
@@ -189,10 +186,13 @@ export function MaintenanceFluidsCalculator() {
               }} optional help="Aspirazione da SNG o altre perdite misurate da reintegrare nelle 24 ore." />
             </div>
             <div className="grid gap-4 md:grid-cols-2">
-              <SelectField id="fluid-hydration" label="Stato idratazione" value={hydrationStatus} onChange={(value) => {
+              <SelectField id="fluid-hydration" label="Stato idratazione" value={hydrationStatus} disabled={usualWeightKg.trim() !== ""} onChange={(value) => {
                 setHydrationStatus(value as HydrationStatus);
                 resetOutput();
               }} options={hydrationStatusLabels} help={<HydrationHelpTable />} />
+              {usualWeightKg.trim() !== "" ? (
+                <p className="text-sm leading-5 text-slate-500 dark:text-slate-400">Disabilitato: il calcolo delle perdite si basa già sulla differenza di peso inserita.</p>
+              ) : null}
             </div>
           </OptionalSection>
 
@@ -299,7 +299,7 @@ function Results({ result }: { result: FluidCalculationResult }) {
   const formatted = formatResults(result);
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-      <ResultCard icon={<Droplets className="size-5" />} label="Mantenimento standard secondo formula di Holliday-Segar" value={formatted.standard} />
+      <ResultCard icon={<Droplets className="size-5" />} label="Mantenimento standard secondo formula di Holliday-Segar" value={formatted.standard} detail={result.isCapped ? "(Raggiunto il limite massimo di 2000 mL/24h)" : undefined} alert={result.isCapped} />
       <ResultCard icon={<Gauge className="size-5" />} label="Mantenimento con correzioni" value={formatted.correctedMaintenance} detail={formatted.restriction} />
       <ResultCard icon={<Waves className="size-5" />} label="Calcolo perdite" value={formatted.previousLosses} />
       <ResultCard icon={<Waves className="size-5" />} label="Perdite prevedibili" value={formatted.predictableLosses} detail={result.predictableLossesDetails.join(" · ")} />
@@ -393,11 +393,11 @@ const alertClasses: Record<AlertLevel, string> = {
   critical: "border-rose-300 bg-rose-50 text-rose-950 ring-1 ring-rose-200 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-100 dark:ring-rose-950"
 };
 
-function SelectField({ id, label, value, onChange, options, help }: { id: string; label: string; value: string; onChange: (value: string) => void; options: Record<string, string>; help?: React.ReactNode }) {
+function SelectField({ id, label, value, onChange, options, help, disabled = false }: { id: string; label: string; value: string; onChange: (value: string) => void; options: Record<string, string>; help?: React.ReactNode; disabled?: boolean }) {
   return (
     <label htmlFor={id} className="grid gap-2">
       <span className="flex items-center gap-2 text-base font-semibold text-slate-950 dark:text-white">{label}{help ? <HelpNote text={help} /> : null}</span>
-      <select id={id} value={value} onChange={(event) => onChange(event.target.value)} className="rounded-md border border-slate-200 bg-white px-3 py-2 text-base text-slate-950 outline-none transition focus:border-blue-500 dark:border-slate-800 dark:bg-slate-950 dark:text-white">
+      <select id={id} value={value} disabled={disabled} onChange={(event) => onChange(event.target.value)} className="rounded-md border border-slate-200 bg-white px-3 py-2 text-base text-slate-950 outline-none transition focus:border-blue-500 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500 dark:border-slate-800 dark:bg-slate-950 dark:text-white dark:disabled:bg-slate-900 dark:disabled:text-slate-500">
         {Object.entries(options).map(([optionValue, optionLabel]) => <option key={optionValue} value={optionValue}>{optionLabel}</option>)}
       </select>
     </label>

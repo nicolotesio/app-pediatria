@@ -4,12 +4,13 @@ export type AlertLevel = "info" | "warning" | "critical";
 
 export type FluidInputs = {
   weightKg: number;
+  actualWeightKg?: number | null;
+  usesDryWeightForMaintenance?: boolean;
   usualWeightKg?: number | null;
   hydrationStatus: HydrationStatus;
   siadhRisk: boolean;
   overloadRisk: boolean;
   sodium?: number | null;
-  potassium?: number | null;
   sodiumTarget?: number | null;
   sodiumAgeGroup: SodiumAgeGroup;
   fever: boolean;
@@ -37,6 +38,7 @@ export type SodiumCorrectionResult = {
 export type FluidCalculationResult = {
   standardMlDay: number;
   standardMlHour: number;
+  isCapped: boolean;
   restrictionFactor: number;
   restrictionLabel: string;
   correctedMaintenanceMlDay: number;
@@ -87,16 +89,18 @@ export function calculateHollidaySegar(weightKg: number) {
     throw new Error("Inserire un peso valido in kg");
   }
 
-  let mlDay: number;
-  if (weightKg <= 10) mlDay = weightKg * 100;
-  else if (weightKg <= 20) mlDay = 1000 + (weightKg - 10) * 50;
-  else mlDay = 1500 + (weightKg - 20) * 20;
+  let theoreticalMlDay: number;
+  if (weightKg <= 10) theoreticalMlDay = weightKg * 100;
+  else if (weightKg <= 20) theoreticalMlDay = 1000 + (weightKg - 10) * 50;
+  else theoreticalMlDay = 1500 + (weightKg - 20) * 20;
 
-  const cappedMlDay = Math.min(mlDay, MAX_MAINTENANCE_ML_DAY);
+  const cappedMlDay = Math.min(theoreticalMlDay, MAX_MAINTENANCE_ML_DAY);
+  const isCapped = cappedMlDay !== theoreticalMlDay;
   return {
     mlDay: round(cappedMlDay),
     mlHour: round(cappedMlDay / 24, 1),
-    capped: cappedMlDay !== mlDay
+    capped: isCapped,
+    isCapped
   };
 }
 
@@ -180,7 +184,7 @@ export function calculateSodiumCorrection(inputs: Pick<FluidInputs, "weightKg" |
       sodiumExcessMEq: null,
       distributionVolumeL: round(distributionVolumeL, 2),
       distributionFactor,
-      note: `Deficit stimato con VdNa ${distributionFactor} L/kg. Non sostituisce protocollo specifico, valutazione dei sintomi e velocità massima di correzione.`
+      note: `Deficit teorico stimato con VdNa ${distributionFactor} L/kg. Attenzione: la correzione della natremia deve essere lenta (max 8-10 mEq/L nelle 24h) per evitare complicanze neurologiche (es. mielinolisi pontina). Seguire il protocollo locale.`
     };
   }
 
@@ -193,7 +197,7 @@ export function calculateSodiumCorrection(inputs: Pick<FluidInputs, "weightKg" |
       sodiumExcessMEq: round(sodiumDeltaMEq, 1),
       distributionVolumeL: round(distributionVolumeL, 2),
       distributionFactor,
-      note: `Eccesso stimato con VdNa ${distributionFactor} L/kg. Correggere lentamente secondo protocollo specifico e monitoraggio ravvicinato.`
+      note: `Eccesso teorico stimato con VdNa ${distributionFactor} L/kg. Attenzione: la correzione della natremia deve essere lenta e controllata (in genere max 8-10 mEq/L nelle 24h, salvo protocollo specialistico) per evitare complicanze neurologiche. Seguire il protocollo locale.`
     };
   }
 
@@ -222,6 +226,14 @@ export function subtractOtherFluids(targetMlDay: number, otherFluidsMlDay: numbe
 
 export function getSafetyAlerts(inputs: FluidInputs): SafetyAlert[] {
   const alerts: SafetyAlert[] = [];
+
+  if (inputs.usesDryWeightForMaintenance) {
+    alerts.push({
+      level: "warning",
+      message: "Il peso anamnestico è inferiore al peso attuale. Sospetto sovraccarico idrico / edemi: il calcolo del mantenimento basale si basa sul peso anamnestico (secco) per evitare di peggiorare il sovraccarico."
+    });
+  }
+
   if (inputs.hydrationStatus === "severeDehydration") {
     alerts.push({
       level: "critical",
@@ -255,20 +267,6 @@ export function getSafetyAlerts(inputs: FluidInputs): SafetyAlert[] {
     }
   }
 
-  if (inputs.potassium !== null && inputs.potassium !== undefined && Number.isFinite(inputs.potassium)) {
-    if (inputs.potassium >= 6) {
-      alerts.push({
-        level: "critical",
-        message: "Iperkaliemia significativa: rivalutare soluzione, supplementazione di potassio e monitoraggio ECG/laboratoristico."
-      });
-    } else if (inputs.potassium < 3) {
-      alerts.push({
-        level: "warning",
-        message: "Ipokaliemia: valutare correzione secondo protocollo locale, diuresi e funzione renale."
-      });
-    }
-  }
-
   if ((inputs.siadhRisk || inputs.overloadRisk) && inputs.hydrationStatus !== "euvolemic") {
     alerts.push({
       level: "warning",
@@ -289,6 +287,13 @@ export function calculateMaintenanceFluids(inputs: FluidInputs): FluidCalculatio
   const sodiumCorrection = calculateSodiumCorrection(inputs);
   const alerts = getSafetyAlerts(inputs);
 
+  if (standard.isCapped) {
+    alerts.push({
+      level: "info",
+      message: "Raggiunto il limite massimo di 2000 mL/24h per lo standard adulto."
+    });
+  }
+
   if (residual.noAdditionalIv) {
     alerts.push({
       level: "warning",
@@ -299,6 +304,7 @@ export function calculateMaintenanceFluids(inputs: FluidInputs): FluidCalculatio
   return {
     standardMlDay: standard.mlDay,
     standardMlHour: standard.mlHour,
+    isCapped: standard.isCapped,
     restrictionFactor: restriction.factor,
     restrictionLabel: restriction.label,
     correctedMaintenanceMlDay,
@@ -353,7 +359,7 @@ export function getMonitoringRecommendations() {
     "bilancio idrico",
     "peso quotidiano",
     "diuresi",
-    "Na/K/Cl",
+    "Na/Cl",
     "glicemia",
     "rivalutazione almeno quotidiana della necessità di EV",
     "riduzione/sospensione appena possibile se via enterale/orale sufficiente"
