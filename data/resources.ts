@@ -9,46 +9,10 @@ export type Resource = {
 
 export const resources: Resource[] = [
   {
-    id: "who-child-growth",
-    title: "WHO Child Growth Standards",
-    description: "Standard internazionali di crescita WHO. Dataset da integrare separatamente se validato per uso locale.",
-    url: "https://www.who.int/tools/child-growth-standards",
-    category: "Crescita",
-    personalNote: "Utile come fonte primaria per future curve 0-2 anni."
-  },
-  {
-    id: "cdc-growth-charts",
-    title: "CDC Growth Charts",
-    description: "Curve di crescita CDC per eta pediatrica. Non configurate nel calcolatore.",
-    url: "https://www.cdc.gov/growthcharts/",
-    category: "Crescita"
-  },
-  {
-    id: "intergrowth",
-    title: "INTERGROWTH-21st",
-    description: "Risorse su crescita fetale e neonatale. Dataset non ancora configurato.",
-    url: "https://intergrowth21.tghn.org/",
-    category: "Crescita"
-  },
-  {
     id: "peditools",
     title: "PediTools",
     description: "Calcolatori pediatrici rapidi per consultazione clinica.",
     url: "https://peditools.org/",
-    category: "Strumenti"
-  },
-  {
-    id: "intergrowth-calculators",
-    title: "INTERGROWTH-21st Applications & Calculators",
-    description: "Applicazioni e calcolatori INTERGROWTH-21st per crescita fetale e neonatale.",
-    url: "https://intergrowth21.com/intergrowth-21st-applications-calculators",
-    category: "Strumenti"
-  },
-  {
-    id: "who-child-growth-standards",
-    title: "WHO Child Growth Standards",
-    description: "Standard WHO per crescita pediatrica, con tabelle e materiali ufficiali.",
-    url: "https://www.who.int/tools/child-growth-standards/standards",
     category: "Strumenti"
   },
   {

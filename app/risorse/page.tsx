@@ -7,14 +7,11 @@ const categoryMeta: Record<string, { title: string; icon: React.ComponentType<{ 
   Strumenti: { title: "Strumenti", icon: Stethoscope, tone: "blue" },
   "Siti e newsletter": { title: "Siti e newsletter", icon: Newspaper, tone: "amber" },
   Podcast: { title: "Podcast", icon: Headphones, tone: "red" },
-  Crescita: { title: "Crescita e curve", icon: TrendingUp, tone: "slate" },
   Neonatologia: { title: "Neonatologia", icon: TrendingUp, tone: "slate" }
 };
 
-const categoryOrder = ["Strumenti", "Siti e newsletter", "Podcast", "Crescita", "Neonatologia"];
-const resourceOrder: Record<string, string[]> = {
-  Crescita: ["intergrowth"]
-};
+const categoryOrder = ["Strumenti", "Siti e newsletter", "Podcast", "Neonatologia"];
+const resourceOrder: Record<string, string[]> = {};
 
 export default function ResourcesPage() {
   const groupedResources = categoryOrder
