@@ -30,7 +30,7 @@ export type CdcGrowthResult = {
 };
 
 export const cdcGrowthMetadata = {
-  source: "Centers for Disease Control and Prevention. 2000 CDC Growth Charts for the United States: Methods and Development. Vital Health Stat 11. 2002;(246):1-190.",
+  source: "CDC Growth Charts (2000), dati disponibili sul sito https://www.cdc.gov/growthcharts/cdc-growth-charts.htm",
   updatedAt: "2026-05-23"
 };
 

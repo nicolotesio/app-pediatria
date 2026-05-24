@@ -116,10 +116,21 @@ export function CdcGrowthCalculator() {
 
   return (
     <CalculatorLayout
-      source={cdcGrowthMetadata.source}
+      source={
+        <>
+          CDC Growth Charts (2000), dati disponibili sul sito{" "}
+          <a
+            href="https://www.cdc.gov/growthcharts/cdc-growth-charts.htm"
+            target="_blank"
+            rel="noreferrer"
+            className="font-semibold text-blue-700 underline underline-offset-2 dark:text-blue-300"
+          >
+            www.cdc.gov/growthcharts/cdc-growth-charts.htm
+          </a>
+        </>
+      }
       updatedAt={cdcGrowthMetadata.updatedAt}
       sourceTitle="Riferimenti bibliografici"
-      sourceNote="Dati LMS caricati localmente dai file CDC forniti."
       unframed
       warningPlacement="bottom"
       warning={null}

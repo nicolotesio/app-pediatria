@@ -8,7 +8,6 @@ const calculators = [
   { title: "WHO Child Growth Standards", href: "/calcolatori/crescita-who-0-5", description: "Valutazione antropometrica secondo gli standard internazionali WHO per bambini da 0 a 5 anni.", icon: ChartSpline },
   { title: "Curve SIEDP 2006", href: "/calcolatori/crescita-siedp-2006", description: "Valutazione antropometrica secondo i riferimenti SIEDP 2006 per la popolazione italiana di età 2–20 anni.", icon: ChartSpline },
   { title: "Curve CDC 2000", href: "/calcolatori/crescita-cdc-2000", description: "Valutazione antropometrica secondo i riferimenti CDC 2000 per la popolazione pediatrica statunitense di età 2–20 anni.", icon: ChartSpline },
-  { title: "BMI pediatrico", description: "Richiede curve/percentili validati.", icon: Calculator, unavailable: true },
   { title: "Superficie corporea", description: "Formula da selezionare e validare.", icon: Calculator, unavailable: true },
   { title: "eGFR pediatrico", description: "Formula e unita di creatinina da configurare.", icon: Calculator, unavailable: true },
   { title: "Sodio corretto", description: "Formula da configurare con fonte.", icon: Calculator, unavailable: true }
