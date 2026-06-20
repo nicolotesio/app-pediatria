@@ -8,54 +8,50 @@ import { WarningBox } from "@/components/ui/WarningBox";
 import {
   calculateAllResults,
   getRowsForParameter,
-  intergrowth21Metadata,
-  type IntergrowthAllResults,
-  type IntergrowthMetricResult,
-  type IntergrowthParameter,
-  type IntergrowthSex
-} from "@/lib/calculators/intergrowth21";
+  inesMetadata,
+  type InesAllResults,
+  type InesMetricResult,
+  type InesParameter,
+  type InesSex
+} from "@/lib/calculators/ines";
 
-const weeksOptions = Array.from({ length: 19 }, (_, index) => index + 24);
+const weeksOptions = Array.from({ length: 20 }, (_, index) => index + 23);
 const daysOptions = Array.from({ length: 7 }, (_, index) => index);
 
-const parameterMeta: Record<IntergrowthParameter, { label: string; unit: string; icon: React.ReactNode }> = {
+const parameterMeta: Record<InesParameter, { label: string; unit: string; icon: React.ReactNode }> = {
   weight: { label: "Peso", unit: "g", icon: <Scale className="size-5" /> },
   length: { label: "Lunghezza", unit: "cm", icon: <Ruler className="size-5" /> },
   headCircumference: { label: "Circonferenza cranica", unit: "cm", icon: <Baby className="size-5" /> }
 };
 
-const intergrowthReferences = (
+const inesReferences = (
   <div className="grid gap-3">
-    <ol className="list-decimal space-y-2 pl-5">
-      <li>
-        Villar J, Cheikh Ismail L, Victora CG, et al. International standards for newborn weight, length, and head circumference by gestational age and sex: the Newborn Cross-Sectional Study of the INTERGROWTH-21st Project. Lancet. 2014 Sep 6;384(9946):857-68. doi: 10.1016/S0140-6736(14)60932-6.
-      </li>
-      <li>
-        Villar J, Giuliani F, Fenton TR, et al. INTERGROWTH-21st very preterm size at birth reference charts. Lancet. 2016 Feb 27;387(10021):844-5. doi: 10.1016/S0140-6736(16)00384-6. Erratum in: Lancet. 2016 Mar 5;387(10022):944. doi: 10.1016/S0140-6736(16)00571-7.
-      </li>
-    </ol>
     <p>
-      Dati e calcolatore ufficiale INTERGROWTH-21st disponibili sul sito:{" "}
+      Bertino E, Spada E, Occhi L, et al. Neonatal Anthropometric Charts: The Italian neonatal study compared with other European studies. J Pediatr Gastroenterol Nutr. 2010;51:353-361.
+    </p>
+    <p>
+      Dati e calcolatore ufficiale INeS disponibili sul sito:{" "}
       <a
-        href="https://intergrowth21.ndog.ox.ac.uk/"
+        href="https://www.inescharts.com/"
         target="_blank"
         rel="noreferrer"
         className="font-semibold text-blue-700 underline underline-offset-2 dark:text-blue-300"
       >
-        https://intergrowth21.ndog.ox.ac.uk/
+        https://www.inescharts.com/
       </a>
     </p>
   </div>
 );
 
-export function IntergrowthBirthCalculator() {
-  const [sex, setSex] = useState<IntergrowthSex | "">("male");
+export function InesBirthCalculator() {
+  const [sex, setSex] = useState<InesSex | "">("male");
+  const [firstborn, setFirstborn] = useState(false);
   const [weeks, setWeeks] = useState(39);
   const [days, setDays] = useState(0);
   const [weight, setWeight] = useState("");
   const [length, setLength] = useState("");
   const [headCircumference, setHeadCircumference] = useState("");
-  const [submittedResult, setSubmittedResult] = useState<IntergrowthAllResults | null>(null);
+  const [submittedResult, setSubmittedResult] = useState<InesAllResults | null>(null);
   const [submittedErrors, setSubmittedErrors] = useState<string[]>([]);
   const [showCharts, setShowCharts] = useState(false);
 
@@ -71,8 +67,10 @@ export function IntergrowthBirthCalculator() {
     const parsedHeadCircumference = parseOptionalDecimal(headCircumference);
 
     if (!sex) errors.push("Selezionare il sesso");
-    if (!Number.isInteger(weeks) || weeks < 24 || weeks > 42) errors.push("Selezionare le settimane tra 24 e 42");
-    if (!Number.isInteger(days) || days < 0 || days > 6) errors.push("Selezionare i giorni tra 0 e 6");
+    if (!Number.isInteger(weeks) || weeks < 23 || weeks > 42) errors.push("Selezionare le settimane tra 23 e 42");
+    if (!Number.isInteger(days) || days < 0 || days > 6 || (weeks === 42 && days > 3)) {
+      errors.push("L'età gestazionale deve essere compresa tra 23+0 e 42+3");
+    }
     if (weight.trim() !== "" && (parsedWeight === null || parsedWeight <= 0)) errors.push("Inserire un peso valido in grammi");
     if (length.trim() !== "" && (parsedLength === null || parsedLength <= 0)) errors.push("Inserire una lunghezza valida in cm");
     if (headCircumference.trim() !== "" && (parsedHeadCircumference === null || parsedHeadCircumference <= 0)) {
@@ -89,7 +87,7 @@ export function IntergrowthBirthCalculator() {
     }
 
     try {
-      const result = calculateAllResults(sex as IntergrowthSex, weeks, days, {
+      const result = calculateAllResults(sex as InesSex, firstborn, weeks, days, {
         weight: parsedWeight,
         length: parsedLength,
         headCircumference: parsedHeadCircumference
@@ -104,8 +102,8 @@ export function IntergrowthBirthCalculator() {
 
   return (
     <CalculatorLayout
-      source={intergrowthReferences}
-      updatedAt={intergrowth21Metadata.updatedAt}
+      source={inesReferences}
+      updatedAt={inesMetadata.updatedAt}
       sourceTitle="Riferimenti bibliografici"
       unframed
       warningPlacement="bottom"
@@ -113,7 +111,7 @@ export function IntergrowthBirthCalculator() {
     >
       <div className="grid gap-5">
         <section className="grid gap-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-          <div className="grid gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <FieldGroup label="Sesso">
               <div className="grid grid-cols-2 gap-2">
                 <SegmentButton active={sex === "male"} onClick={() => {
@@ -130,6 +128,22 @@ export function IntergrowthBirthCalculator() {
                 </SegmentButton>
               </div>
             </FieldGroup>
+            <FieldGroup label="Primogenito">
+              <div className="grid grid-cols-2 gap-2">
+                <SegmentButton active={firstborn} onClick={() => {
+                  setFirstborn(true);
+                  resetSubmittedOutput();
+                }}>
+                  Sì
+                </SegmentButton>
+                <SegmentButton active={!firstborn} onClick={() => {
+                  setFirstborn(false);
+                  resetSubmittedOutput();
+                }}>
+                  No
+                </SegmentButton>
+              </div>
+            </FieldGroup>
           </div>
 
           <FieldGroup label="Età gestazionale">
@@ -140,12 +154,13 @@ export function IntergrowthBirthCalculator() {
                 selected={weeks}
                 onSelect={(value) => {
                   setWeeks(value);
+                  if (value === 42 && days > 3) setDays(3);
                   resetSubmittedOutput();
                 }}
               />
               <ButtonGrid
                 label="Giorni"
-                values={daysOptions}
+                values={weeks === 42 ? [0, 1, 2, 3] : daysOptions}
                 selected={days}
                 onSelect={(value) => {
                   setDays(value);
@@ -156,15 +171,15 @@ export function IntergrowthBirthCalculator() {
           </FieldGroup>
 
           <div className="grid gap-4 sm:grid-cols-3">
-            <NumberField id="intergrowth-weight" label="Peso" unit="g" value={weight} onChange={(value) => {
+            <NumberField id="ines-weight" label="Peso" unit="g" value={weight} onChange={(value) => {
               setWeight(value);
               resetSubmittedOutput();
             }} />
-            <NumberField id="intergrowth-length" label="Lunghezza" unit="cm" value={length} onChange={(value) => {
+            <NumberField id="ines-length" label="Lunghezza" unit="cm" value={length} onChange={(value) => {
               setLength(value);
               resetSubmittedOutput();
             }} />
-            <NumberField id="intergrowth-head" label="Circonferenza cranica" unit="cm" value={headCircumference} onChange={(value) => {
+            <NumberField id="ines-head" label="Circonferenza cranica" unit="cm" value={headCircumference} onChange={(value) => {
               setHeadCircumference(value);
               resetSubmittedOutput();
             }} />
@@ -207,10 +222,10 @@ export function IntergrowthBirthCalculator() {
   );
 }
 
-function Results({ result }: { result: IntergrowthAllResults }) {
+function Results({ result }: { result: InesAllResults }) {
   return (
     <section className="grid gap-3">
-      <ResultSummary sex={result.sex} gestationalAge={result.gestationalAgeKey} />
+      <ResultSummary sex={result.sex} firstborn={result.firstborn} gestationalAge={result.gestationalAgeKey} lmsWeek={result.lmsWeek} />
       <div className="grid gap-3 lg:grid-cols-3">
         {result.results.map((item) => (
           <ResultCard key={item.parameter} result={item} />
@@ -220,7 +235,7 @@ function Results({ result }: { result: IntergrowthAllResults }) {
   );
 }
 
-function ResultSummary({ sex, gestationalAge }: { sex: IntergrowthSex; gestationalAge: string }) {
+function ResultSummary({ sex, firstborn, gestationalAge, lmsWeek }: { sex: InesSex; firstborn: boolean; gestationalAge: string; lmsWeek: number }) {
   return (
     <div className="rounded-lg border border-slate-200 bg-white p-3 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <dl className="flex flex-wrap gap-x-6 gap-y-2">
@@ -229,18 +244,25 @@ function ResultSummary({ sex, gestationalAge }: { sex: IntergrowthSex; gestation
           <dd className="text-slate-700 dark:text-slate-200">{sex === "male" ? "Maschio" : "Femmina"}</dd>
         </div>
         <div className="flex gap-2">
+          <dt className="font-semibold text-slate-950 dark:text-white">Primogenito</dt>
+          <dd className="text-slate-700 dark:text-slate-200">{firstborn ? "Sì" : "No"}</dd>
+        </div>
+        <div className="flex gap-2">
           <dt className="font-semibold text-slate-950 dark:text-white">Età gestazionale</dt>
           <dd className="text-slate-700 dark:text-slate-200">{gestationalAge}</dd>
+        </div>
+        <div className="flex gap-2">
+          <dt className="font-semibold text-slate-950 dark:text-white">EG arrotondata (per LMS)</dt>
+          <dd className="text-slate-700 dark:text-slate-200">{lmsWeek}</dd>
         </div>
       </dl>
     </div>
   );
 }
 
-function ResultCard({ result }: { result: IntergrowthMetricResult }) {
-  const alert = result.zScore === null || result.zScore < -2 || result.zScore > 2;
+function ResultCard({ result }: { result: InesMetricResult }) {
+  const alert = result.zScore < -2 || result.zScore > 2;
   const meta = parameterMeta[result.parameter];
-  const showRangeAlert = result.zScore === null;
 
   return (
     <article className={`grid gap-4 rounded-lg border bg-white p-4 shadow-sm dark:bg-slate-950 ${alert ? "border-rose-300 ring-1 ring-rose-200 dark:border-rose-800 dark:ring-rose-950" : "border-slate-200 dark:border-slate-800"}`}>
@@ -257,42 +279,31 @@ function ResultCard({ result }: { result: IntergrowthMetricResult }) {
         <Metric label="Centile" value={result.percentileLabel} alert={alert} />
         <Metric label="Z-score" value={result.zScoreLabel} alert={alert} />
       </dl>
-      {showRangeAlert ? (
-        <div className="w-fit rounded-full bg-rose-50 px-3 py-1 text-sm font-semibold text-rose-800 ring-1 ring-rose-200 dark:bg-rose-950/40 dark:text-rose-100 dark:ring-rose-900">
-          Fuori range tabellare
-        </div>
-      ) : null}
     </article>
   );
 }
 
-function GrowthCharts({ result }: { result: IntergrowthAllResults }) {
+function GrowthCharts({ result }: { result: InesAllResults }) {
   return (
     <section className="grid gap-4">
       <div className="grid gap-4">
         {result.results.map((item) => (
-          <GrowthChart key={item.parameter} metric={item} sex={result.sex} weeks={result.weeks} days={result.days} />
+          <GrowthChart key={item.parameter} metric={item} sex={result.sex} firstborn={result.firstborn} weeks={result.weeks} days={result.days} />
         ))}
       </div>
     </section>
   );
 }
 
-function GrowthChart({ metric, sex, weeks, days }: { metric: IntergrowthMetricResult; sex: IntergrowthSex; weeks: number; days: number }) {
+function GrowthChart({ metric, sex, firstborn, weeks, days }: { metric: InesMetricResult; sex: InesSex; firstborn: boolean; weeks: number; days: number }) {
   const width = 760;
   const height = 428;
   const padding = { top: 24, right: 24, bottom: 50, left: 52 };
   const patientAge = weeks + days / 7;
-  const isEarlyGestation = patientAge < 33;
-  const xMin = isEarlyGestation ? 24 : 33;
-  const xMax = isEarlyGestation ? 32 + 6 / 7 : 42 + 6 / 7;
-  const xTicks = isEarlyGestation
-    ? Array.from({ length: 9 }, (_, index) => index + 24)
-    : Array.from({ length: 10 }, (_, index) => index + 33);
-  const rows = getRowsForParameter(metric.parameter, sex).filter((row) => {
-    const age = row.weeks + row.days / 7;
-    return age >= xMin && age <= xMax;
-  });
+  const xMin = 23;
+  const xMax = 42 + 3 / 7;
+  const xTicks = Array.from({ length: 20 }, (_, index) => index + 23);
+  const rows = getRowsForParameter(metric.parameter, sex, firstborn);
   const series = [
     { label: "+3 DS", z: 3, color: "#be123c", width: 1.4 },
     { label: "+2 DS", z: 2, color: "#dc2626", width: 1.4 },
@@ -304,7 +315,7 @@ function GrowthChart({ metric, sex, weeks, days }: { metric: IntergrowthMetricRe
   ].map((item) => ({
     ...item,
     values: rows.map((row) => ({
-      age: row.weeks + row.days / 7,
+      age: row.week,
       value: metric.zScoreTable.find((point) => point.z === item.z)
         ? row.values[zToColumn(item.z)]
         : 0
@@ -329,12 +340,12 @@ function GrowthChart({ metric, sex, weeks, days }: { metric: IntergrowthMetricRe
   return (
     <article className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-950">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-        <h4 className="text-base font-bold text-slate-950 dark:text-white">{getIntergrowthChartTitle(metric.parameter)}</h4>
+        <h4 className="text-base font-bold text-slate-950 dark:text-white">{getInesChartTitle(metric.parameter)}</h4>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-slate-600 dark:text-slate-300">
           {series.map((item) => <Legend key={item.label} color={item.color} label={item.label} />)}
         </div>
       </div>
-      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={getIntergrowthChartTitle(metric.parameter)} className="h-auto w-full overflow-visible">
+      <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={getInesChartTitle(metric.parameter)} className="h-auto w-full overflow-visible">
         <rect x={padding.left} y={padding.top} width={width - padding.left - padding.right} height={height - padding.top - padding.bottom} className="fill-slate-50 dark:fill-slate-900" rx="6" />
         {yTicks.map((tick) => (
           <g key={tick}>
@@ -361,7 +372,7 @@ function GrowthChart({ metric, sex, weeks, days }: { metric: IntergrowthMetricRe
   );
 }
 
-function getIntergrowthChartTitle(parameter: IntergrowthParameter) {
+function getInesChartTitle(parameter: InesParameter) {
   if (parameter === "weight") return "Peso per età gestazionale";
   if (parameter === "length") return "Lunghezza per età gestazionale";
   return "Circonferenza cranica per età gestazionale";
@@ -487,7 +498,7 @@ function makeTicks(min: number, max: number) {
   return ticks.length >= 2 ? ticks : [min, max].map(roundChartTick);
 }
 
-function makeMetricTicks(parameter: IntergrowthParameter, min: number, max: number) {
+function makeMetricTicks(parameter: InesParameter, min: number, max: number) {
   if (parameter === "weight") return makeFixedStepTicks(min, max, 1000);
   if (parameter === "length" || parameter === "headCircumference") return makeFixedStepTicks(min, max, 5);
   return makeTicks(min, max);
@@ -525,7 +536,7 @@ function dedupe(values: string[]) {
   return Array.from(new Set(values));
 }
 
-function exportResult(result: IntergrowthAllResults) {
+function exportResult(result: InesAllResults) {
   const html = buildExportHtml(result);
   const printWindow = window.open("", "_blank");
 
@@ -534,7 +545,7 @@ function exportResult(result: IntergrowthAllResults) {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `intergrowth-21-${result.gestationalAgeKey.replace("+", "p")}.html`;
+    link.download = `ines-${result.gestationalAgeKey.replace("+", "p")}.html`;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -549,7 +560,7 @@ function exportResult(result: IntergrowthAllResults) {
   window.setTimeout(() => printWindow.print(), 250);
 }
 
-function buildExportHtml(result: IntergrowthAllResults) {
+function buildExportHtml(result: InesAllResults) {
   const rows = result.results.map((item) => `
     <tr>
       <td>${escapeHtml(item.label)}</td>
@@ -565,7 +576,7 @@ function buildExportHtml(result: IntergrowthAllResults) {
 <html lang="it">
 <head>
   <meta charset="utf-8" />
-  <title>Riepilogo INTERGROWTH-21</title>
+  <title>Riepilogo INeS</title>
   <style>
     body { font-family: Arial, sans-serif; color: #0f172a; margin: 32px; }
     h1 { font-size: 22px; margin-bottom: 8px; }
@@ -590,9 +601,11 @@ function buildExportHtml(result: IntergrowthAllResults) {
   <h1>Riepilogo centili alla nascita</h1>
   <dl>
     <dt>Sesso</dt><dd>${result.sex === "male" ? "Maschio" : "Femmina"}</dd>
+    <dt>Primogenito</dt><dd>${result.firstborn ? "Sì" : "No"}</dd>
     <dt>Eta gestazionale</dt><dd>${escapeHtml(result.gestationalAgeKey)}</dd>
+    <dt>EG arrotondata (per LMS)</dt><dd>${result.lmsWeek}</dd>
     <dt>Data del calcolo</dt><dd>${escapeHtml(formatDateTime(result.calculatedAt))}</dd>
-    <dt>Riferimento</dt><dd>INTERGROWTH-21</dd>
+    <dt>Riferimento</dt><dd>INeS</dd>
   </dl>
   <table>
     <thead>
@@ -602,26 +615,20 @@ function buildExportHtml(result: IntergrowthAllResults) {
   </table>
   <h2>Grafici</h2>
   <section class="charts">${charts}</section>
-  <p class="note">Documento generato dal calcolatore INTERGROWTH-21. Verificare sempre il dato nel contesto clinico.</p>
+  <p class="note">Documento generato dal calcolatore INeS. Verificare sempre il dato nel contesto clinico.</p>
 </body>
 </html>`;
 }
 
-function buildExportChartSvg(metric: IntergrowthMetricResult, result: IntergrowthAllResults) {
+function buildExportChartSvg(metric: InesMetricResult, result: InesAllResults) {
   const width = 760;
   const height = 428;
   const padding = { top: 24, right: 24, bottom: 50, left: 52 };
   const patientAge = result.weeks + result.days / 7;
-  const isEarlyGestation = patientAge < 33;
-  const xMin = isEarlyGestation ? 24 : 33;
-  const xMax = isEarlyGestation ? 32 + 6 / 7 : 42 + 6 / 7;
-  const xTicks = isEarlyGestation
-    ? Array.from({ length: 9 }, (_, index) => index + 24)
-    : Array.from({ length: 10 }, (_, index) => index + 33);
-  const rows = getRowsForParameter(metric.parameter, result.sex).filter((row) => {
-    const age = row.weeks + row.days / 7;
-    return age >= xMin && age <= xMax;
-  });
+  const xMin = 23;
+  const xMax = 42 + 3 / 7;
+  const xTicks = Array.from({ length: 20 }, (_, index) => index + 23);
+  const rows = getRowsForParameter(metric.parameter, result.sex, result.firstborn);
   const series = [
     { label: "+3 DS", z: 3, color: "#be123c", width: 1.4 },
     { label: "+2 DS", z: 2, color: "#dc2626", width: 1.4 },
@@ -633,7 +640,7 @@ function buildExportChartSvg(metric: IntergrowthMetricResult, result: Intergrowt
   ].map((item) => ({
     ...item,
     values: rows.map((row) => ({
-      age: row.weeks + row.days / 7,
+      age: row.week,
       value: row.values[zToColumn(item.z)]
     }))
   }));

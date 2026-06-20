@@ -20,6 +20,7 @@ describe("calculateAllResults INTERGROWTH-21", () => {
 
     expect(weight?.zScore).toBeCloseTo(0.1429, 4);
     expect(weight?.percentile).toBeCloseTo(55.68, 2);
+    expect(weight?.percentileLabel).toBe("56°");
     expect(length?.zScore).toBeCloseTo(0.4226, 4);
     expect(length?.percentile).toBeCloseTo(66.37, 2);
     expect(headCircumference?.zScore).toBeCloseTo(0.0840, 4);

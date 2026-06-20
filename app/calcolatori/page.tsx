@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/Badge";
 
 const calculators = [
   { title: "INTERGROWTH-21st", href: "/calcolatori/intergrowth-21", description: "Valutazione antropometrica neonatale secondo gli standard internazionali INTERGROWTH-21st.", icon: PencilRuler },
+  { title: "INeS", href: "/calcolatori/ines", description: "Valutazione auxologica neonatale secondo le carte INeS, sviluppate sulla popolazione neonatale italiana.", icon: PencilRuler },
   { title: "WHO Child Growth Standards", href: "/calcolatori/crescita-who-0-5", description: "Valutazione antropometrica secondo gli standard internazionali WHO per bambini da 0 a 5 anni.", icon: ChartSpline },
   { title: "Curve SIEDP 2006", href: "/calcolatori/crescita-siedp-2006", description: "Valutazione antropometrica secondo i riferimenti SIEDP 2006 per la popolazione italiana di età 2–20 anni.", icon: ChartSpline },
   { title: "Curve CDC 2000", href: "/calcolatori/crescita-cdc-2000", description: "Valutazione antropometrica secondo i riferimenti CDC 2000 per la popolazione pediatrica statunitense di età 2–20 anni.", icon: ChartSpline },

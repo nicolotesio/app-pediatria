@@ -229,7 +229,7 @@ function calculateMetric(parameter: IntergrowthParameter, sex: IntergrowthSex, g
       zScore: null,
       zScoreLabel: "< -3 DS",
       percentile: null,
-      percentileLabel: "< 0,13°",
+      percentileLabel: "< 1°",
       interpretation: "fuori range tabellare",
       zScoreTable
     };
@@ -244,7 +244,7 @@ function calculateMetric(parameter: IntergrowthParameter, sex: IntergrowthSex, g
       zScore: null,
       zScoreLabel: "> +3 DS",
       percentile: null,
-      percentileLabel: "> 99,87°",
+      percentileLabel: "> 99°",
       interpretation: "fuori range tabellare",
       zScoreTable
     };
@@ -261,7 +261,7 @@ function calculateMetric(parameter: IntergrowthParameter, sex: IntergrowthSex, g
     zScore,
     zScoreLabel: formatSigned(zScore),
     percentile,
-    percentileLabel: `${formatNumber(percentile, percentile < 1 || percentile > 99 ? 2 : 1)}°`,
+    percentileLabel: `${formatNumber(percentile, 0)}°`,
     interpretation: classifyPercentile(percentile),
     zScoreTable
   };
