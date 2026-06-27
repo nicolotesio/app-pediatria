@@ -49,7 +49,7 @@ export const searchIndex: SearchItem[] = [
     type: "Appunto" as const,
     title: note.title,
     description: `${note.category} - ${note.tags.join(", ")}`,
-    href: "/appunti",
+    href: `/appunti/${note.id}`,
     category: note.category
   })),
   ...resources.map((resource) => ({

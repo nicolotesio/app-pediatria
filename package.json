@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "local": "next dev -p 3000",
+    "local:clean": "powershell -NoProfile -ExecutionPolicy Bypass -File ./start-local.ps1 -Clean -Restart",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

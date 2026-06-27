@@ -6,7 +6,7 @@ const SPLASH_MIN_MS = 900;
 const SPLASH_MAX_MS = 3000;
 
 export function ServiceWorkerRegister() {
-  const [isCheckingForUpdates, setIsCheckingForUpdates] = useState(true);
+  const [isCheckingForUpdates, setIsCheckingForUpdates] = useState(process.env.NODE_ENV === "production");
 
   useEffect(() => {
     document.body.classList.toggle("app-splash-active", isCheckingForUpdates);
@@ -52,7 +52,7 @@ export function ServiceWorkerRegister() {
     }
 
     if (process.env.NODE_ENV !== "production") {
-      const clearDevelopmentCache = navigator.serviceWorker
+      navigator.serviceWorker
         .getRegistrations()
         .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister().catch(() => undefined))))
         .then(() => {
@@ -61,8 +61,6 @@ export function ServiceWorkerRegister() {
             .keys()
             .then((keys) => Promise.all(keys.filter((key) => key.startsWith("pedianotes-")).map((key) => caches.delete(key).catch(() => undefined))));
         });
-
-      showSplashWhile(clearDevelopmentCache);
 
       return () => {
         isMounted = false;

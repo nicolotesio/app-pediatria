@@ -17,25 +17,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 sm:py-5">
-          <Link href="/" className="flex items-center gap-3">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-5">
+          <Link href="/" className="flex min-w-0 items-center gap-3">
             <Image
               src="/favicon-512.png"
               alt=""
               aria-hidden="true"
               width={56}
               height={56}
-              className="size-12 shrink-0 rounded-md sm:size-14"
+              className="size-10 shrink-0 rounded-md sm:size-14"
               priority
             />
-            <span>
-              <span className="block text-2xl font-semibold leading-tight sm:text-3xl">
+            <span className="min-w-0">
+              <span className="block text-xl font-semibold leading-tight sm:text-3xl">
                 Appunti di <span className="text-blue-700 dark:text-blue-300">Pediatria</span>
               </span>
-              <span className="block text-sm text-slate-500 sm:text-base dark:text-slate-400">Dr Nicolò Tesio</span>
+              <span className="block truncate text-sm text-slate-500 sm:text-base dark:text-slate-400">Dr Nicolò Tesio</span>
             </span>
           </Link>
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <nav className="hidden items-center gap-1 lg:flex">
               {navItems.map((item) => {
                 const Icon = item.icon;
@@ -55,15 +55,15 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:py-8">{children}</main>
+      <main className="mx-auto max-w-7xl px-4 pb-24 pt-6 sm:px-6 lg:pb-8 lg:pt-8">{children}</main>
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-200 bg-white lg:hidden dark:border-slate-800 dark:bg-slate-950">
         <div className="grid grid-cols-6">
           {navItems.slice(0, 6).map((item) => {
             const Icon = item.icon;
             return (
-              <Link key={item.href} href={item.href} className="flex min-h-16 flex-col items-center justify-center gap-1 px-1 py-3 text-xs font-medium text-slate-600 dark:text-slate-300">
+              <Link key={item.href} href={item.href} className="flex min-h-16 flex-col items-center justify-center gap-1 px-1 py-3 text-[10px] font-medium leading-tight text-slate-600 sm:text-xs dark:text-slate-300">
                 <Icon className="size-5" />
-                {item.label}
+                <span className="max-w-full truncate px-1">{item.label}</span>
               </Link>
             );
           })}

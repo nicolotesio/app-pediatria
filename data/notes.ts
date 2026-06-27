@@ -5,6 +5,7 @@ export type NoteCategory =
   | "Gastroenterologia"
   | "Cardiologia"
   | "Neurologia"
+  | "Genetica"
   | "Urgenze"
   | "Farmacologia";
 
@@ -18,6 +19,16 @@ export type ClinicalNote = {
   content: string;
 };
 
-export const noteCategories: NoteCategory[] = [];
+export const noteCategories: NoteCategory[] = ["Genetica"];
 
-export const notes: ClinicalNote[] = [];
+export const notes: ClinicalNote[] = [
+  {
+    id: "nf1-criteri-diagnostici",
+    title: "Criteri diagnostici per NF1",
+    category: "Genetica",
+    tags: ["NF1", "neurofibromatosi", "Legius", "criteri diagnostici"],
+    updatedAt: "2026-06-27",
+    sources: ["Legius et al., 2021"],
+    content: "Checklist interattiva dei criteri diagnostici revisionati per neurofibromatosi tipo 1."
+  }
+];
