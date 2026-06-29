@@ -30,5 +30,14 @@ export const notes: ClinicalNote[] = [
     updatedAt: "2026-06-27",
     sources: ["Legius et al., 2021"],
     content: "Checklist interattiva dei criteri diagnostici revisionati per neurofibromatosi tipo 1."
+  },
+  {
+    id: "sclerosi-tuberosa-criteri-diagnostici",
+    title: "Criteri diagnostici per sclerosi tuberosa",
+    category: "Genetica",
+    tags: ["TSC", "sclerosi tuberosa", "Bourneville", "criteri diagnostici"],
+    updatedAt: "2026-06-29",
+    sources: ["Northrup et al., 2021"],
+    content: "Checklist interattiva dei criteri diagnostici per sclerosi tuberosa complessa."
   }
 ];

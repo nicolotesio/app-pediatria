@@ -17,6 +17,13 @@ export default function NotesPage() {
           inlineHeader
           meta={<Dna className="size-6 text-blue-700 dark:text-blue-300" />}
         />
+        <Card
+          href="/appunti/sclerosi-tuberosa-criteri-diagnostici"
+          title="Criteri diagnostici per sclerosi tuberosa"
+          description="Checklist interattiva dei criteri TSC, con caratteristiche principali, minori e interpretazione diagnostica."
+          inlineHeader
+          meta={<Dna className="size-6 text-blue-700 dark:text-blue-300" />}
+        />
       </section>
     </div>
   );
