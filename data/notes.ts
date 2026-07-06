@@ -19,7 +19,7 @@ export type ClinicalNote = {
   content: string;
 };
 
-export const noteCategories: NoteCategory[] = ["Genetica"];
+export const noteCategories: NoteCategory[] = ["Genetica", "Farmacologia"];
 
 export const notes: ClinicalNote[] = [
   {
@@ -39,5 +39,14 @@ export const notes: ClinicalNote[] = [
     updatedAt: "2026-06-29",
     sources: ["Northrup et al., 2021"],
     content: "Checklist interattiva dei criteri diagnostici per sclerosi tuberosa complessa."
+  },
+  {
+    id: "terapia-antibiotica",
+    title: "Terapia antibiotica",
+    category: "Farmacologia",
+    tags: ["antibiotici", "terapia antibiotica", "posologia", "diluizione", "pediatria"],
+    updatedAt: "2026-07-06",
+    sources: ["Wellington ICU Drug Manual, 2020"],
+    content: "Schede rapide di terapia antibiotica pediatrica con classi, vie di somministrazione, posologia, diluizioni EV e note."
   }
 ];

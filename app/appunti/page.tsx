@@ -1,4 +1,4 @@
-import { Dna } from "lucide-react";
+import { Dna, Pill } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
@@ -23,6 +23,13 @@ export default function NotesPage() {
           description="Checklist interattiva dei criteri TSC, con caratteristiche principali, minori e interpretazione diagnostica."
           inlineHeader
           meta={<Dna className="size-6 text-blue-700 dark:text-blue-300" />}
+        />
+        <Card
+          href="/appunti/terapia-antibiotica"
+          title="Terapia antibiotica"
+          description="Schede antibiotiche pediatriche divise per classe, con posologia, vie di somministrazione, diluizione e note."
+          inlineHeader
+          meta={<Pill className="size-6 text-blue-700 dark:text-blue-300" />}
         />
       </section>
     </div>
