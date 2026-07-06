@@ -48,5 +48,14 @@ export const notes: ClinicalNote[] = [
     updatedAt: "2026-07-06",
     sources: ["Wellington ICU Drug Manual, 2020"],
     content: "Schede rapide di terapia antibiotica pediatrica con classi, vie di somministrazione, posologia, diluizioni EV e note."
+  },
+  {
+    id: "premedicazione-trasfusione",
+    title: "Premedicazione trasfusione",
+    category: "Farmacologia",
+    tags: ["trasfusione", "premedicazione", "idrocortisone", "clorfenamina", "farmacologia"],
+    updatedAt: "2026-07-06",
+    sources: [],
+    content: "Schema rapido di premedicazione circa un'ora prima della trasfusione, con avviso di verifica dosaggi e somministrazione."
   }
 ];

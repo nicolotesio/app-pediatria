@@ -1,4 +1,4 @@
-import { Dna, Pill } from "lucide-react";
+import { Dna, Pill, Syringe } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
@@ -30,6 +30,13 @@ export default function NotesPage() {
           description="Schede antibiotiche pediatriche divise per classe, con posologia, vie di somministrazione, diluizione e note."
           inlineHeader
           meta={<Pill className="size-6 text-blue-700 dark:text-blue-300" />}
+        />
+        <Card
+          href="/appunti/premedicazione-trasfusione"
+          title="Premedicazione trasfusione"
+          description="Schema rapido di premedicazione circa un'ora prima della trasfusione, con avviso di verifica dosaggi."
+          inlineHeader
+          meta={<Syringe className="size-6 text-blue-700 dark:text-blue-300" />}
         />
       </section>
     </div>
