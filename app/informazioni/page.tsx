@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Info, MessageSquarePlus, ShieldAlert } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
@@ -13,7 +12,7 @@ export default function InformationPage() {
           <div className="min-w-0">
             <h2 className="text-lg font-semibold text-slate-950 dark:text-white">Il progetto</h2>
             <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-              Questa webapp è un progetto personale di Dr Nicolò Tesio, pensato per avere rapidamente a disposizione informazioni e tool clinici utili nella pratica pediatrica.
+              Questa webapp è un progetto personale pensato per avere rapidamente a disposizione informazioni e tool clinici utili nella pratica pediatrica.
             </p>
           </div>
         </div>
@@ -31,16 +30,20 @@ export default function InformationPage() {
         </div>
       </section>
 
-      <Link
-        href="/feedback"
+      <section
         className="flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-5 text-blue-950 shadow-sm transition hover:border-blue-300 hover:bg-blue-100 dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-100 dark:hover:bg-blue-950"
       >
         <MessageSquarePlus className="mt-0.5 size-5 shrink-0" />
-        <span>
-          <span className="block text-lg font-semibold">Suggerisci una miglioria</span>
-          <span className="mt-2 block text-sm leading-6 text-blue-900 dark:text-blue-100">Invia feedback, errori o idee per nuovi contenuti.</span>
-        </span>
-      </Link>
+        <div className="min-w-0">
+          <h2 className="text-lg font-semibold">Segnala errori, invia feedback o idee per nuovi contenuti</h2>
+          <a
+            href="mailto:dott.nicolotesio@gmail.com"
+            className="mt-2 inline-block break-all text-sm font-semibold leading-6 text-blue-800 underline underline-offset-4 hover:text-blue-950 dark:text-blue-100 dark:hover:text-white"
+          >
+            dott.nicolotesio@gmail.com
+          </a>
+        </div>
+      </section>
     </div>
   );
 }

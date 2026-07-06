@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     default: "Appunti di Pediatria",
     template: "%s | Appunti di Pediatria"
   },
-  description: "Webapp personale di Dr Nicolò Tesio per appunti, risorse e strumenti clinici in pediatria.",
+  description: "Webapp personale per appunti, risorse e strumenti clinici in pediatria.",
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,

@@ -35,7 +35,7 @@ const sections = [
   },
   {
     title: "Informazioni",
-    description: "Dettagli sul progetto, feedback e note di utilizzo.",
+    description: "Dettagli sul progetto, contatti e note di utilizzo.",
     href: "/informazioni",
     icon: Info
   }

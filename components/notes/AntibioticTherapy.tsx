@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { ExternalLink } from "lucide-react";
-import { Badge } from "@/components/ui/Badge";
+import { ChevronDown, ChevronRight, ExternalLink } from "lucide-react";
 
 type RouteDetails = {
   route: string;
@@ -8,17 +7,18 @@ type RouteDetails = {
   specialSituations?: string[];
   dilution?: string[];
   notes?: string[];
+  links?: {
+    label: string;
+    href: string;
+  }[];
 };
 
 type Antibiotic = {
   id: string;
   name: string;
   className: string;
+  generation?: string;
   routes: RouteDetails[];
-  links?: {
-    label: string;
-    href: string;
-  }[];
 };
 
 const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
@@ -132,6 +132,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         id: "cefazolina",
         name: "Cefazolina",
         className: "Cefalosporine",
+        generation: "I gen.",
         routes: [
           {
             route: "EV",
@@ -145,6 +146,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         id: "cefuroxime",
         name: "Cefuroxime",
         className: "Cefalosporine",
+        generation: "II gen.",
         routes: [
           {
             route: "EV",
@@ -158,6 +160,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         id: "cefixima",
         name: "Cefixima",
         className: "Cefalosporine",
+        generation: "III gen.",
         routes: [
           {
             route: "PO",
@@ -170,6 +173,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         id: "cefotaxime",
         name: "Cefotaxime",
         className: "Cefalosporine",
+        generation: "III gen.",
         routes: [
           {
             route: "EV",
@@ -183,6 +187,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         id: "cefpodoxima",
         name: "Cefpodoxima",
         className: "Cefalosporine",
+        generation: "III gen.",
         routes: [
           {
             route: "PO",
@@ -195,6 +200,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         id: "ceftazidime",
         name: "Ceftazidime",
         className: "Cefalosporine",
+        generation: "III gen.",
         routes: [
           {
             route: "EV",
@@ -209,6 +215,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         id: "ceftriaxone",
         name: "Ceftriaxone",
         className: "Cefalosporine",
+        generation: "III gen.",
         routes: [
           {
             route: "EV",
@@ -223,13 +230,14 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         id: "cefepime",
         name: "Cefepime",
         className: "Cefalosporine",
+        generation: "IV gen.",
         routes: [
           {
             route: "EV",
             posology: ["50 mg/kg ogni 8h", "Dose max: 6 g/die"],
             specialSituations: ["Sepsi e infezioni gravi: 100-150 mg/kg in infusione continua nelle 24h previa dose di carico a 50 mg/kg"],
             dilution: ["SF o SG5%", "30-50 ml in 30-60 min"],
-            notes: ["Cefalosporina di IV generazione, attiva su Pseudomonas"]
+            notes: ["Attiva su Pseudomonas"]
           }
         ]
       },
@@ -237,11 +245,12 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         id: "ceftarolina",
         name: "Ceftarolina",
         className: "Cefalosporine",
+        generation: "V gen.",
         routes: [
           {
             route: "EV",
             posology: ["2-23 mesi: 8 mg/kg ogni 8h", ">2 anni e peso <33 kg: 12 mg/kg ogni 8h", ">2 anni e peso >33 kg: 400 mg ogni 8h", "600 mg ogni 12h"],
-            notes: ["Cefalosporina di V generazione, attiva su MRSA"]
+            notes: ["Attiva su MRSA"]
           }
         ]
       }
@@ -273,18 +282,18 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
             posology: ["10-15 mg/kg ogni 6h", "40-60 mg/kg/die in infusione continua", "Dose max: 3 g/die (750 mg/dose)"],
             specialSituations: ["Meningiti: 15 mg/kg ogni 6h"],
             dilution: ["SG5%", "<250 mg: 50 ml in 60 min", ">250 mg: 100 ml in 60 min"],
-            notes: ["Monitorare funzionalita renale", "TDM", "Infusione lenta per rischio di red man syndrome"]
+            notes: ["Monitorare funzionalita renale", "TDM", "Infusione lenta per rischio di red man syndrome"],
+            links: [
+              {
+                label: "RCH Clinical Practice Guideline: Vancomycin",
+                href: "https://www.rch.org.au/clinicalguide/guideline_index/vancomycin/"
+              }
+            ]
           },
           {
             route: "PO",
             posology: ["10 mg/kg ogni 6h", "Dose max: 2 g/die"],
             notes: ["Solo per C. difficile produttore di tossina"]
-          }
-        ],
-        links: [
-          {
-            label: "RCH Clinical Practice Guideline: Vancomycin",
-            href: "https://www.rch.org.au/clinicalguide/guideline_index/vancomycin/"
           }
         ]
       }
@@ -666,11 +675,7 @@ function FieldRow({ title, values }: { title: string; values?: string[] }) {
 
 function AntibioticDetails({ antibiotic }: { antibiotic: Antibiotic }) {
   return (
-    <article className="grid gap-4 rounded-lg border border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950">
-      <div>
-        <h2 className="text-2xl font-bold text-blue-950 dark:text-white">{antibiotic.name}</h2>
-      </div>
-
+    <div className="grid gap-4 bg-blue-50 p-4 dark:bg-blue-950/70">
       <div className="grid gap-4">
         {antibiotic.routes.map((route) => (
           <section key={route.route} className="grid gap-2">
@@ -681,27 +686,26 @@ function AntibioticDetails({ antibiotic }: { antibiotic: Antibiotic }) {
               <FieldRow title="Diluizione" values={route.dilution} />
               <FieldRow title="Note" values={route.notes} />
             </div>
+            {route.links?.length ? (
+              <div className="grid gap-2 rounded-md border border-blue-200 bg-white p-3 dark:border-blue-900 dark:bg-slate-950">
+                {route.links.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-blue-800 hover:text-blue-950 dark:text-blue-200 dark:hover:text-blue-100"
+                  >
+                    {link.label}
+                    <ExternalLink className="size-4" />
+                  </a>
+                ))}
+              </div>
+            ) : null}
           </section>
         ))}
       </div>
-
-      {antibiotic.links?.length ? (
-        <div className="grid gap-2 rounded-md border border-blue-200 bg-white p-3 dark:border-blue-900 dark:bg-slate-950">
-          {antibiotic.links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-blue-800 hover:text-blue-950 dark:text-blue-200 dark:hover:text-blue-100"
-            >
-              {link.label}
-              <ExternalLink className="size-4" />
-            </a>
-          ))}
-        </div>
-      ) : null}
-    </article>
+    </div>
   );
 }
 
@@ -722,16 +726,25 @@ export function AntibioticTherapy() {
       <div className="grid gap-5">
         {antibioticClasses.map((group) => (
           <section key={group.className} className="grid gap-3">
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="text-sm font-semibold uppercase text-slate-500 dark:text-slate-400">{group.className}</h2>
-              <Badge tone="slate" size="sm">{group.antibiotics.length}</Badge>
-            </div>
+            <h2 className="text-sm font-semibold uppercase text-slate-500 dark:text-slate-400">{group.className}</h2>
             <div className="grid gap-2">
               {group.antibiotics.map((antibiotic) => {
                 return (
-                  <details key={antibiotic.id} className="group grid gap-2">
-                    <summary className="cursor-pointer list-none rounded-md border border-slate-200 bg-white px-3 py-2 text-left text-sm font-medium text-slate-700 transition hover:border-blue-200 hover:bg-slate-50 group-open:border-blue-300 group-open:bg-blue-50 group-open:text-blue-950 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-blue-900 dark:hover:bg-slate-900 dark:group-open:border-blue-800 dark:group-open:bg-blue-950 dark:group-open:text-blue-100 [&::-webkit-details-marker]:hidden">
-                      {antibiotic.name}
+                  <details
+                    key={antibiotic.id}
+                    className="group overflow-hidden rounded-md border border-slate-200 bg-white transition group-open:border-blue-300 dark:border-slate-800 dark:bg-slate-950 dark:group-open:border-blue-800"
+                  >
+                    <summary className="antibiotic-summary flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-50 group-open:bg-blue-50 group-open:text-blue-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:group-open:bg-blue-950 dark:group-open:text-blue-100 [&::-webkit-details-marker]:hidden">
+                      <span className="min-w-0">
+                        <span>{antibiotic.name}</span>
+                        {antibiotic.generation ? (
+                          <span className="antibiotic-generation ml-2 hidden align-middle text-xs font-semibold text-slate-500 group-open:inline dark:text-slate-400">{antibiotic.generation}</span>
+                        ) : null}
+                      </span>
+                      <span className="shrink-0 text-slate-500 dark:text-slate-400">
+                        <ChevronRight className="size-4 group-open:hidden" />
+                        <ChevronDown className="hidden size-4 group-open:block" />
+                      </span>
                     </summary>
                     <AntibioticDetails antibiotic={antibiotic} />
                   </details>

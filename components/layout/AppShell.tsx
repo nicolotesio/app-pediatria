@@ -32,7 +32,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <span className="block text-xl font-semibold leading-tight sm:text-3xl">
                 Appunti di <span className="text-blue-700 dark:text-blue-300">Pediatria</span>
               </span>
-              <span className="block truncate text-sm text-slate-500 sm:text-base dark:text-slate-400">Dr Nicolò Tesio</span>
             </span>
           </Link>
           <div className="flex shrink-0 items-center gap-2">

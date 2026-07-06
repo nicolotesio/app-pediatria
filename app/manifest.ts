@@ -4,7 +4,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: "Appunti di Pediatria",
     short_name: "Appunti Pediatria",
-    description: "Appunti, risorse e strumenti clinici personali di Dr Nicolò Tesio.",
+    description: "Appunti, risorse e strumenti clinici personali in pediatria.",
     start_url: "/",
     display: "standalone",
     background_color: "#f8fafc",

@@ -29,18 +29,10 @@ export const searchIndex: SearchItem[] = [
     category: "Emergenze"
   },
   {
-    id: "feedback",
-    type: "Risorsa",
-    title: "Feedback",
-    description: "Invia migliorie, errori o idee per nuovi contenuti dell'app.",
-    href: "/feedback",
-    category: "Risorse"
-  },
-  {
     id: "informazioni",
     type: "Risorsa",
     title: "Informazioni",
-    description: "Dettagli sul progetto, feedback e note di utilizzo dell'app.",
+    description: "Dettagli sul progetto, contatti e note di utilizzo dell'app.",
     href: "/informazioni",
     category: "Risorse"
   },

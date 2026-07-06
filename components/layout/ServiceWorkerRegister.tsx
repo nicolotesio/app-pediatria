@@ -121,7 +121,6 @@ export function ServiceWorkerRegister() {
     <div className="fixed inset-0 z-[100] grid place-items-center bg-slate-300 px-8 text-center text-slate-950">
       <h1 className="text-3xl font-semibold leading-tight sm:text-4xl">
         Appunti di <span className="text-blue-500">Pediatria</span>
-        <span className="block text-base font-normal text-slate-600 sm:text-lg">Dr Nicolò Tesio</span>
       </h1>
     </div>
   );
