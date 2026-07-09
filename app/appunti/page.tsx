@@ -1,4 +1,4 @@
-import { Dna, Pill, Syringe } from "lucide-react";
+import { Dna, Flame, Pill, Syringe } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
@@ -23,6 +23,13 @@ export default function NotesPage() {
           description="Checklist interattiva dei criteri TSC, con caratteristiche principali, minori e interpretazione diagnostica."
           inlineHeader
           meta={<Dna className="size-6 text-blue-700 dark:text-blue-300" />}
+        />
+        <Card
+          href="/appunti/criteri-mas"
+          title="Criteri MAS"
+          description="Criteri laboratoristici per sospetta sindrome da attivazione macrofagica in AIG sistemica."
+          inlineHeader
+          meta={<Flame className="size-6 text-blue-700 dark:text-blue-300" />}
         />
         <Card
           href="/appunti/terapia-antibiotica"

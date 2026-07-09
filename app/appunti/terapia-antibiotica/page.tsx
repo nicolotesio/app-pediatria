@@ -6,7 +6,7 @@ export default function AntibioticTherapyPage() {
     <div className="grid gap-5 pb-16">
       <SectionHeader
         title="Terapia antibiotica"
-        description="Schede rapide di terapia antibiotica pediatrica (> 28 giorni di eta)."
+        description="Schede rapide di terapia antibiotica pediatrica (> 28 giorni di età)."
       />
       <AntibioticTherapy />
       <aside className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm dark:border-slate-800 dark:bg-slate-900">

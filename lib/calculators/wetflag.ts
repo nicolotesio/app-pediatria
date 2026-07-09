@@ -32,7 +32,7 @@ export type WetflagResult = {
 export const wetflagMetadata = {
   source: clinicalSources[0].reference,
   updatedAt: clinicalSources[0].updatedAt,
-  validity: "Eta 1 mese-12 anni, stime iniziali in emergenza. Usare peso reale appena disponibile.",
+  validity: "Età 1 mese-12 anni, stime iniziali in emergenza. Usare peso reale appena disponibile.",
   units: "anni, kg, J, mm ID, ml, microgrammi, grammi"
 };
 
@@ -44,11 +44,11 @@ const MAX_LORAZEPAM_MG = 4;
 
 export function calculateWetflag(ageYears: number, weightKg = estimateWeightForAge(ageYears)): WetflagResult {
   if (!Number.isFinite(ageYears)) {
-    throw new Error("Eta non valida");
+    throw new Error("Età non valida");
   }
 
   if (ageYears < 0) {
-    throw new Error("Eta non puo essere negativa");
+    throw new Error("L'età non può essere negativa");
   }
 
   if (!Number.isFinite(weightKg) || weightKg <= 0) {
@@ -58,7 +58,7 @@ export function calculateWetflag(ageYears: number, weightKg = estimateWeightForA
   const warnings: string[] = [];
   const ageMonths = Math.round(ageYears * 12);
   if (ageMonths < Math.round(MIN_AGE * 12) || ageMonths > Math.round(MAX_AGE * 12)) {
-    warnings.push("Eta fuori range validato (1 mese-12 anni): risultati da verificare con particolare cautela.");
+    warnings.push("Età fuori range validato (1 mese-12 anni): risultati da verificare con particolare cautela.");
   }
 
   const estimatedWeightKg = round1(weightKg);

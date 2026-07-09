@@ -21,7 +21,7 @@ export type EmergencyDrugsResult = {
 
 export function calculateEmergencyDrugs(ageYears: number, weightKg: number): EmergencyDrugsResult {
   if (!Number.isFinite(ageYears) || ageYears < 0) {
-    throw new Error("Eta non valida");
+    throw new Error("Età non valida");
   }
 
   if (!Number.isFinite(weightKg) || weightKg <= 0) {

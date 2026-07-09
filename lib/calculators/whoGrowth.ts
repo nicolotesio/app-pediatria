@@ -163,7 +163,7 @@ function calculateWhoMetric(
   };
 }
 
-// Interpola i parametri LMS e le curve SD quando eta o lunghezza cadono tra due righe.
+// Interpola i parametri LMS e le curve SD quando età o lunghezza cadono tra due righe.
 function interpolateReference(rows: readonly WhoRawRow[], xValue: number): WhoReferenceRow {
   const lower = [...rows].reverse().find((row) => row.x <= xValue);
   const upper = rows.find((row) => row.x >= xValue);

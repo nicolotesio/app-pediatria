@@ -32,15 +32,15 @@ describe("calculateWhoGrowth", () => {
     expect(result.results.some((item) => item.dataset === "wfl")).toBe(false);
   });
 
-  it("calcola eta in giorni dalle date", () => {
+  it("calcola età in giorni dalle date", () => {
     expect(calculateAgeDaysFromDates("2024-01-01", "2024-01-31")).toBe(30);
   });
 
-  it("calcola eta corretta per prematurita", () => {
+  it("calcola età corretta per prematurità", () => {
     expect(calculateCorrectedAgeDays(90, 32, 0)).toBe(34);
   });
 
-  it("non accetta eta corretta negativa", () => {
+  it("non accetta età corretta negativa", () => {
     expect(() => calculateCorrectedAgeDays(10, 32, 0)).toThrow("non può essere negativa");
   });
 });

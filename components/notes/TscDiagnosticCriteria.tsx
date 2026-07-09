@@ -14,17 +14,17 @@ const majorCriteria: Criterion[] = [
   {
     id: "hypomelanotic-macules",
     label: "Macule ipomelanotiche",
-    detail: "Tre o piu macule, ciascuna di almeno 5 mm di diametro."
+    detail: "Tre o più macule, ciascuna di almeno 5 mm di diametro."
   },
   {
     id: "angiofibromas",
     label: "Angiofibromi o placca cefalica fibrosa",
-    detail: "Tre o piu angiofibromi, oppure una placca cefalica fibrosa."
+    detail: "Tre o più angiofibromi, oppure una placca cefalica fibrosa."
   },
   {
     id: "ungual-fibromas",
     label: "Fibromi subungueali o ungueali",
-    detail: "Due o piu fibromi."
+    detail: "Due o più fibromi."
   },
   {
     id: "shagreen-patch",
@@ -41,7 +41,7 @@ const majorCriteria: Criterion[] = [
   {
     id: "subependymal-nodules",
     label: "Noduli subependimali",
-    detail: "Due o piu noduli."
+    detail: "Due o più noduli."
   },
   {
     id: "sega",
@@ -58,7 +58,7 @@ const majorCriteria: Criterion[] = [
   {
     id: "angiomyolipomas",
     label: "Angiomiolipomi",
-    detail: "Due o piu angiomiolipomi."
+    detail: "Due o più angiomiolipomi."
   }
 ];
 
@@ -71,12 +71,12 @@ const minorCriteria: Criterion[] = [
   {
     id: "dental-enamel-pits",
     label: "Corrosione dello smalto dentale",
-    detail: "Tre o piu lesioni."
+    detail: "Tre o più lesioni."
   },
   {
     id: "oral-fibromas",
     label: "Fibromi del cavo orale",
-    detail: "Due o piu fibromi."
+    detail: "Due o più fibromi."
   },
   {
     id: "retinal-achromic-patch",
@@ -256,7 +256,7 @@ export function TscDiagnosticCriteria() {
         <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">{status.text}</p>
 
         <p className="text-xs leading-5 text-slate-500 dark:text-slate-400">
-          Diagnosi definitiva: mutazione patogena TSC1/TSC2, oppure due caratteristiche principali, oppure una principale con due minori. Diagnosi possibile: una caratteristica principale oppure due o piu caratteristiche minori.
+          Diagnosi definitiva: mutazione patogena TSC1/TSC2, oppure due caratteristiche principali, oppure una principale con due minori. Diagnosi possibile: una caratteristica principale oppure due o più caratteristiche minori.
         </p>
 
         {isLamAngiomyolipomaOnly ? (

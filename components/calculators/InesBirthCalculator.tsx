@@ -602,7 +602,7 @@ function buildExportHtml(result: InesAllResults) {
   <dl>
     <dt>Sesso</dt><dd>${result.sex === "male" ? "Maschio" : "Femmina"}</dd>
     <dt>Primogenito</dt><dd>${result.firstborn ? "Sì" : "No"}</dd>
-    <dt>Eta gestazionale</dt><dd>${escapeHtml(result.gestationalAgeKey)}</dd>
+    <dt>Età gestazionale</dt><dd>${escapeHtml(result.gestationalAgeKey)}</dd>
     <dt>EG arrotondata (per LMS)</dt><dd>${result.lmsWeek}</dd>
     <dt>Data del calcolo</dt><dd>${escapeHtml(formatDateTime(result.calculatedAt))}</dd>
     <dt>Riferimento</dt><dd>INeS</dd>

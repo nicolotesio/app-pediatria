@@ -3,42 +3,12 @@ import { HomeSearchBox } from "@/components/HomeSearchBox";
 import { Card } from "@/components/ui/Card";
 
 const sections = [
-  {
-    title: "Emergenze",
-    description: "Strumenti clinici rapidi con fonti, unita, range e avvisi di sicurezza.",
-    href: "/emergenze",
-    icon: Ambulance
-  },
-  {
-    title: "Calcolatori",
-    description: "Calcolatori disponibili e placeholder per dataset non ancora configurati.",
-    href: "/calcolatori",
-    icon: Calculator
-  },
-  {
-    title: "Appunti",
-    description: "Note cliniche modificabili, organizzate per categoria, tag e fonti.",
-    href: "/appunti",
-    icon: BookOpenText
-  },
-  {
-    title: "Risorse",
-    description: "Link utili e note personali per consultazione rapida.",
-    href: "/risorse",
-    icon: ExternalLink
-  },
-  {
-    title: "Genitori",
-    description: "Schede semplici per comunicazione e counselling.",
-    href: "/genitori",
-    icon: Baby
-  },
-  {
-    title: "Informazioni",
-    description: "Dettagli sul progetto, contatti e note di utilizzo.",
-    href: "/informazioni",
-    icon: Info
-  }
+  { title: "Emergenze", href: "/emergenze", icon: Ambulance },
+  { title: "Calcolatori", href: "/calcolatori", icon: Calculator },
+  { title: "Appunti", href: "/appunti", icon: BookOpenText },
+  { title: "Risorse", href: "/risorse", icon: ExternalLink },
+  { title: "Genitori", href: "/genitori", icon: Baby },
+  { title: "Informazioni", href: "/informazioni", icon: Info }
 ];
 
 export default function HomePage() {
@@ -53,7 +23,6 @@ export default function HomePage() {
               key={section.href}
               href={section.href}
               title={section.title}
-              description={section.description}
               inlineHeader
               meta={<Icon className="size-6 text-blue-700 dark:text-blue-300" />}
             />

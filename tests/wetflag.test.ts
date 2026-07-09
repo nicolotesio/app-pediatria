@@ -39,7 +39,7 @@ describe("calculateWetflag", () => {
     expect(result.lorazepam.mg).toBe(4);
   });
 
-  it("segnala eta fuori range", () => {
+  it("segnala età fuori range", () => {
     const result = calculateWetflag(0);
 
     expect(result.warnings[0]).toContain("fuori range");
@@ -80,7 +80,7 @@ describe("calculateWetflag", () => {
     expect(result.warnings).toHaveLength(0);
   });
 
-  it("rifiuta eta negativa", () => {
-    expect(() => calculateWetflag(-1)).toThrow("Eta non puo essere negativa");
+  it("rifiuta età negativa", () => {
+    expect(() => calculateWetflag(-1)).toThrow("L'età non può essere negativa");
   });
 });

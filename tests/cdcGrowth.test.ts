@@ -17,7 +17,7 @@ describe("calculateCdcGrowth", () => {
     expect(height.percentile).toBeCloseTo(50, 1);
   });
 
-  it("interpola le righe LMS tra due eta disponibili", () => {
+  it("interpola le righe LMS tra due età disponibili", () => {
     const result = calculateCdcMetric("weight", "male", 25 / 12, 12.81128336);
 
     expect(result.lms.M).toBeCloseTo(12.81128336, 4);
@@ -34,7 +34,7 @@ describe("calculateCdcGrowth", () => {
     expect(normal.classification).toBe("Normopeso");
   });
 
-  it("calcola eta e formato da mesi", () => {
+  it("calcola età e formato da mesi", () => {
     expect(calculateAgeDecimalFromDates("2022-01-01", "2024-01-01")).toBeCloseTo(2, 2);
     expect(formatCdcAge(2.5)).toBe("2 anni 6 mesi");
   });

@@ -331,11 +331,11 @@ function validateCalculationInputs(sex: IntergrowthSex, weeks: number, days: num
   }
 
   if (!Number.isInteger(weeks) || weeks < 24 || weeks > 42) {
-    throw new Error("Selezionare le settimane di eta gestazionale tra 24 e 42");
+    throw new Error("Selezionare le settimane di età gestazionale tra 24 e 42");
   }
 
   if (!Number.isInteger(days) || days < 0 || days > 6) {
-    throw new Error("Selezionare i giorni di eta gestazionale tra 0 e 6");
+    throw new Error("Selezionare i giorni di età gestazionale tra 0 e 6");
   }
 
   const values = [input.weight, input.length, input.headCircumference].filter((value) => value !== null && value !== undefined);

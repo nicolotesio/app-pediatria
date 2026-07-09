@@ -1,4 +1,4 @@
-import { Stethoscope, Syringe } from "lucide-react";
+import { Brain, Stethoscope, Syringe } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
@@ -13,6 +13,13 @@ export default function EmergenciesPage() {
           description="Stime rapide per emergenza pediatrica."
           inlineHeader
           meta={<Stethoscope className="size-6 text-blue-700 dark:text-blue-300" />}
+        />
+        <Card
+          href="/emergenze/gcs-pediatrico"
+          title="GCS pediatrico rapido"
+          description="Calcolo rapido della Glasgow Coma Scale pediatrica."
+          inlineHeader
+          meta={<Brain className="size-6 text-blue-700 dark:text-blue-300" />}
         />
         <Card
           href="/emergenze/farmaci"

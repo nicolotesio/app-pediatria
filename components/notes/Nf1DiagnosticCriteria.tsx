@@ -14,8 +14,8 @@ type Criterion = {
 const criteria: Criterion[] = [
   {
     id: "cafe-au-lait",
-    label: "Sei o piu macchie caffe-latte",
-    detail: "Diametro massimo superiore a 5 mm in eta prepubere e diametro massimo superiore a 15 mm nei soggetti adulti.",
+    label: "Sei o più macchie caffè-latte",
+    detail: "Diametro massimo superiore a 5 mm in età prepubere e diametro massimo superiore a 15 mm nei soggetti adulti.",
     pigmentary: true
   },
   {
@@ -25,7 +25,7 @@ const criteria: Criterion[] = [
   },
   {
     id: "neurofibromas",
-    label: "Due o piu neurofibromi di qualsiasi tipo o un neurofibroma plessiforme"
+    label: "Due o più neurofibromi di qualsiasi tipo o un neurofibroma plessiforme"
   },
   {
     id: "optic-glioma",
@@ -33,9 +33,9 @@ const criteria: Criterion[] = [
   },
   {
     id: "lisch-choroidal",
-    label: "Due o piu noduli di Lisch iridei o anomalie coroideali",
+    label: "Due o più noduli di Lisch iridei o anomalie coroideali",
     detail:
-      "Noduli identificati all'esame con lampada a fessura, oppure due o piu anomalie della coroide definite come chiazze luminose e chiare documentate con tomografia a coerenza ottica (OCT) o imaging in modalita infrarosso (NIR)."
+      "Noduli identificati all'esame con lampada a fessura, oppure due o più anomalie della coroide definite come chiazze luminose e chiare documentate con tomografia a coerenza ottica (OCT) o imaging in modalità infrarosso (NIR)."
   },
   {
     id: "osseous",
@@ -58,7 +58,7 @@ function getProbabilityLabel(selectedCount: number, hasAffectedParent: boolean, 
       label: "Alta",
       text: hasAffectedParent
         ? "Diagnosi di NF1 soddisfatta in un figlio di un genitore che soddisfa i criteri diagnostici, in presenza di almeno un criterio in A."
-        : "Diagnosi di NF1 soddisfatta: sono presenti due o piu criteri diagnostici in assenza di genitore con diagnosi di NF1."
+        : "Diagnosi di NF1 soddisfatta: sono presenti due o più criteri diagnostici in assenza di genitore con diagnosi di NF1."
     };
   }
 
@@ -67,7 +67,7 @@ function getProbabilityLabel(selectedCount: number, hasAffectedParent: boolean, 
       tone: "amber" as const,
       label: "Intermedia",
       text: pigmentaryOnly
-        ? "Presenza di soli criteri pigmentari: NF1 e' probabile, ma va considerata diagnosi differenziale, in particolare sindrome di Legius."
+        ? "Presenza di soli criteri pigmentari: NF1 è probabile, ma va considerata diagnosi differenziale, in particolare sindrome di Legius."
         : "Criteri non ancora sufficienti: monitorare evoluzione clinica e integrare con valutazione specialistica."
     };
   }
@@ -179,14 +179,14 @@ export function Nf1DiagnosticCriteria() {
         <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">{probability.text}</p>
 
         <p className="text-xs leading-5 text-slate-500 dark:text-slate-400">
-          Due o piu criteri A tra A1-A7 sono sufficienti per la diagnosi di NF1. Se un genitore ha NF1, la soglia diagnostica nel figlio e&apos; un solo criterio A.
+          Due o più criteri A tra A1-A7 sono sufficienti per la diagnosi di NF1. Se un genitore ha NF1, la soglia diagnostica nel figlio è un solo criterio A.
         </p>
 
         {pigmentaryOnly ? (
           <div className="flex gap-3 rounded-md border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-100">
             <AlertTriangle className="mt-0.5 size-5 shrink-0" />
             <p>
-              Se sono presenti solo macchie caffe-latte e lentigginosi, la diagnosi piu probabile e&apos; NF1, ma eccezionalmente la persona potrebbe avere altre diagnosi, in particolare la sindrome di Legius. Almeno uno dei due segni cutanei pigmentati, macchie caffe-latte o lentigginosi atipica, deve essere bilaterale.
+              Se sono presenti solo macchie caffè-latte e lentigginosi, la diagnosi più probabile è NF1, ma eccezionalmente la persona potrebbe avere altre diagnosi, in particolare la sindrome di Legius. Almeno uno dei due segni cutanei pigmentati, macchie caffè-latte o lentigginosi atipica, deve essere bilaterale.
             </p>
           </div>
         ) : null}

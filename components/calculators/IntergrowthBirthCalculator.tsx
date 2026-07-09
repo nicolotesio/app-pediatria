@@ -590,7 +590,7 @@ function buildExportHtml(result: IntergrowthAllResults) {
   <h1>Riepilogo centili alla nascita</h1>
   <dl>
     <dt>Sesso</dt><dd>${result.sex === "male" ? "Maschio" : "Femmina"}</dd>
-    <dt>Eta gestazionale</dt><dd>${escapeHtml(result.gestationalAgeKey)}</dd>
+    <dt>Età gestazionale</dt><dd>${escapeHtml(result.gestationalAgeKey)}</dd>
     <dt>Data del calcolo</dt><dd>${escapeHtml(formatDateTime(result.calculatedAt))}</dd>
     <dt>Riferimento</dt><dd>INTERGROWTH-21</dd>
   </dl>

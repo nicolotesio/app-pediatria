@@ -119,7 +119,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
           {
             route: "EV",
             posology: ["15-25 mg/kg ogni 6h", "Dose max: 4 g/die"],
-            notes: ["Rischio convulsioni", "Non in meningite", "Non se eta < 1 anno", "Non se insufficienza renale"]
+            notes: ["Rischio convulsioni", "Non in meningite", "Non se età < 1 anno", "Non se insufficienza renale"]
           }
         ]
       }
@@ -192,7 +192,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
           {
             route: "PO",
             posology: ["5 mg/kg ogni 12h", "Dose max: 400 mg/die"],
-            notes: ["Piu attiva su Gram+ rispetto a cefixima: S. pneumoniae e S. pyogenes", "OMA, IVU, faringotonsillite streptococcica, CAP come terapia step-down"]
+            notes: ["Più attiva su Gram+ rispetto a cefixima: S. pneumoniae e S. pyogenes", "OMA, IVU, faringotonsillite streptococcica, CAP come terapia step-down"]
           }
         ]
       },
@@ -390,7 +390,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
           {
             route: "EV/PO",
             posology: ["<12 anni: 10 mg/kg ogni 8h", ">12 anni: 600 mg ogni 12h"],
-            dilution: ["EV gia costituito: 600 mg/100 ml in 60 min"],
+            dilution: ["EV già costituito: 600 mg/100 ml in 60 min"],
             notes: ["Attivita su VRSA"]
           }
         ]

@@ -45,7 +45,7 @@ export const siedpGrowthMetadata = {
   source: "Cacciari E, Milani S, Balsamo A, et al. Italian cross-sectional growth charts for height, weight and BMI (2 to 20 yr). J Endocrinol Invest. 2006;29(7):581-593. doi:10.1007/BF03344156",
   updatedAt: "2026-05-14",
   validity: "Età 2-20 anni. Popolazione italiana; usare come supporto alla valutazione auxologica, non come diagnosi isolata.",
-  units: "anni, kg, cm, kg/m2, SDS, centili"
+  units: "anni, kg, cm, kg/m², SDS, centili"
 };
 
 const MIN_AGE_YEARS = 2;
@@ -125,7 +125,7 @@ export function calculateAgeDecimalFromDates(birthDate: string, measurementDate:
   }
 
   if (measurement.getTime() < birth.getTime()) {
-    throw new Error("La data della misurazione non puo precedere la data di nascita");
+    throw new Error("La data della misurazione non può precedere la data di nascita");
   }
 
   return (measurement.getTime() - birth.getTime()) / (365.2425 * 24 * 60 * 60 * 1000);
@@ -140,7 +140,7 @@ export function formatCompletedAgeFromDates(birthDate: string, measurementDate: 
   }
 
   if (measurement.getTime() < birth.getTime()) {
-    throw new Error("La data della misurazione non puo precedere la data di nascita");
+    throw new Error("La data della misurazione non può precedere la data di nascita");
   }
 
   return formatMonthsAsAge(calculateCompletedMonths(birth, measurement));

@@ -4,13 +4,13 @@ import { Ambulance, Baby, BookOpenText, Calculator, ExternalLink, Home, Search }
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const navItems = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/emergenze", label: "Emergenze", icon: Ambulance },
-  { href: "/calcolatori", label: "Calcolatori", icon: Calculator },
-  { href: "/appunti", label: "Appunti", icon: BookOpenText },
-  { href: "/risorse", label: "Risorse", icon: ExternalLink },
-  { href: "/genitori", label: "Genitori", icon: Baby },
-  { href: "/cerca", label: "Cerca", icon: Search }
+  { href: "/", label: "Home", shortLabel: "Home", icon: Home },
+  { href: "/emergenze", label: "Emergenze", shortLabel: "ER", icon: Ambulance },
+  { href: "/calcolatori", label: "Calcolatori", shortLabel: "Calc", icon: Calculator },
+  { href: "/appunti", label: "Appunti", shortLabel: "Appunti", icon: BookOpenText },
+  { href: "/risorse", label: "Risorse", shortLabel: "Risorse", icon: ExternalLink },
+  { href: "/genitori", label: "Genitori", shortLabel: "Genitori", icon: Baby },
+  { href: "/cerca", label: "Cerca", shortLabel: "Cerca", icon: Search }
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -62,7 +62,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             return (
               <Link key={item.href} href={item.href} className="flex min-h-16 flex-col items-center justify-center gap-1 px-1 py-3 text-[10px] font-medium leading-tight text-slate-600 sm:text-xs dark:text-slate-300">
                 <Icon className="size-5" />
-                <span className="max-w-full truncate px-1">{item.label}</span>
+                <span className="max-w-full truncate px-1">{item.shortLabel}</span>
               </Link>
             );
           })}

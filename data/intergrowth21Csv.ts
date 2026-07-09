@@ -1,6 +1,6 @@
 // CSV INTERGROWTH-21st importati dai file forniti.
 // Per aggiornare i riferimenti, sostituire il contenuto delle costanti CSV mantenendo le intestazioni Weeks,Days,3SDneg,2SDneg,1SDneg,M,1SD,2SD,3SD.
-// Nota: lengthMaleCsv integra da 33+0 a 42+6 i valori corretti estratti dal PDF INTERGROWTH-21st_Length_Z_Scores_Boys.pdf, perche il CSV fornito in quella sezione contiene valori di circonferenza cranica.
+// Nota: lengthMaleCsv integra da 33+0 a 42+6 i valori corretti estratti dal PDF INTERGROWTH-21st_Length_Z_Scores_Boys.pdf, perché il CSV fornito in quella sezione contiene valori di circonferenza cranica.
 
 export const weightMaleCsv = `Weeks,Days,3SDneg,2SDneg,1SDneg,M,1SD,2SD,3SD
 24,0,0.36,0.43,0.53,0.64,0.77,0.94,1.14
