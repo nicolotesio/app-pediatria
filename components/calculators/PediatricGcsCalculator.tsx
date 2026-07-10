@@ -5,6 +5,12 @@ import { CalculatorLayout } from "@/components/CalculatorLayout";
 
 type AgeGroup = "infant" | "young" | "older";
 
+const ageGroupOptions: Array<{ value: AgeGroup; label: string }> = [
+  { value: "infant", label: "<2 anni" },
+  { value: "young", label: "2-5 anni" },
+  { value: "older", label: ">5 anni" }
+];
+
 const eyeOptions = [
   { score: 4, infant: "Spontanea", older: "Spontanea" },
   { score: 3, infant: "Al richiamo", older: "Al comando verbale" },
@@ -43,8 +49,6 @@ export function PediatricGcsCalculator() {
 
   return (
     <CalculatorLayout
-      title="GCS pediatrico rapido"
-      description="Calcolo rapido della Glasgow Coma Scale pediatrica: apertura occhi, risposta motoria e risposta verbale."
       source="Adattamento della Pediatric Glasgow Coma Scale."
       updatedAt="2026-07-09"
       validity="Punteggio totale 3-15"
@@ -53,15 +57,24 @@ export function PediatricGcsCalculator() {
       warning="Usare il punteggio come supporto alla valutazione clinica. Considerare sedazione, intubazione, crisi convulsive, ipoglicemia, trauma e altre cause correggibili."
     >
       <div className="grid gap-5">
-        <section className="grid gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-          <label className="grid gap-2">
-            <span className="text-base font-semibold text-slate-950 dark:text-white">Fascia d&apos;età per risposta verbale</span>
-            <select value={ageGroup} onChange={(event) => setAgeGroup(event.target.value as AgeGroup)} className="rounded-md border border-slate-200 bg-white px-3 py-2 text-base text-slate-950 outline-none focus:border-blue-500 dark:border-slate-800 dark:bg-slate-950 dark:text-white">
-              <option value="infant">0-23 mesi</option>
-              <option value="young">2-5 anni</option>
-              <option value="older">&gt; 5 anni</option>
-            </select>
-          </label>
+        <section className="grid gap-3">
+          <h2 className="text-base font-semibold text-slate-950 dark:text-white">Fascia d&apos;età</h2>
+          <div className="grid grid-cols-3 gap-2">
+            {ageGroupOptions.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setAgeGroup(option.value)}
+                className={`rounded-md border px-3 py-3 text-sm font-semibold transition ${
+                  ageGroup === option.value
+                    ? "border-blue-300 bg-blue-50 text-blue-800 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100"
+                    : "border-slate-200 bg-white text-slate-700 hover:border-blue-200 hover:bg-blue-50/60 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-200 dark:hover:border-blue-900 dark:hover:bg-blue-950/30"
+                }`}
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
         </section>
 
         <ScoreGroup title="Apertura occhi" value={eye} onChange={setEye} options={eyeOptions.map((option) => ({ score: option.score, label: ageGroup === "infant" ? option.infant : option.older }))} />

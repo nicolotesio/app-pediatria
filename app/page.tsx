@@ -24,6 +24,7 @@ export default function HomePage() {
               href={section.href}
               title={section.title}
               inlineHeader
+              align="center"
               meta={<Icon className="size-6 text-blue-700 dark:text-blue-300" />}
             />
           );
