@@ -1,4 +1,4 @@
-import { Brain, Dna, Flame, Pill, Syringe } from "lucide-react";
+import { Bacteria, Brain, Dna, Flame, Pill, Syringe } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
@@ -25,10 +25,16 @@ const diagnosisNotes = [
 
 const therapyNotes = [
   {
-    title: "Terapia antibiotica",
+    title: "Farmaci antibiotici",
     href: "/appunti/terapia-antibiotica",
     description: "Schede antibiotiche pediatriche divise per classe, con posologia, vie di somministrazione, diluizione e note.",
     icon: Pill
+  },
+  {
+    title: "Principi di antibioticoterapia",
+    href: "/appunti/principi-antibioticoterapia",
+    description: "Schemi visuali su antibiogramma, spettro, sedi di infezione e penetrabilita antibiotica.",
+    icon: Bacteria
   },
   {
     title: "Premedicazione trasfusione",

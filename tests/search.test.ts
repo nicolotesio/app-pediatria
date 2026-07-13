@@ -10,7 +10,7 @@ describe("search index", () => {
       expect.arrayContaining([
         expect.objectContaining({
           href: "/appunti/terapia-antibiotica",
-          title: "Terapia antibiotica"
+          title: "Farmaci antibiotici"
         })
       ])
     );

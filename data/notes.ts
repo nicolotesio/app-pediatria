@@ -52,7 +52,7 @@ export const notes: ClinicalNote[] = [
   },
   {
     id: "terapia-antibiotica",
-    title: "Terapia antibiotica",
+    title: "Farmaci antibiotici",
     category: "Farmacologia",
     tags: ["antibiotici", "terapia antibiotica", "posologia", "diluizione", "pediatria"],
     updatedAt: "2026-07-06",
@@ -60,6 +60,16 @@ export const notes: ClinicalNote[] = [
     content: "Schede rapide di terapia antibiotica pediatrica con classi, vie di somministrazione, posologia, diluizioni EV e note.",
     searchText:
       "amikacina gentamicina tobramicina netilmicina ertapenem meropenem imipenem cilastatina cefazolina cefuroxime cefixima cefotaxime cefpodoxima ceftazidime ceftriaxone cefepime ceftarolina teicoplanina vancomicina clindamicina daptomicina azitromicina claritromicina linezolid amoxicillina clavulanato ampicillina sulbactam oxacillina piperacillina tazobactam ticarcillina colistina ciprofloxacina levofloxacina cotrimossazolo trimetoprim sulfametossazolo tmp smx fosfomicina metronidazolo rifampicina tigeciclina aminoglicosidi carbapenemici cefalosporine glicopeptidi lincosamidi lipopeptidi macrolidi oxazolidinoni penicilline polimixine chinolonici fluorochinolonici sulfonamidici nitroimidazoli rifamicine glicilcicline"
+  },
+  {
+    id: "principi-antibioticoterapia",
+    title: "Principi di antibioticoterapia",
+    category: "Farmacologia",
+    tags: ["antibiotici", "antibiogramma", "spettro antibiotico", "penetrabilita", "sede infezione"],
+    updatedAt: "2026-07-13",
+    sources: [],
+    content: "Schemi visuali su antibiogramma, spettro, sedi di infezione e penetrabilita antibiotica.",
+    searchText: "MRSA pseudomonas anaerobi intracellulari anti-tossina torrente ematico tessuti SNC osso BEE antibiotico antibioticoterapia"
   },
   {
     id: "premedicazione-trasfusione",
