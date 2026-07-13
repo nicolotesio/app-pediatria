@@ -13,9 +13,9 @@ const sections = [
 
 export default function HomePage() {
   return (
-    <div className="grid gap-5 pb-16">
+    <div className="grid gap-4 pb-4 sm:gap-5 sm:pb-8">
       <HomeSearchBox />
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="grid gap-3 sm:gap-4 lg:grid-cols-2 xl:grid-cols-3">
         {sections.map((section) => {
           const Icon = section.icon;
           return (
@@ -25,6 +25,7 @@ export default function HomePage() {
               title={section.title}
               inlineHeader
               align="center"
+              compact
               meta={<Icon className="size-6 text-blue-700 dark:text-blue-300" />}
             />
           );

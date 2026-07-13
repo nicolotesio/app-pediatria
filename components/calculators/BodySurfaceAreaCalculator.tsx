@@ -51,8 +51,6 @@ export function BodySurfaceAreaCalculator() {
 
   return (
     <CalculatorLayout
-      title="BSA - Superficie corporea"
-      description="Usata per dosaggio di chemioterapici, immunoglobuline e alcuni antiepilettici."
       source={
         <ul className="list-disc space-y-1 pl-5">
           <li>Mosteller RD. Simplified calculation of body-surface area. N Engl J Med. 1987.</li>

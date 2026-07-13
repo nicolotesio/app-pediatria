@@ -213,7 +213,6 @@ export function WhoGrowthCalculator() {
       sourceTitle="Riferimenti bibliografici"
       unframed
       warningPlacement="bottom"
-      warning={null}
     >
       <div className="grid gap-5">
         <section className="grid gap-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">

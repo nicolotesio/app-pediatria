@@ -9,27 +9,20 @@ type Sex = "male" | "female";
 export function TargetHeightCalculator() {
   const [motherHeight, setMotherHeight] = useState("");
   const [fatherHeight, setFatherHeight] = useState("");
-  const [childHeight, setChildHeight] = useState("");
   const [sex, setSex] = useState<Sex>("male");
 
   const result = useMemo(() => {
     const mother = parseDecimal(motherHeight);
     const father = parseDecimal(fatherHeight);
-    const current = parseOptionalDecimal(childHeight);
     if (!isPositive(mother) || !isPositive(father)) return null;
     const target = sex === "male" ? (father + mother + 13) / 2 : (father + mother - 13) / 2;
     return {
-      target,
-      lower: target - 8.5,
-      upper: target + 8.5,
-      currentDelta: current === null ? null : current - target
+      target
     };
-  }, [childHeight, fatherHeight, motherHeight, sex]);
+  }, [fatherHeight, motherHeight, sex]);
 
   return (
     <CalculatorLayout
-      title="Altezza bersaglio"
-      description="Altezza geneticamente attesa in base all'altezza dei genitori. Range orientativo: +/- 8,5 cm."
       source="Formula di Tanner per altezza bersaglio familiare."
       updatedAt="2026-07-09"
       units="cm"
@@ -48,7 +41,6 @@ export function TargetHeightCalculator() {
                 <option value="female">Femmina</option>
               </select>
             </label>
-            <NumberField id="target-current" label="Altezza attuale bambino" unit="cm" placeholder="opzionale" value={childHeight} onChange={setChildHeight} optional />
           </div>
           <p className="text-sm leading-6 text-slate-500 dark:text-slate-400">
             Maschio: (H padre + H madre + 13) / 2. Femmina: (H padre + H madre - 13) / 2.
@@ -56,10 +48,8 @@ export function TargetHeightCalculator() {
         </section>
 
         {result ? (
-          <section className="grid gap-4 rounded-lg border border-blue-200 bg-blue-50 p-5 text-blue-950 shadow-sm dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-100 sm:grid-cols-3">
-            <Result label="Altezza bersaglio" value={`${format(result.target)} cm`} />
-            <Result label="Range familiare" value={`${format(result.lower)} - ${format(result.upper)} cm`} />
-            <Result label="Scarto attuale" value={result.currentDelta === null ? "Non calcolato" : `${formatSigned(result.currentDelta)} cm`} />
+          <section className="rounded-lg border border-blue-200 bg-blue-50 p-5 text-blue-950 shadow-sm dark:border-blue-900 dark:bg-blue-950/40 dark:text-blue-100">
+            <Result label="Altezza bersaglio" value={`${format(result.target)} cm +- 8,5 cm`} />
           </section>
         ) : (
           <WarningBox>Inserire altezza di madre e padre per calcolare l&apos;altezza bersaglio.</WarningBox>
@@ -95,22 +85,10 @@ function parseDecimal(value: string) {
   return Number(value.replace(",", "."));
 }
 
-function parseOptionalDecimal(value: string) {
-  if (value.trim() === "") return null;
-  const parsed = parseDecimal(value);
-  return Number.isFinite(parsed) ? parsed : null;
-}
-
 function isPositive(value: number) {
   return Number.isFinite(value) && value > 0;
 }
 
 function format(value: number) {
   return value.toFixed(1).replace(".", ",");
-}
-
-function formatSigned(value: number) {
-  const formatted = format(Math.abs(value));
-  if (Math.abs(value) < 0.05) return "0,0";
-  return `${value > 0 ? "+" : "-"}${formatted}`;
 }

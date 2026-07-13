@@ -3,7 +3,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 
 export default function ParentsPage() {
   return (
-    <div className="grid gap-6 pb-16">
+    <div className="grid gap-5 pb-16">
       <SectionHeader title="GENITORI" />
       <EmptyState
         title="Ci stiamo lavorando"

@@ -9,6 +9,7 @@ export type SearchItem = {
   description: string;
   href: string;
   category: string;
+  keywords?: string;
 };
 
 export const searchIndex: SearchItem[] = [
@@ -42,7 +43,8 @@ export const searchIndex: SearchItem[] = [
     title: note.title,
     description: `${note.category} - ${note.tags.join(", ")}`,
     href: `/appunti/${note.id}`,
-    category: note.category
+    category: note.category,
+    keywords: [note.content, note.tags.join(" "), note.sources.join(" "), note.searchText ?? ""].join(" ")
   })),
   ...resources.map((resource) => ({
     id: resource.id,
@@ -67,6 +69,8 @@ export function filterSearchItems(query: string) {
   if (!normalized) return searchIndex;
 
   return searchIndex.filter((item) => {
-    return [item.title, item.description, item.category, item.type].some((field) => field.toLowerCase().includes(normalized));
+    return [item.title, item.description, item.category, item.type, item.keywords ?? ""].some((field) =>
+      field.toLowerCase().includes(normalized)
+    );
   });
 }

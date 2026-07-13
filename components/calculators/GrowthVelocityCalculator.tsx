@@ -30,8 +30,6 @@ export function GrowthVelocityCalculator() {
 
   return (
     <CalculatorLayout
-      title="Velocità di crescita"
-      description="Calcolo della crescita staturale annua tra due misurazioni."
       source="Velocità = delta altezza / delta tempo, espressa in cm/anno."
       updatedAt="2026-07-09"
       units="cm/anno"

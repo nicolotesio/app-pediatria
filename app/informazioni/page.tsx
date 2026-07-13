@@ -12,7 +12,7 @@ export default function InformationPage() {
           <div className="min-w-0">
             <h2 className="text-lg font-semibold text-slate-950 dark:text-white">Il progetto</h2>
             <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">
-              Questa webapp è un progetto personale pensato per avere rapidamente a disposizione informazioni e tool clinici utili nella pratica pediatrica.
+              Questa webapp è un progetto personale del Dr. Nicolò Tesio, pensato per avere rapidamente a disposizione informazioni e tool clinici utili nella pratica pediatrica.
             </p>
           </div>
         </div>
@@ -37,7 +37,6 @@ export default function InformationPage() {
         <MessageSquarePlus className="mt-0.5 size-5 shrink-0" />
         <div className="min-w-0">
           <h2 className="text-lg font-semibold">Segnala errori, invia feedback o idee per nuovi contenuti</h2>
-          <p className="mt-2 text-sm leading-6 text-blue-800 dark:text-blue-100">Tocca il box per aprire una nuova email.</p>
         </div>
       </a>
     </div>

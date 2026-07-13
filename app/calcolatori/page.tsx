@@ -1,4 +1,4 @@
-import { Calculator, ChartSpline, Droplets, PencilRuler, Ruler } from "lucide-react";
+import { Calculator, ChartSpline, Crosshair, Droplets, PencilRuler } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
@@ -8,7 +8,7 @@ const auxologyCalculators = [
   { title: "WHO Child Growth Standards", href: "/calcolatori/crescita-who-0-5", description: "Valutazione antropometrica secondo gli standard internazionali WHO per bambini da 0 a 5 anni.", icon: ChartSpline },
   { title: "Curve SIEDP 2006", href: "/calcolatori/crescita-siedp-2006", description: "Valutazione antropometrica secondo i riferimenti SIEDP 2006 per la popolazione italiana di età 2-20 anni.", icon: ChartSpline },
   { title: "Curve CDC 2000", href: "/calcolatori/crescita-cdc-2000", description: "Valutazione antropometrica secondo i riferimenti CDC 2000 per la popolazione pediatrica statunitense di età 2-20 anni.", icon: ChartSpline },
-  { title: "Altezza bersaglio", href: "/calcolatori/altezza-bersaglio", description: "Stima dell'altezza geneticamente attesa e del range familiare.", icon: Ruler },
+  { title: "Altezza bersaglio", href: "/calcolatori/altezza-bersaglio", icon: Crosshair },
   { title: "Velocità di crescita", href: "/calcolatori/velocita-crescita", description: "Calcolo della velocità staturale tra due misurazioni.", icon: ChartSpline }
 ];
 
@@ -22,7 +22,7 @@ type CalculatorItem = (typeof auxologyCalculators)[number];
 
 export default function CalculatorsPage() {
   return (
-    <div className="grid gap-8 pb-16">
+    <div className="grid gap-5 pb-16">
       <SectionHeader title="CALCOLATORI" />
       <CalculatorSection title="Auxologia" calculators={auxologyCalculators} />
       <CalculatorSection title="Altri calcolatori" calculators={generalCalculators} />
@@ -33,7 +33,9 @@ export default function CalculatorsPage() {
 function CalculatorSection({ title, calculators }: { title: string; calculators: CalculatorItem[] }) {
   return (
     <section className="grid gap-4">
-      <h2 className="text-xl font-semibold text-slate-950 dark:text-white">{title}</h2>
+      <div className="border-y border-slate-200 py-3 text-center dark:border-slate-800">
+        <h2 className="text-xl font-semibold text-slate-950 dark:text-white">{title}</h2>
+      </div>
       <div className="grid gap-4 sm:grid-cols-2">
         {calculators.map((calculator) => {
           const Icon = calculator.icon;
@@ -42,7 +44,7 @@ function CalculatorSection({ title, calculators }: { title: string; calculators:
               key={calculator.title}
               href={calculator.href}
               title={calculator.title}
-              description={calculator.description}
+              description={calculator.href === "/calcolatori/velocita-crescita" ? undefined : calculator.description}
               inlineHeader
               meta={<Icon className="size-6 text-blue-700 dark:text-blue-300" />}
             />

@@ -32,11 +32,11 @@ export function CalculatorLayout({
   warning,
   warningPlacement = "side"
 }: CalculatorLayoutProps) {
-  const warningBox = warning === null ? null : (
+  const warningBox = warning ? (
     <WarningBox title={null}>
-      {warning ?? "Strumento di supporto clinico. Verificare sempre dosi, linee guida locali, peso reale e condizioni del paziente."}
+      {warning}
     </WarningBox>
-  );
+  ) : null;
 
   if (warningPlacement === "bottom") {
     return (

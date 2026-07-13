@@ -31,8 +31,6 @@ export function PediatricEgfrCalculator() {
 
   return (
     <CalculatorLayout
-      title="eGFR pediatrico"
-      description="Stima del filtrato glomerulare con formula di Schwartz."
       source={
         <ul className="list-disc space-y-1 pl-5">
           <li>Schwartz GJ et al. New equations to estimate GFR in children with CKD. J Am Soc Nephrol. 2009.</li>
