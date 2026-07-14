@@ -1,4 +1,4 @@
-import { Bacteria, Brain, Dna, Flame, Pill, Syringe } from "lucide-react";
+import { Brain, Bug, Dna, Flame, Pill, Syringe } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
@@ -34,7 +34,7 @@ const therapyNotes = [
     title: "Principi di antibioticoterapia",
     href: "/appunti/principi-antibioticoterapia",
     description: "Schemi visuali su antibiogramma, spettro, sedi di infezione e penetrabilita antibiotica.",
-    icon: Bacteria
+    icon: Bug
   },
   {
     title: "Premedicazione trasfusione",
