@@ -24,6 +24,16 @@ export const noteCategories: NoteCategory[] = ["Genetica", "Farmacologia"];
 
 export const notes: ClinicalNote[] = [
   {
+    id: "terapia-antiemetica",
+    title: "Terapia antiemetica",
+    category: "Farmacologia",
+    tags: ["antiemetici", "nausea", "vomito", "farmacologia"],
+    updatedAt: "2026-07-18",
+    sources: [],
+    content: "Farmaci antiemetici organizzati per classe farmacologica.",
+    searchText: "antagonisti recettore 5-HT3 5-HT3RA palonosetron ondansetron corticosteroidi methylprednisolone metilprednisolone desametasone antagonisti recettore NK1 NKI aprepitant antagonisti dopaminergici alizapride antipsicotici clorpromazina antistaminici antiistaminici clorfenamina"
+  },
+  {
     id: "nf1-criteri-diagnostici",
     title: "Criteri diagnostici per NF1",
     category: "Genetica",

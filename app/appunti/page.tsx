@@ -25,6 +25,12 @@ const diagnosisNotes = [
 
 const therapyNotes = [
   {
+    title: "Terapia antiemetica",
+    href: "/appunti/terapia-antiemetica",
+    description: "Farmaci antiemetici suddivisi per classe farmacologica.",
+    icon: Pill
+  },
+  {
     title: "Farmaci antibiotici",
     href: "/appunti/terapia-antibiotica",
     description: "Schede antibiotiche pediatriche divise per classe, con posologia, vie di somministrazione, diluizione e note.",
