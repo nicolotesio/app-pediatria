@@ -36,7 +36,7 @@ const antiemeticClasses: Array<{ className: string; drugs: AntiemeticDrug[] }> =
     drugs: [
       {
         name: "Metilprednisolone",
-        route: "EV",
+        route: "PO, EV",
         posology: ["1 mg/kg, ogni 8 ore", "Dose max: 40 mg/dose"],
         notes: [
           "Sempre in associazione con altri antiemetici.",
@@ -47,7 +47,7 @@ const antiemeticClasses: Array<{ className: string; drugs: AntiemeticDrug[] }> =
       },
       {
         name: "Desametasone",
-        route: "EV",
+        route: "PO, EV",
         posology: ["6-8 mg/m² in 1 o 2 dosi/die"],
         notes: [
           "Sempre in associazione con altri antiemetici.",
@@ -109,7 +109,7 @@ const antiemeticClasses: Array<{ className: string; drugs: AntiemeticDrug[] }> =
     drugs: [
       {
         name: "Alizapride",
-        route: "PO, EV, IM",
+        route: "PO, EV",
         posology: ["1 mg/kg/dose, ogni 8 ore", "Dose max: 50 mg/dose"],
         notes: [
           "Attenzione nell'associazione con derivati della Morfina: aumentato rischio di eventi avversi neurologici e respiratori.",
@@ -123,7 +123,7 @@ const antiemeticClasses: Array<{ className: string; drugs: AntiemeticDrug[] }> =
     drugs: [
       {
         name: "Clorpromazina",
-        route: "PO, IM, EV",
+        route: "PO, EV",
         posology: ["0.5-1 mg/kg/dose, ogni 8 ore", "Dose max: 25 mg/dose"],
         notes: [
           "Gli antipsicotici sono poco usati come antiemetici per il rischio di effetto paradosso, ma possono essere utili quando è presente una prevalente componente psicologica che causa vomito anticipatorio. In questo caso può essere utile anche l'utilizzo di Lorazepam PO."
@@ -136,7 +136,7 @@ const antiemeticClasses: Array<{ className: string; drugs: AntiemeticDrug[] }> =
     drugs: [
       {
         name: "Clorfenamina",
-        route: "EV, IM, SC",
+        route: "EV",
         posology: ["0.2 mg/kg/dose, ogni 8-12 ore", "Dose max: 10 mg/dose"],
         notes: ["Antistaminico di prima generazione."]
       }
