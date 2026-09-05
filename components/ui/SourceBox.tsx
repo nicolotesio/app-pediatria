@@ -1,15 +1,30 @@
 import { ShieldCheck } from "lucide-react";
 
 type SourceBoxProps = {
-  source: React.ReactNode;
+  source?: React.ReactNode;
   updatedAt: string;
   validity?: string;
   units?: string;
   title?: string;
   note?: string;
+  updatedOnly?: boolean;
 };
 
-export function SourceBox({ source, updatedAt, validity, units, title = "Fonte", note }: SourceBoxProps) {
+export function SourceBox({ source, updatedAt, validity, units, title = "Fonte", note, updatedOnly = false }: SourceBoxProps) {
+  if (updatedOnly) {
+    return (
+      <aside className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
+        <div className="flex gap-3">
+          <ShieldCheck className="mt-0.5 size-5 shrink-0 text-blue-700 dark:text-blue-300" />
+          <dl className="text-sm">
+            <dt className="font-semibold text-slate-950 dark:text-white">Aggiornato</dt>
+            <dd className="text-slate-600 dark:text-slate-300">{updatedAt}</dd>
+          </dl>
+        </div>
+      </aside>
+    );
+  }
+
   return (
     <aside className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-900">
       <div className="flex gap-3">
@@ -21,22 +36,9 @@ export function SourceBox({ source, updatedAt, validity, units, title = "Fonte",
             {note ? <dd className="mt-1 text-slate-600 dark:text-slate-300">{note}</dd> : null}
           </div>
           <div className="grid gap-2 sm:grid-cols-3">
-            <div>
-              <dt className="font-semibold text-slate-950 dark:text-white">Aggiornato</dt>
-              <dd className="text-slate-600 dark:text-slate-300">{updatedAt}</dd>
-            </div>
-            {validity ? (
-              <div>
-                <dt className="font-semibold text-slate-950 dark:text-white">Validità</dt>
-                <dd className="text-slate-600 dark:text-slate-300">{validity}</dd>
-              </div>
-            ) : null}
-            {units ? (
-              <div>
-                <dt className="font-semibold text-slate-950 dark:text-white">Unità</dt>
-                <dd className="text-slate-600 dark:text-slate-300">{units}</dd>
-              </div>
-            ) : null}
+            <div><dt className="font-semibold text-slate-950 dark:text-white">Aggiornato</dt><dd className="text-slate-600 dark:text-slate-300">{updatedAt}</dd></div>
+            {validity ? <div><dt className="font-semibold text-slate-950 dark:text-white">Validità</dt><dd className="text-slate-600 dark:text-slate-300">{validity}</dd></div> : null}
+            {units ? <div><dt className="font-semibold text-slate-950 dark:text-white">Unità</dt><dd className="text-slate-600 dark:text-slate-300">{units}</dd></div> : null}
           </div>
         </dl>
       </div>

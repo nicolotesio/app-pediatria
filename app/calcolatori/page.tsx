@@ -15,7 +15,8 @@ const auxologyCalculators = [
 const generalCalculators = [
   { title: "Terapia infusionale di supporto", href: "/calcolatori/terapia-infusionale-supporto", description: "Stima orientativa del mantenimento idrico EV pediatrico con alert di sicurezza e monitoraggio.", icon: Droplets },
   { title: "Superficie corporea", href: "/calcolatori/superficie-corporea", description: "BSA con formule Mosteller, Du Bois e Haycock.", icon: Calculator },
-  { title: "eGFR pediatrico", href: "/calcolatori/egfr-pediatrico", description: "Stima del filtrato glomerulare con formula di Schwartz.", icon: Calculator }
+  { title: "eGFR pediatrico", href: "/calcolatori/egfr-pediatrico", description: "Stima del filtrato glomerulare con formula di Schwartz.", icon: Calculator },
+  { title: "Saturazione della transferrina", href: "/calcolatori/saturazione-transferrina", description: "Calcolo della percentuale da sideremia e transferrina.", icon: Calculator }
 ];
 
 type CalculatorItem = (typeof auxologyCalculators)[number];
