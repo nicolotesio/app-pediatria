@@ -5,7 +5,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 export default function AntiemeticTherapyPage() {
   return (
     <div className="grid gap-5 pb-16">
-      <SectionHeader title="Terapia antiemetica" />
+      <SectionHeader title="Farmaci antiemetici" />
       <figure className="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
         <Image
           src="/principi-terapia-antiemetica.png"

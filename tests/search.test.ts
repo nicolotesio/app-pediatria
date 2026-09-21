@@ -54,19 +54,19 @@ describe("search index", () => {
   it("finds antiemetic therapy by drug name", () => {
     expect(filterSearchItems("palonosetron")).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ href: "/appunti/terapia-antiemetica", title: "Terapia antiemetica" })
+        expect.objectContaining({ href: "/appunti/terapia-antiemetica", title: "Farmaci antiemetici" })
       ])
     );
 
     expect(filterSearchItems("aprepitant")).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ href: "/appunti/terapia-antiemetica", title: "Terapia antiemetica" })
+        expect.objectContaining({ href: "/appunti/terapia-antiemetica", title: "Farmaci antiemetici" })
       ])
     );
 
     expect(filterSearchItems("clorpromazina")).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ href: "/appunti/terapia-antiemetica", title: "Terapia antiemetica" })
+        expect.objectContaining({ href: "/appunti/terapia-antiemetica", title: "Farmaci antiemetici" })
       ])
     );
   });

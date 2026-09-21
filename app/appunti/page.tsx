@@ -25,7 +25,7 @@ const diagnosisNotes = [
 
 const therapyNotes = [
   {
-    title: "Terapia antiemetica",
+    title: "Farmaci antiemetici",
     href: "/appunti/terapia-antiemetica",
     description: "Farmaci antiemetici suddivisi per classe farmacologica.",
     icon: Pill
@@ -37,6 +37,17 @@ const therapyNotes = [
     icon: Pill
   },
   {
+    title: "Farmaci antivirali",
+    href: "/appunti/farmaci-antivirali",
+    description: "Schede pediatriche di antivirali con vie di somministrazione, regimi e monitoraggio.",
+    icon: Pill
+  },
+  {
+    title: "Farmaci antifungini",
+    href: "/appunti/farmaci-antifungini",
+    description: "Schede pediatriche di antifungini con vie di somministrazione, regimi e monitoraggio.",
+    icon: Pill
+  },  {
     title: "Principi di antibioticoterapia",
     href: "/appunti/principi-antibioticoterapia",
     description: "Schemi visuali su antibiogramma, spettro, sedi di infezione e penetrabilita antibiotica.",

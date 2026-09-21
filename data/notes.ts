@@ -25,7 +25,7 @@ export const noteCategories: NoteCategory[] = ["Genetica", "Farmacologia"];
 export const notes: ClinicalNote[] = [
   {
     id: "terapia-antiemetica",
-    title: "Terapia antiemetica",
+    title: "Farmaci antiemetici",
     category: "Farmacologia",
     tags: ["antiemetici", "nausea", "vomito", "farmacologia"],
     updatedAt: "2026-07-18",
@@ -70,6 +70,26 @@ export const notes: ClinicalNote[] = [
     content: "Schede rapide di terapia antibiotica pediatrica con classi, vie di somministrazione, posologia, diluizioni EV e note.",
     searchText:
       "amikacina gentamicina tobramicina netilmicina ertapenem meropenem imipenem cilastatina cefazolina cefuroxime cefixima cefotaxime cefpodoxima ceftazidime ceftriaxone cefepime ceftarolina teicoplanina vancomicina clindamicina daptomicina azitromicina claritromicina linezolid amoxicillina clavulanato ampicillina sulbactam oxacillina piperacillina tazobactam ticarcillina colistina ciprofloxacina levofloxacina cotrimossazolo trimetoprim sulfametossazolo tmp smx fosfomicina metronidazolo rifampicina tigeciclina aminoglicosidi carbapenemici cefalosporine glicopeptidi lincosamidi lipopeptidi macrolidi oxazolidinoni penicilline polimixine chinolonici fluorochinolonici sulfonamidici nitroimidazoli rifamicine glicilcicline"
+  },
+  {
+    id: "farmaci-antivirali",
+    title: "Farmaci antivirali",
+    category: "Farmacologia",
+    tags: ["antivirali", "aciclovir", "ganciclovir", "valganciclovir", "foscarnet", "cidofovir", "farmacologia"],
+    updatedAt: "2026-09-21",
+    sources: ["EMA product information; NIH Pediatric Opportunistic Infection Guidelines"],
+    content: "Schede rapide di terapia antivirale pediatrica con vie di somministrazione, posologia e monitoraggio.",
+    searchText: "antivirali aciclovir ganciclovir valganciclovir cidofovir foscarnet CMV HSV VZV"
+  },
+  {
+    id: "farmaci-antifungini",
+    title: "Farmaci antifungini",
+    category: "Farmacologia",
+    tags: ["antifungini", "fluconazolo", "voriconazolo", "posaconazolo", "amfotericina", "caspofungina", "farmacologia"],
+    updatedAt: "2026-09-21",
+    sources: ["EMA product information"],
+    content: "Schede rapide di terapia antifungina pediatrica con vie di somministrazione, posologia e monitoraggio.",
+    searchText: "antifungini fluconazolo itraconazolo voriconazolo posaconazolo amfotericina caspofungina candida aspergillus"
   },
   {
     id: "principi-antibioticoterapia",
