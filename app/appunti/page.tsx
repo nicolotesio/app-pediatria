@@ -1,27 +1,6 @@
-import { Brain, Bug, Dna, Flame, Pill, Syringe } from "lucide-react";
+import { Brain, Bug, Pill, Syringe } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-
-const diagnosisNotes = [
-  {
-    title: "Criteri NF1",
-    href: "/appunti/nf1-criteri-diagnostici",
-    description: "Checklist interattiva dei criteri revisionati per neurofibromatosi tipo 1, con score e interpretazione diagnostica.",
-    icon: Dna
-  },
-  {
-    title: "Criteri TSC",
-    href: "/appunti/sclerosi-tuberosa-criteri-diagnostici",
-    description: "Checklist interattiva dei criteri TSC, con caratteristiche principali, minori e interpretazione diagnostica.",
-    icon: Dna
-  },
-  {
-    title: "Criteri MAS",
-    href: "/appunti/criteri-mas",
-    description: "Criteri laboratoristici per sospetta sindrome da attivazione macrofagica in AIG sistemica.",
-    icon: Flame
-  }
-];
 
 const therapyNotes = [
   {
@@ -67,24 +46,20 @@ const therapyNotes = [
   }
 ];
 
-type NoteItem = (typeof diagnosisNotes)[number];
+type NoteItem = (typeof therapyNotes)[number];
 
 export default function NotesPage() {
   return (
     <div className="grid gap-5 pb-16">
-      <SectionHeader title="APPUNTI" />
-      <NotesSection title="Diagnosi" notes={diagnosisNotes} />
-      <NotesSection title="Terapia" notes={therapyNotes} />
+      <SectionHeader title="TERAPIA" />
+      <NotesSection notes={therapyNotes} />
     </div>
   );
 }
 
-function NotesSection({ title, notes }: { title: string; notes: NoteItem[] }) {
+function NotesSection({ notes }: { notes: NoteItem[] }) {
   return (
-    <section className="grid gap-4">
-      <div className="border-y border-slate-200 py-3 text-center dark:border-slate-800">
-        <h2 className="text-xl font-semibold text-slate-950 dark:text-white">{title}</h2>
-      </div>
+    <section>
       <div className="grid gap-4 sm:grid-cols-2">
         {notes.map((note) => {
           const Icon = note.icon;

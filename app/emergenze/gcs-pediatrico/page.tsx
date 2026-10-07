@@ -6,7 +6,6 @@ export default function PediatricGcsPage() {
     <div className="grid gap-5 pb-16">
       <SectionHeader
         title="GCS pediatrico rapido"
-        description="Calcolo rapido della Glasgow Coma Scale pediatrica."
       />
       <PediatricGcsCalculator />
     </div>

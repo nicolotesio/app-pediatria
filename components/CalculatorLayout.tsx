@@ -19,8 +19,8 @@ type CalculatorLayoutProps = {
 };
 
 export function CalculatorLayout({ title, description, source, sourceUpdatedOnly = false, updatedAt, validity, units, sourceTitle, sourceNote, children, unframed = false, showSource = true, warning, warningPlacement = "side" }: CalculatorLayoutProps) {
-  const sourceBox = showSource && updatedAt && (source || sourceUpdatedOnly)
-    ? <SourceBox source={source} updatedAt={updatedAt} validity={validity} units={units} title={sourceTitle} note={sourceNote} updatedOnly={sourceUpdatedOnly} />
+  const sourceBox = showSource && updatedAt
+    ? <SourceBox source={source} updatedAt={updatedAt} validity={validity} title={sourceTitle} note={sourceNote} updatedOnly={sourceUpdatedOnly || !source} />
     : null;
   const warningBox = warning ? <WarningBox title={null}>{warning}</WarningBox> : null;
 

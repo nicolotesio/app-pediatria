@@ -14,6 +14,13 @@ describe("calculateWhoGrowth", () => {
     expect(weight?.percentile).toBeCloseTo(50, 1);
   });
 
+  it("calcola il solo centile del peso quando sono inseriti solo peso ed età", () => {
+    const result = calculateWhoGrowth(whoGrowthData, "male", 365, 10, null, null);
+
+    expect(result.results).toHaveLength(1);
+    expect(result.results[0]?.key).toBe("weight");
+  });
+
   it("sotto o uguale a 730 giorni usa weight-for-length e non BMI", () => {
     const result = calculateWhoGrowth(whoGrowthData, "female", 730, 10.2, 80, 46);
 

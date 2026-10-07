@@ -142,9 +142,13 @@ export function WhoGrowthCalculator() {
     if (!whoData) errors.push(whoDataError ?? "Caricamento dati WHO in corso");
     if (!sex) errors.push("Selezionare il sesso");
     if (agePreview.error) errors.push(agePreview.error);
-    if (weightKg.trim() === "" || !Number.isFinite(parsedWeight) || parsedWeight <= 0) errors.push("Inserire un peso valido in kg");
-    if (statureCm.trim() === "" || !Number.isFinite(parsedStature) || parsedStature <= 0) errors.push("Inserire una lunghezza/statura valida in cm");
-    if (headCircumferenceCm.trim() === "" || !Number.isFinite(parsedHead) || parsedHead <= 0) errors.push("Inserire una circonferenza cranica valida in cm");
+    const hasWeight = weightKg.trim() !== "";
+    const hasStature = statureCm.trim() !== "";
+    const hasHead = headCircumferenceCm.trim() !== "";
+    if (!hasWeight && !hasStature && !hasHead) errors.push("Inserire almeno una misura antropometrica");
+    if (hasWeight && (!Number.isFinite(parsedWeight) || parsedWeight <= 0)) errors.push("Inserire un peso valido in kg");
+    if (hasStature && (!Number.isFinite(parsedStature) || parsedStature <= 0)) errors.push("Inserire una lunghezza/statura valida in cm");
+    if (hasHead && (!Number.isFinite(parsedHead) || parsedHead <= 0)) errors.push("Inserire una circonferenza cranica valida in cm");
 
     let effectiveAgeDays = agePreview.ageDays;
     let correctedAgeUsed = false;
@@ -181,7 +185,7 @@ export function WhoGrowthCalculator() {
 
     try {
       setSubmittedResult({
-        ...calculateWhoGrowth(whoData as WhoGrowthData, sex as WhoSex, effectiveAgeDays, parsedWeight, parsedStature, parsedHead),
+        ...calculateWhoGrowth(whoData as WhoGrowthData, sex as WhoSex, effectiveAgeDays, hasWeight ? parsedWeight : null, hasStature ? parsedStature : null, hasHead ? parsedHead : null),
         chronologicalAgeDays: agePreview.ageDays,
         ageMode,
         correctedAgeUsed,
@@ -215,7 +219,7 @@ export function WhoGrowthCalculator() {
       warningPlacement="bottom"
     >
       <div className="grid gap-5">
-        <section className="grid gap-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <section className="grid gap-5">
           <div className="grid gap-3 sm:grid-cols-2">
             <FieldGroup label="Sesso">
               <div className="grid grid-cols-2 gap-2">
@@ -501,7 +505,7 @@ function GrowthChart({ data, result, metric }: { data: WhoGrowthData; result: Wh
   const rows = getChartRows(data, metric.dataset, result.sex, result.mode);
   const xMin = rows[0].x;
   const xMax = rows[rows.length - 1].x;
-  const patientX = isLengthAxis ? result.statureCm : result.ageDays;
+  const patientX = isLengthAxis ? (result.statureCm ?? result.ageDays) : result.ageDays;
   const series = zLabels.map((label, index) => ({
     label,
     color: zColors[index],
@@ -858,9 +862,9 @@ function buildWhoExportHtml(result: WhoGrowthResult, chartSvgs: string[]) {
   <dl>
     <dt>Sesso</dt><dd>${result.sex === "male" ? "Maschio" : "Femmina"}</dd>
     <dt>Età</dt><dd>${escapeHtml(formatWhoAge(result.ageDays))}</dd>
-    <dt>Peso</dt><dd>${escapeHtml(formatNumber(result.weightKg, 2))} kg</dd>
-    <dt>${escapeHtml(statureLabel)}</dt><dd>${escapeHtml(formatNumber(result.statureCm, 1))} cm</dd>
-    <dt>Circonferenza cranica</dt><dd>${escapeHtml(formatNumber(result.headCircumferenceCm, 1))} cm</dd>
+    ${result.weightKg !== null ? `<dt>Peso</dt><dd>${escapeHtml(formatNumber(result.weightKg, 2))} kg</dd>` : ""}
+    ${result.statureCm !== null ? `<dt>${escapeHtml(statureLabel)}</dt><dd>${escapeHtml(formatNumber(result.statureCm, 1))} cm</dd>` : ""}
+    ${result.headCircumferenceCm !== null ? `<dt>Circonferenza cranica</dt><dd>${escapeHtml(formatNumber(result.headCircumferenceCm, 1))} cm</dd>` : ""}
     ${result.bmi ? `<dt>BMI</dt><dd>${escapeHtml(formatNumber(result.bmi, 1))} kg/m²</dd>` : ""}
     <dt>Data del calcolo</dt><dd>${escapeHtml(formatDateTime(new Date()))}</dd>
     <dt>Riferimento</dt><dd>WHO Child Growth Standards</dd>

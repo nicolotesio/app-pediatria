@@ -93,7 +93,7 @@ export function PediatricGcsCalculator() {
 
 function ScoreGroup({ title, value, onChange, options }: { title: string; value: number; onChange: (value: number) => void; options: Array<{ score: number; label: string }> }) {
   return (
-    <section className="grid gap-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+    <section className="grid gap-3">
       <div className="flex items-center justify-between gap-3">
         <h3 className="text-base font-bold text-slate-950 dark:text-white">{title}</h3>
         <span className="rounded-full bg-blue-100 px-3 py-1 text-sm font-bold text-blue-800 dark:bg-blue-950 dark:text-blue-100">{value}</span>

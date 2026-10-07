@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   calculateHollidaySegar,
+  calculateHollidaySegarMaintenance,
   calculateMaintenanceFluids,
   calculatePredictableLosses,
   calculatePreviousLosses,
@@ -40,6 +41,10 @@ describe("maintenance fluids", () => {
 
   it("segnala il cap Holliday-Segar sopra 2000 mL/24h", () => {
     expect(calculateHollidaySegar(60)).toEqual({ mlDay: 2000, mlHour: 83.3, capped: true, isCapped: true });
+  });
+
+  it("restituisce la formula Holliday-Segar senza cap nel calcolatore di mantenimento", () => {
+    expect(calculateHollidaySegarMaintenance(60)).toEqual({ mlDay: 2300, mlHour: 95.8 });
   });
 
   it("applica restrizione per rischio SIADH", () => {

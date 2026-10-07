@@ -30,7 +30,7 @@ export function TargetHeightCalculator() {
       warningPlacement="bottom"
     >
       <div className="grid gap-5">
-        <section className="grid gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <section className="grid gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <NumberField id="target-mother" label="Altezza madre" unit="cm" placeholder="es. 162" value={motherHeight} onChange={setMotherHeight} />
             <NumberField id="target-father" label="Altezza padre" unit="cm" placeholder="es. 175" value={fatherHeight} onChange={setFatherHeight} />
@@ -43,7 +43,8 @@ export function TargetHeightCalculator() {
             </label>
           </div>
           <p className="text-sm leading-6 text-slate-500 dark:text-slate-400">
-            Maschio: (H padre + H madre + 13) / 2. Femmina: (H padre + H madre - 13) / 2.
+            <span className="block">Maschio: (H padre + H madre + 13) / 2.</span>
+            <span className="block">Femmina: (H padre + H madre - 13) / 2.</span>
           </p>
         </section>
 

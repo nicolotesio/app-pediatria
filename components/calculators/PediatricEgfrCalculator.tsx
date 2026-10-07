@@ -45,7 +45,7 @@ export function PediatricEgfrCalculator() {
       warning="La stima dipende dal metodo di misura della creatinina, dalla massa muscolare e dal contesto clinico. Verificare con protocolli locali o nefrologo pediatra quando il dato orienta decisioni rilevanti."
     >
       <div className="grid gap-5">
-        <section className="grid gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <section className="grid gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <NumberField id="egfr-height" label="Altezza" unit="cm" placeholder="es. 110" value={heightCm} onChange={setHeightCm} />
             <NumberField id="egfr-creatinine" label="Creatinina" unit={unit === "mgdl" ? "mg/dL" : "µmol/L"} placeholder={unit === "mgdl" ? "es. 0,6" : "es. 53"} value={creatinine} onChange={setCreatinine} />

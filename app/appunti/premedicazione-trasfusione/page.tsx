@@ -1,23 +1,22 @@
 import { SectionHeader } from "@/components/ui/SectionHeader";
-import { WarningBox } from "@/components/ui/WarningBox";
 
 const medications = [
   {
     name: "Idrocortisone",
-    brand: "FLEBOCORTID",
+    brand: "FLEBOCORTID, fiale da 100 mg e 500 mg",
     rows: [
       ["Via di somministrazione", "EV"],
       ["Posologia", "5 mg/kg"],
-      ["Dose massima", "250 mg (o 100 mg?)"]
+      ["Dose massima", "500 mg (1 fiala)"]
     ]
   },
   {
     name: "Clorfenamina",
-    brand: "TRIMETON, fiale 1 ml 10 mg",
+    brand: "TRIMETON, fiale da 10 mg",
     rows: [
       ["Via di somministrazione", "EV"],
       ["Posologia", "0.2 mg/kg"],
-      ["Dose massima", "20 mg"],
+      ["Dose massima", "20 mg (2 fiale)"],
       ["Somministrazione", "EV in > 1 min"]
     ]
   }
@@ -28,12 +27,10 @@ export default function TransfusionPremedicationPage() {
     <div className="grid gap-5 pb-16">
       <SectionHeader
         title="Premedicazione trasfusione"
-        description="Schema rapido da considerare circa un'ora prima della trasfusione."
+        description="Terapia da somministrare circa un'ora prima della trasfusione."
       />
 
       <section className="grid gap-4">
-        <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">Circa un&apos;ora prima della trasfusione.</p>
-
         <div className="grid gap-3">
           {medications.map((medication) => (
             <article key={medication.name} className="grid gap-3 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950">
@@ -54,8 +51,6 @@ export default function TransfusionPremedicationPage() {
           ))}
         </div>
       </section>
-
-      <WarningBox title="Attenzione">Dosaggi e somministrazioni da verificare.</WarningBox>
 
       <aside className="rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm dark:border-slate-800 dark:bg-slate-900">
         <p className="font-semibold text-slate-950 dark:text-white">Aggiornato</p>

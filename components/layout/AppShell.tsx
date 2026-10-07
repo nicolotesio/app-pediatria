@@ -7,7 +7,7 @@ const navItems = [
   { href: "/", label: "Home", shortLabel: "Home", icon: Home },
   { href: "/emergenze", label: "Emergenze", shortLabel: "ER", icon: Ambulance },
   { href: "/calcolatori", label: "Calcolatori", shortLabel: "Calc", icon: Calculator },
-  { href: "/appunti", label: "Appunti", shortLabel: "Appunti", icon: BookOpenText },
+  { href: "/appunti", label: "Terapia", shortLabel: "Terapia", icon: BookOpenText },
   { href: "/risorse", label: "Risorse", shortLabel: "Risorse", icon: ExternalLink },
   { href: "/genitori", label: "Genitori", shortLabel: "Genitori", icon: Baby },
   { href: "/cerca", label: "Cerca", shortLabel: "Cerca", icon: Search }

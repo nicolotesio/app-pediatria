@@ -104,8 +104,8 @@ const calculators: SearchItem[] = [
   {
     id: "terapia-infusionale-supporto",
     type: "Calcolatore",
-    title: "Terapia infusionale di supporto",
-    description: "Stima del mantenimento idrico endovenoso pediatrico.",
+    title: "Terapia infusionale di mantenimento",
+    description: "Calcolo del mantenimento idrico secondo Holliday–Segar.",
     href: "/calcolatori/terapia-infusionale-supporto",
     category: "Calcolatori",
     keywords: "fluidi liquidi mantenimento ev endovena holliday segar 4-2-1"

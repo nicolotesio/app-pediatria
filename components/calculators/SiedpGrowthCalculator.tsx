@@ -131,7 +131,7 @@ export function SiedpGrowthCalculator() {
       warningPlacement="bottom"
     >
       <div className="grid gap-5">
-        <section className="grid gap-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <section className="grid gap-5">
           <div className="grid gap-3 sm:grid-cols-2">
             <FieldGroup label="Sesso">
               <div className="grid grid-cols-2 gap-2">

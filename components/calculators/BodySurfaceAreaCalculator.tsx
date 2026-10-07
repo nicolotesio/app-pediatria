@@ -16,21 +16,21 @@ const formulas: Array<{
   {
     key: "mosteller",
     label: "Mosteller",
-    expression: "sqrt(H x P / 3600)",
+    expression: "√(H × P / 3600)",
     use: "Standard pediatrico",
     calculate: (heightCm, weightKg) => Math.sqrt((heightCm * weightKg) / 3600)
   },
   {
     key: "dubois",
     label: "Du Bois",
-    expression: "0,007184 x H^0,725 x P^0,425",
+    expression: "0,007184 × H⁰·⁷²⁵ × P⁰·⁴²⁵",
     use: "Adulti, chemio",
     calculate: (heightCm, weightKg) => 0.007184 * Math.pow(heightCm, 0.725) * Math.pow(weightKg, 0.425)
   },
   {
     key: "haycock",
     label: "Haycock",
-    expression: "0,024265 x H^0,3964 x P^0,5378",
+    expression: "0,024265 × H⁰·³⁹⁶⁴ × P⁰·⁵³⁷⁸",
     use: "Neonatologia",
     calculate: (heightCm, weightKg) => 0.024265 * Math.pow(heightCm, 0.3964) * Math.pow(weightKg, 0.5378)
   }
@@ -64,7 +64,7 @@ export function BodySurfaceAreaCalculator() {
       warningPlacement="bottom"
     >
       <div className="grid gap-5">
-        <section className="grid gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+        <section className="grid gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <NumberField id="bsa-weight" label="Peso" unit="kg" placeholder="es. 20" value={weightKg} onChange={setWeightKg} />
             <NumberField id="bsa-height" label="Altezza" unit="cm" placeholder="es. 110" value={heightCm} onChange={setHeightCm} />

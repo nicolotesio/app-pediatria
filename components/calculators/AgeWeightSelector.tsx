@@ -48,7 +48,7 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1 / 12, ageMax = 1
   };
 
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
+    <section>
       <div className="grid gap-6">
         <div className="grid gap-3">
           <div className="flex items-center justify-between gap-4">

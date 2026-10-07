@@ -104,6 +104,19 @@ export function calculateHollidaySegar(weightKg: number) {
   };
 }
 
+export function calculateHollidaySegarMaintenance(weightKg: number) {
+  if (!Number.isFinite(weightKg) || weightKg <= 0) {
+    throw new Error("Inserire un peso valido in kg");
+  }
+
+  let mlDay: number;
+  if (weightKg <= 10) mlDay = weightKg * 100;
+  else if (weightKg <= 20) mlDay = 1000 + (weightKg - 10) * 50;
+  else mlDay = 1500 + (weightKg - 20) * 20;
+
+  return { mlDay: round(mlDay), mlHour: round(mlDay / 24, 1) };
+}
+
 export function getRestrictionFactor({ siadhRisk, overloadRisk }: { siadhRisk: boolean; overloadRisk: boolean }) {
   if (overloadRisk) {
     return {

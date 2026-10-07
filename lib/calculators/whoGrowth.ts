@@ -30,9 +30,9 @@ export type WhoGrowthResult = {
   ageYears: number;
   ageMonths: number;
   mode: "under2" | "over2";
-  weightKg: number;
-  statureCm: number;
-  headCircumferenceCm: number;
+  weightKg: number | null;
+  statureCm: number | null;
+  headCircumferenceCm: number | null;
   bmi: number | null;
   results: WhoMetricResult[];
 };
@@ -53,22 +53,22 @@ const datasetLabels: Record<WhoDataset, string> = {
   bfa: "BMI"
 };
 
-export function calculateWhoGrowth(data: WhoGrowthData, sex: WhoSex, ageDays: number, weightKg: number, statureCm: number, headCircumferenceCm: number): WhoGrowthResult {
+export function calculateWhoGrowth(data: WhoGrowthData, sex: WhoSex, ageDays: number, weightKg: number | null, statureCm: number | null, headCircumferenceCm: number | null): WhoGrowthResult {
   validateInputs(sex, ageDays, weightKg, statureCm, headCircumferenceCm);
 
   const mode = ageDays <= TWO_YEARS_DAYS ? "under2" : "over2";
-  const bmi = mode === "over2" ? calculateBmi(weightKg, statureCm) : null;
-  const results: WhoMetricResult[] = [
-    calculateWhoMetric(data, "weight", "Peso", weightKg, "kg", "wfa", sex, ageDays),
-    calculateWhoMetric(data, "lengthHeight", mode === "under2" ? "Lunghezza" : "Statura", statureCm, "cm", "lhfa", sex, ageDays),
-    calculateWhoMetric(data, "headCircumference", "Circonferenza cranica", headCircumferenceCm, "cm", "hcfa", sex, ageDays)
-  ];
+  const bmi = mode === "over2" && weightKg !== null && statureCm !== null ? calculateBmi(weightKg, statureCm) : null;
+  const results: WhoMetricResult[] = [];
+
+  if (weightKg !== null) results.push(calculateWhoMetric(data, "weight", "Peso", weightKg, "kg", "wfa", sex, ageDays));
+  if (statureCm !== null) results.push(calculateWhoMetric(data, "lengthHeight", mode === "under2" ? "Lunghezza" : "Statura", statureCm, "cm", "lhfa", sex, ageDays));
+  if (headCircumferenceCm !== null) results.push(calculateWhoMetric(data, "headCircumference", "Circonferenza cranica", headCircumferenceCm, "cm", "hcfa", sex, ageDays));
 
   // La scelta tra wfl e bfa segue le istruzioni WHO: weight-for-length fino a 730 giorni,
   // BMI-for-age oltre 730 giorni.
-  if (mode === "under2") {
+  if (mode === "under2" && weightKg !== null && statureCm !== null) {
     results.push(calculateWhoMetric(data, "weightForLength", "Peso per lunghezza", weightKg, "kg", "wfl", sex, statureCm));
-  } else {
+  } else if (mode === "over2" && bmi !== null) {
     results.push(calculateWhoMetric(data, "bmi", "BMI", bmi as number, "kg/m²", "bfa", sex, ageDays));
   }
 
@@ -205,12 +205,13 @@ function calculateBmi(weightKg: number, heightCm: number) {
   return weightKg / (heightCm / 100) ** 2;
 }
 
-function validateInputs(sex: WhoSex, ageDays: number, weightKg: number, statureCm: number, headCircumferenceCm: number) {
+function validateInputs(sex: WhoSex, ageDays: number, weightKg: number | null, statureCm: number | null, headCircumferenceCm: number | null) {
   if (sex !== "male" && sex !== "female") throw new Error("Selezionare il sesso");
   if (!Number.isInteger(ageDays) || ageDays < 0 || ageDays > MAX_AGE_DAYS) throw new Error("Età consentita solo tra 0 e 5 anni");
-  if (!Number.isFinite(weightKg) || weightKg <= 0) throw new Error("Inserire un peso valido in kg");
-  if (!Number.isFinite(statureCm) || statureCm <= 0) throw new Error("Inserire una lunghezza/statura valida in cm");
-  if (!Number.isFinite(headCircumferenceCm) || headCircumferenceCm <= 0) throw new Error("Inserire una circonferenza cranica valida in cm");
+  if (weightKg === null && statureCm === null && headCircumferenceCm === null) throw new Error("Inserire almeno una misura antropometrica");
+  if (weightKg !== null && (!Number.isFinite(weightKg) || weightKg <= 0)) throw new Error("Inserire un peso valido in kg");
+  if (statureCm !== null && (!Number.isFinite(statureCm) || statureCm <= 0)) throw new Error("Inserire una lunghezza/statura valida in cm");
+  if (headCircumferenceCm !== null && (!Number.isFinite(headCircumferenceCm) || headCircumferenceCm <= 0)) throw new Error("Inserire una circonferenza cranica valida in cm");
 }
 
 function parseDateOnly(value: string) {

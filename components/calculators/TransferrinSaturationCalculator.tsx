@@ -27,8 +27,7 @@ export function TransferrinSaturationCalculator() {
       warningPlacement="bottom"
     >
       <div className="grid gap-5">
-        <section className="grid gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950">
-          <p className="text-sm leading-6 text-slate-600 dark:text-slate-300">Inserire sideremia e transferrina con le unità riportate qui sotto.</p>
+        <div className="grid gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <NumberField id="transferrin-serum-iron" label="Sideremia" unit="µg/dL" placeholder="es. 100" value={serumIron} onChange={setSerumIron} />
             <NumberField
@@ -44,7 +43,7 @@ export function TransferrinSaturationCalculator() {
             <p className="font-semibold text-slate-950 dark:text-white">Formula:</p>
             <p>Saturazione della transferrina [%] = sideremia [µg/dL] / (transferrina [mg/dL] × 1,42) × 100</p>
           </div>
-        </section>
+        </div>
 
         {result !== null ? (
           <>
