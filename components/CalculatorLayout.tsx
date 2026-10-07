@@ -18,15 +18,15 @@ type CalculatorLayoutProps = {
   warningPlacement?: "side" | "bottom";
 };
 
-export function CalculatorLayout({ title, description, source, sourceUpdatedOnly = false, updatedAt, validity, units, sourceTitle, sourceNote, children, unframed = false, showSource = true, warning, warningPlacement = "side" }: CalculatorLayoutProps) {
+export function CalculatorLayout({ title, description, source, sourceUpdatedOnly = false, updatedAt, validity, units, sourceTitle, sourceNote, children, unframed = false, showSource = true, warning, warningPlacement = "bottom" }: CalculatorLayoutProps) {
   const sourceBox = showSource && updatedAt
     ? <SourceBox source={source} updatedAt={updatedAt} validity={validity} title={sourceTitle} note={sourceNote} updatedOnly={sourceUpdatedOnly || !source} />
     : null;
   const warningBox = warning ? <WarningBox title={null}>{warning}</WarningBox> : null;
 
   if (warningPlacement === "bottom") {
-    return <section className="grid gap-5"><div className={unframed ? undefined : "rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"}>{title ? <h2 className="text-2xl font-semibold text-slate-950 dark:text-white">{title}</h2> : null}{description ? <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{description}</p> : null}<div className={title || description ? "mt-5" : undefined}>{children}</div></div>{sourceBox}{warningBox}</section>;
+    return <section className="grid gap-5"><div className={unframed ? undefined : "rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"}>{title ? <h2 className="text-2xl font-semibold text-slate-950 dark:text-white">{title}</h2> : null}{description ? <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{description}</p> : null}<div className={title || description ? "mt-5" : undefined}>{children}</div></div>{sourceBox}{warningBox}</section>;
   }
 
-  return <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]"><div className={unframed ? undefined : "rounded-lg border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"}>{title ? <h2 className="text-2xl font-semibold text-slate-950 dark:text-white">{title}</h2> : null}{description ? <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{description}</p> : null}<div className={title || description ? "mt-5" : undefined}>{children}</div></div><div className="space-y-4">{sourceBox}{warningBox}</div></section>;
+  return <section className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]"><div className={unframed ? undefined : "rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"}>{title ? <h2 className="text-2xl font-semibold text-slate-950 dark:text-white">{title}</h2> : null}{description ? <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{description}</p> : null}<div className={title || description ? "mt-5" : undefined}>{children}</div></div><div className="space-y-4">{sourceBox}{warningBox}</div></section>;
 }

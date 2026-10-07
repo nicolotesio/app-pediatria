@@ -32,6 +32,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="it" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: `try { var savedTheme = localStorage.getItem('theme'); document.documentElement.classList.toggle('dark', savedTheme ? savedTheme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches); } catch (e) { document.documentElement.classList.toggle('dark', window.matchMedia('(prefers-color-scheme: dark)').matches); }` }} />
+      </head>
       <body>
         <div id="app-shell">
           <AppShell>{children}</AppShell>

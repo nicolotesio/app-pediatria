@@ -4,8 +4,8 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 
 export default function EmergenciesPage() {
   return (
-    <div className="grid gap-5 pb-16">
-      <SectionHeader title="EMERGENZE" />
+    <div className="grid gap-5">
+      <SectionHeader title="Emergenze" />
       <div className="grid gap-4 sm:grid-cols-2">
         <Card
           href="/emergenze/wetflag"
@@ -16,7 +16,7 @@ export default function EmergenciesPage() {
         />
         <Card
           href="/emergenze/gcs-pediatrico"
-          title="CGS pediatrico"
+          title="GCS pediatrico"
           inlineHeader
           compact
           meta={<Brain className="size-6 text-blue-700 dark:text-blue-300" />}

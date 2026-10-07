@@ -8,16 +8,16 @@ import { SearchBar } from "@/components/ui/SearchBar";
 
 export function HomeSearchBox() {
   const [query, setQuery] = useState("");
-  const results = useMemo(() => filterSearchItems(query).slice(0, 5), [query]);
+  const results = useMemo(() => filterSearchItems(query), [query]);
   const hasQuery = query.trim().length > 0;
 
   return (
     <section>
-      <SearchBar value={query} onChange={setQuery} placeholder="Cerca appunti, risorse o schede" />
+      <SearchBar value={query} onChange={setQuery} placeholder="Cerca un farmaco o uno strumento…" />
       {hasQuery ? (
         <div className="mt-3 grid gap-2">
           {results.length > 0 ? (
-            results.map((item) => (
+            results.slice(0, 5).map((item) => (
               <Link key={`${item.type}-${item.id}`} href={item.href} className="rounded-md border border-slate-200 p-3 hover:border-blue-300 dark:border-slate-800">
                 <div className="mb-2 flex flex-wrap gap-2">
                   <Badge tone="blue">{item.type}</Badge>
@@ -30,6 +30,7 @@ export function HomeSearchBox() {
           ) : (
             <p className="rounded-md border border-slate-200 p-3 text-sm text-slate-600 dark:border-slate-800 dark:text-slate-300">Nessun risultato.</p>
           )}
+          <Link href={"/cerca?q=" + encodeURIComponent(query)} className="min-h-11 py-2 text-sm font-medium text-blue-700 dark:text-blue-300">Apri la ricerca completa ({results.length} risultati)</Link>
         </div>
       ) : null}
     </section>

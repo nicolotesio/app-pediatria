@@ -23,10 +23,19 @@ a {
   @apply transition-colors;
 }
 
+:where(a, button, summary, input, select):focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 3px;
+}
+
+input, select {
+  scroll-margin-top: 6rem;
+}
+
 details[open] > .antibiotic-summary {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.75rem;
 }
 
 details[open] > .antibiotic-summary .antibiotic-generation {
@@ -45,4 +54,30 @@ details[open] > .antibiotic-summary .antibiotic-generation {
 
 .prose-clinic ul {
   @apply list-disc space-y-1 pl-5;
+}
+
+#main-content input[inputmode="decimal"],
+#main-content input[type="number"],
+#main-content .text-3xl {
+  font-variant-numeric: tabular-nums;
+}
+
+@media print {
+  @page { margin: 18mm; }
+  :root, .dark { color-scheme: light; }
+  body { background: white !important; color: black !important; }
+  #app-shell > div > header,
+  #app-shell > div > nav,
+  #app-shell > div > a,
+  .no-print { display: none !important; }
+  #main-content { max-width: none; padding: 0; }
+  #main-content > a { display: none; }
+  .parent-sheets { display: block; }
+  .parent-sheet { break-after: page; border: 0; padding-top: 0; }
+  .parent-sheet:last-child { break-after: auto; }
+  .parent-sheet * { color: black !important; border-color: #b0b0b0 !important; }
+  .parent-sheet h2, .parent-sheet h3 { break-after: avoid; }
+  .parent-sheet p, .parent-sheet li { orphans: 3; widows: 3; }
+  .parent-sheets:has(.is-printing) .parent-sheet:not(.is-printing) { display: none; }
+  .parent-sheet footer { break-inside: avoid; }
 }

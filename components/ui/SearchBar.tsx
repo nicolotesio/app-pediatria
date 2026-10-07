@@ -16,7 +16,8 @@ export function SearchBar({ value, onChange, placeholder = "Cerca" }: SearchBarP
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-slate-300 bg-white py-3 pl-10 pr-3 text-sm outline-none ring-blue-600 transition focus:ring-2 dark:border-slate-700 dark:bg-slate-900"
+        aria-label={placeholder} type="search"
+        className="w-full rounded-xl border border-slate-300 bg-white py-3 pl-10 pr-3 text-base outline-none ring-blue-600 transition focus:ring-2 dark:border-slate-700 dark:bg-slate-900"
       />
     </label>
   );

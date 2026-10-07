@@ -53,7 +53,7 @@ export function TargetHeightCalculator() {
             <Result label="Altezza bersaglio" value={`${format(result.target)} cm +- 8,5 cm`} />
           </section>
         ) : (
-          <WarningBox>Inserire altezza di madre e padre per calcolare l&apos;altezza bersaglio.</WarningBox>
+          <WarningBox tone={motherHeight.trim() === "" || fatherHeight.trim() === "" ? "info" : "warning"}>Inserire altezza di madre e padre per calcolare l&apos;altezza bersaglio.</WarningBox>
         )}
       </div>
     </CalculatorLayout>

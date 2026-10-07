@@ -84,7 +84,7 @@ export function BodySurfaceAreaCalculator() {
             <p className="mt-2 text-sm leading-6">{selectedFormula.label}: {selectedFormula.expression}</p>
           </section>
         ) : (
-          <WarningBox>Inserire peso e altezza per calcolare la superficie corporea.</WarningBox>
+          <WarningBox tone={weightKg.trim() === "" || heightCm.trim() === "" ? "info" : "warning"}>Inserire peso e altezza per calcolare la superficie corporea.</WarningBox>
         )}
 
         <div className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-950">

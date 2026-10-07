@@ -75,7 +75,7 @@ export function PediatricEgfrCalculator() {
             <p className="mt-2 text-sm leading-6">Formula: k x altezza / creatinina. Creatinina convertita in mg/dL se inserita in µmol/L.</p>
           </section>
         ) : (
-          <WarningBox>Inserire altezza e creatinina per calcolare eGFR.</WarningBox>
+          <WarningBox tone={heightCm.trim() === "" || creatinine.trim() === "" ? "info" : "warning"}>Inserire altezza e creatinina per calcolare eGFR.</WarningBox>
         )}
       </div>
     </CalculatorLayout>

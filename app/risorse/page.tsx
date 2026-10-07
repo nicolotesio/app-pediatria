@@ -1,5 +1,4 @@
 import { ExternalLink, Headphones, Newspaper, Stethoscope, TrendingUp } from "lucide-react";
-import { Badge } from "@/components/ui/Badge";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { resources, type Resource } from "@/data/resources";
 
@@ -22,9 +21,9 @@ export default function ResourcesPage() {
     .filter((group) => group.resources.length > 0);
 
   return (
-    <div className="grid gap-5 pb-16">
-      <SectionHeader title="RISORSE" />
-      <div className="grid gap-4">
+    <div className="mx-auto grid max-w-4xl gap-7">
+      <SectionHeader title="Risorse" />
+      <div className="grid gap-8">
         {groupedResources.map((group) => (
           <ResourceGroup key={group.category} category={group.category} resources={group.resources} />
         ))}
@@ -52,13 +51,13 @@ function ResourceGroup({ category, resources }: { category: string; resources: R
   const Icon = meta.icon;
 
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <section className="border-t border-slate-200 pt-5 dark:border-slate-800">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-3">
           <Icon className="size-5 text-blue-700 dark:text-blue-300" />
           <h2 className="text-lg font-semibold text-slate-950 dark:text-white">{meta.title}</h2>
         </div>
-        <Badge tone={meta.tone}>{resources.length}</Badge>
+        <span className="text-xs tabular-nums text-slate-500 dark:text-slate-400">{resources.length}</span>
       </div>
       <div className="divide-y divide-slate-200 dark:divide-slate-800">
         {resources.map((resource) => (
@@ -67,7 +66,7 @@ function ResourceGroup({ category, resources }: { category: string; resources: R
               <div className="min-w-0">
                 <h3 className="text-sm font-semibold leading-5 text-slate-950 dark:text-white">{resource.title}</h3>
                 <p className="mt-1 text-xs leading-5 text-slate-600 dark:text-slate-300">{resource.description}</p>
-                {resource.personalNote ? <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">Nota: {resource.personalNote}</p> : null}
+                {resource.personalNote ? <p className="mt-1 text-xs leading-5 text-slate-500 dark:text-slate-400">{resource.personalNote}</p> : null}
               </div>
               <ExternalLink className="mt-0.5 size-4 shrink-0 text-slate-400" />
             </div>

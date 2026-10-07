@@ -3,6 +3,11 @@ import { describe, expect, it } from "vitest";
 import { filterSearchItems } from "@/lib/content/search";
 
 describe("search index", () => {
+  it("finds the transferrin calculator by its laboratory input", () => {
+    expect(filterSearchItems("sideremia")).toEqual(expect.arrayContaining([
+      expect.objectContaining({ href: "/calcolatori/saturazione-transferrina", type: "Calcolatore" })
+    ]));
+  });
   it("finds antibiotic therapy by antibiotic name", () => {
     const results = filterSearchItems("cefazolina");
 

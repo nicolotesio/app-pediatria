@@ -1,47 +1,48 @@
 import { Brain, Bug, Pill, Syringe } from "lucide-react";
-import { Card } from "@/components/ui/Card";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 
 const therapyNotes = [
   {
     title: "Farmaci antiemetici",
     href: "/appunti/terapia-antiemetica",
-    description: "Farmaci antiemetici suddivisi per classe farmacologica.",
+    description: "Classi e vie di somministrazione",
     icon: Pill
   },
   {
     title: "Farmaci antibiotici",
     href: "/appunti/terapia-antibiotica",
-    description: "Schede antibiotiche pediatriche divise per classe, con posologia, vie di somministrazione, diluizione e note.",
+    description: "Posologia, diluizione e somministrazione",
     icon: Pill
   },
   {
     title: "Farmaci antivirali",
     href: "/appunti/farmaci-antivirali",
-    description: "Schede pediatriche di antivirali con vie di somministrazione, regimi e monitoraggio.",
+    description: "Regimi, vie di somministrazione e monitoraggio",
     icon: Pill
   },
   {
     title: "Farmaci antifungini",
     href: "/appunti/farmaci-antifungini",
-    description: "Schede pediatriche di antifungini con vie di somministrazione, regimi e monitoraggio.",
+    description: "Regimi, vie di somministrazione e monitoraggio",
     icon: Pill
   },  {
     title: "Principi di antibioticoterapia",
     href: "/appunti/principi-antibioticoterapia",
-    description: "Schemi visuali su antibiogramma, spettro, sedi di infezione e penetrabilita antibiotica.",
+    description: "Antibiogramma, spettro e sedi di infezione",
     icon: Bug
   },
   {
     title: "Premedicazione trasfusione",
     href: "/appunti/premedicazione-trasfusione",
-    description: "Schema rapido di premedicazione circa un'ora prima della trasfusione, con avviso di verifica dosaggi.",
+    description: "Schema di premedicazione e verifica dei dosaggi",
     icon: Syringe
   },
   {
     title: "Terapia dello stato di male epilettico",
     href: "/appunti/stato-male-epilettico",
-    description: "Tabella farmaci per lo stato di male epilettico pediatrico.",
+    description: "Tabella dei farmaci",
     icon: Brain
   }
 ];
@@ -50,8 +51,8 @@ type NoteItem = (typeof therapyNotes)[number];
 
 export default function NotesPage() {
   return (
-    <div className="grid gap-5 pb-16">
-      <SectionHeader title="TERAPIA" />
+    <div className="mx-auto grid max-w-4xl gap-7">
+      <SectionHeader title="Terapia"  />
       <NotesSection notes={therapyNotes} />
     </div>
   );
@@ -60,18 +61,15 @@ export default function NotesPage() {
 function NotesSection({ notes }: { notes: NoteItem[] }) {
   return (
     <section>
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-x-8 sm:grid-cols-2">
         {notes.map((note) => {
           const Icon = note.icon;
           return (
-            <Card
-              key={note.href}
-              href={note.href}
-              title={note.title}
-              description={note.description}
-              inlineHeader
-              meta={<Icon className="size-6 text-blue-700 dark:text-blue-300" />}
-            />
+            <Link key={note.href} href={note.href} className="group flex items-center gap-3 border-b border-slate-200 py-4 dark:border-slate-800">
+              <Icon className="size-5 shrink-0 text-blue-700 dark:text-blue-300" aria-hidden="true" />
+              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold group-hover:text-blue-700 dark:group-hover:text-blue-300">{note.title}</span><span className="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">{note.description}</span></span>
+              <ChevronRight className="size-4 shrink-0 text-slate-400" aria-hidden="true" />
+            </Link>
           );
         })}
       </div>

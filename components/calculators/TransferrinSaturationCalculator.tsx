@@ -39,10 +39,7 @@ export function TransferrinSaturationCalculator() {
               onChange={setTransferrin}
             />
           </div>
-          <div className="rounded-md bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 dark:bg-slate-900 dark:text-slate-200">
-            <p className="font-semibold text-slate-950 dark:text-white">Formula:</p>
-            <p>Saturazione della transferrina [%] = sideremia [µg/dL] / (transferrina [mg/dL] × 1,42) × 100</p>
-          </div>
+
         </div>
 
         {result !== null ? (
@@ -53,7 +50,11 @@ export function TransferrinSaturationCalculator() {
           </section>
           <LegendBox />
           </>
-        ) : <WarningBox>Inserire sideremia e transferrina per calcolare la saturazione.</WarningBox>}
+        ) : <WarningBox tone={serumIron.trim() === "" || transferrin.trim() === "" ? "info" : "warning"}>Inserire sideremia e transferrina per calcolare la saturazione.</WarningBox>}
+          <details className="rounded-md bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 dark:bg-slate-900 dark:text-slate-200">
+            <summary className="cursor-pointer font-medium">Formula:</summary>
+            <p>Saturazione della transferrina [%] = sideremia [µg/dL] / (transferrina [mg/dL] × 1,42) × 100</p>
+          </details>
       </div>
     </CalculatorLayout>
   );

@@ -8,3 +8,5 @@ coverage
 .env*
 *.log
 tsconfig.tsbuildinfo
+/tmp/
+/output/

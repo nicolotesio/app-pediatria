@@ -1,57 +1,21 @@
-import { Calculator, ChartSpline, Crosshair, Droplets, PencilRuler } from "lucide-react";
-import { Card } from "@/components/ui/Card";
+import { ChevronRight, ChartSpline, Calculator } from "lucide-react";
+import Link from "next/link";
 import { SectionHeader } from "@/components/ui/SectionHeader";
-
-const auxologyCalculators = [
-  { title: "INTERGROWTH-21st", href: "/calcolatori/intergrowth-21", description: "Valutazione antropometrica neonatale secondo gli standard internazionali INTERGROWTH-21st.", icon: PencilRuler },
-  { title: "INeS", href: "/calcolatori/ines", description: "Valutazione auxologica neonatale secondo le carte INeS, sviluppate sulla popolazione neonatale italiana.", icon: PencilRuler },
-  { title: "WHO Child Growth Standards", href: "/calcolatori/crescita-who-0-5", description: "Valutazione antropometrica secondo gli standard internazionali WHO per bambini da 0 a 5 anni.", icon: ChartSpline },
-  { title: "Curve SIEDP 2006", href: "/calcolatori/crescita-siedp-2006", description: "Valutazione antropometrica secondo i riferimenti SIEDP 2006 per la popolazione italiana di età 2-20 anni.", icon: ChartSpline },
-  { title: "Curve CDC 2000", href: "/calcolatori/crescita-cdc-2000", description: "Valutazione antropometrica secondo i riferimenti CDC 2000 per la popolazione pediatrica statunitense di età 2-20 anni.", icon: ChartSpline },
-  { title: "Altezza bersaglio", href: "/calcolatori/altezza-bersaglio", icon: Crosshair },
-  { title: "Velocità di crescita", href: "/calcolatori/velocita-crescita", description: "Calcolo della velocità staturale tra due misurazioni.", icon: ChartSpline }
-];
-
-const generalCalculators = [
-  { title: "Terapia infusionale di mantenimento", href: "/calcolatori/terapia-infusionale-supporto", description: "Calcolo del mantenimento idrico secondo Holliday–Segar.", icon: Droplets },
-  { title: "Superficie corporea", href: "/calcolatori/superficie-corporea", description: "BSA con formule Mosteller, Du Bois e Haycock.", icon: Calculator },
-  { title: "eGFR pediatrico", href: "/calcolatori/egfr-pediatrico", description: "Stima del filtrato glomerulare con formula di Schwartz.", icon: Calculator },
-  { title: "Saturazione della transferrina", href: "/calcolatori/saturazione-transferrina", description: "Calcolo della percentuale da sideremia e transferrina.", icon: Calculator }
-];
-
-type CalculatorItem = (typeof auxologyCalculators)[number];
+import { calculators } from "@/lib/content/calculatorCatalog";
 
 export default function CalculatorsPage() {
-  return (
-    <div className="grid gap-5 pb-16">
-      <SectionHeader title="CALCOLATORI" />
-      <CalculatorSection title="Auxologia" calculators={auxologyCalculators} />
-      <CalculatorSection title="Altri calcolatori" calculators={generalCalculators} />
-    </div>
-  );
-}
-
-function CalculatorSection({ title, calculators }: { title: string; calculators: CalculatorItem[] }) {
-  return (
-    <section className="grid gap-4">
-      <div className="border-y border-slate-200 py-3 text-center dark:border-slate-800">
-        <h2 className="text-xl font-semibold text-slate-950 dark:text-white">{title}</h2>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        {calculators.map((calculator) => {
-          const Icon = calculator.icon;
-          return (
-            <Card
-              key={calculator.title}
-              href={calculator.href}
-              title={calculator.title}
-              description={calculator.href === "/calcolatori/velocita-crescita" ? undefined : calculator.description}
-              inlineHeader
-              meta={<Icon className="size-6 text-blue-700 dark:text-blue-300" />}
-            />
-          );
-        })}
-      </div>
-    </section>
-  );
+  return <div className="mx-auto grid max-w-4xl gap-7">
+    <SectionHeader title="Calcolatori" />
+    {["Auxologia", "Calcolatori"].map(category => <section key={category}>
+      <h2 className="mb-3 text-sm font-semibold text-slate-500 dark:text-slate-400">{category === "Calcolatori" ? "Altri calcolatori" : category}</h2>
+      <div className="grid gap-x-8 sm:grid-cols-2">{calculators.filter(item => item.category === category).map(item => {
+        const Icon = category === "Auxologia" ? ChartSpline : Calculator;
+        return <Link key={item.href} href={item.href} className="group flex items-center gap-3 border-b border-slate-200 py-4 transition hover:text-blue-700 dark:border-slate-800 dark:hover:text-blue-300">
+          <Icon className="size-5 shrink-0 text-blue-700 dark:text-blue-300" />
+          <span className="min-w-0 flex-1"><span className="block text-sm font-semibold">{item.title}</span><span className="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">{item.description}</span></span>
+          <ChevronRight className="size-4 shrink-0 text-slate-400" />
+        </Link>;
+      })}</div>
+    </section>)}
+  </div>;
 }

@@ -38,10 +38,7 @@ export function MaintenanceFluidsCalculator() {
             </div>
           </label>
 
-          <div className="rounded-md bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 dark:bg-slate-900 dark:text-slate-200">
-            <p className="font-semibold text-slate-950 dark:text-white">Formula di Holliday–Segar</p>
-            <p>100 mL/kg/24 h per i primi 10 kg + 50 mL/kg/24 h per i successivi 10 kg + 20 mL/kg/24 h oltre i 20 kg.</p>
-          </div>
+
         </section>
 
         {result ? (
@@ -51,8 +48,12 @@ export function MaintenanceFluidsCalculator() {
             <p className="mt-2 text-sm font-semibold">{formatNumber(result.mlHour)} mL/h</p>
           </section>
         ) : (
-          <WarningBox>Inserire un peso valido in kg per calcolare il mantenimento.</WarningBox>
+          <WarningBox tone={weightKg.trim() === "" ? "info" : "warning"}>Inserire un peso valido in kg per calcolare il mantenimento.</WarningBox>
         )}
+          <details className="rounded-md bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 dark:bg-slate-900 dark:text-slate-200">
+            <summary className="cursor-pointer font-medium">Formula di Holliday–Segar</summary>
+            <p>100 mL/kg/24 h per i primi 10 kg + 50 mL/kg/24 h per i successivi 10 kg + 20 mL/kg/24 h oltre i 20 kg.</p>
+          </details>
       </div>
     </CalculatorLayout>
   );

@@ -1,3 +1,6 @@
+"use client";
+import { useState } from "react";
+import { SearchBar } from "@/components/ui/SearchBar";
 import Image from "next/image";
 import { ChevronDown, ChevronRight, ExternalLink } from "lucide-react";
 
@@ -710,21 +713,29 @@ function AntibioticDetails({ antibiotic }: { antibiotic: Antibiotic }) {
 }
 
 export function AntibioticTherapy() {
+  const [query, setQuery] = useState("");
+  const [selectedClass, setSelectedClass] = useState("");
+  const normalized = query.trim().toLocaleLowerCase("it");
+  const filtered = antibioticClasses
+    .filter(group => !selectedClass || group.className === selectedClass)
+    .map(group => ({ ...group, antibiotics: group.antibiotics.filter(drug => (drug.name + " " + drug.className).toLocaleLowerCase("it").includes(normalized)) }))
+    .filter(group => group.antibiotics.length > 0);
   return (
     <section className="grid gap-6">
-      <figure className="overflow-hidden rounded-lg border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-950">
-        <Image
-          src="/antibiotic-susceptibilities-intensive-care.jpg"
-          alt="Antibiotic susceptibilities in intensive care"
-          width={7017}
-          height={4959}
-          priority
-          className="h-auto w-full"
-        />
-      </figure>
-
+      <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_minmax(0,16rem)]">
+        <SearchBar value={query} onChange={setQuery} placeholder="Cerca un antibiotico…" />
+        <select aria-label="Classe antibiotica" value={selectedClass} onChange={event => setSelectedClass(event.target.value)} className="min-h-12 min-w-0 rounded-xl border border-slate-300 bg-white px-3 text-base dark:border-slate-700 dark:bg-slate-900">
+          <option value="">Tutte le classi</option>
+          {antibioticClasses.map(group => <option key={group.className} value={group.className}>{group.className}</option>)}
+        </select>
+      </div>
+      <p role="status" className="text-sm text-slate-500 dark:text-slate-400">{filtered.reduce((total, group) => total + group.antibiotics.length, 0)} farmaci{filtered.length === 0 ? ": prova un altro nome o un’altra classe." : ""}</p>
+      <details className="rounded-xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+        <summary className="cursor-pointer px-4 py-3 text-sm font-medium">Approfondimento: spettro e sensibilità antibiotica</summary>
+        <figure className="p-3"><Image src="/antibiotic-susceptibilities-intensive-care.jpg" alt="Antibiotic susceptibilities in intensive care" width={7017} height={4959} className="h-auto w-full" /></figure>
+      </details>
       <div className="grid gap-5">
-        {antibioticClasses.map((group) => (
+        {filtered.map((group) => (
           <section key={group.className} className="grid gap-3">
             <h2 className="text-sm font-semibold uppercase text-slate-500 dark:text-slate-400">{group.className}</h2>
             <div className="grid gap-2">
@@ -734,7 +745,7 @@ export function AntibioticTherapy() {
                     key={antibiotic.id}
                     className="group overflow-hidden rounded-md border border-slate-200 bg-white transition group-open:border-blue-300 dark:border-slate-800 dark:bg-slate-950 dark:group-open:border-blue-800"
                   >
-                    <summary className="antibiotic-summary flex cursor-pointer list-none items-center justify-between gap-3 px-3 py-2 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-50 group-open:bg-blue-50 group-open:text-blue-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:group-open:bg-blue-950 dark:group-open:text-blue-100 [&::-webkit-details-marker]:hidden">
+                    <summary className="antibiotic-summary flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-50 group-open:bg-blue-50 group-open:text-blue-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:group-open:bg-blue-950 dark:group-open:text-blue-100 [&::-webkit-details-marker]:hidden">
                       <span className="min-w-0">
                         <span>{antibiotic.name}</span>
                         {antibiotic.generation ? (

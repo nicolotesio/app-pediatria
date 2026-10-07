@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { filterSearchItems } from "@/lib/content/search";
 import { SearchBar } from "@/components/ui/SearchBar";
@@ -9,11 +9,12 @@ import { EmptyState } from "@/components/ui/EmptyState";
 
 export function SearchPageClient() {
   const [query, setQuery] = useState("");
+  useEffect(() => { setQuery(new URLSearchParams(window.location.search).get("q") ?? ""); }, []);
   const results = useMemo(() => filterSearchItems(query), [query]);
 
   return (
     <div className="grid gap-5">
-      <SearchBar value={query} onChange={setQuery} placeholder="Cerca appunti, risorse o schede" />
+      <SearchBar value={query} onChange={setQuery} placeholder="Cerca un farmaco, uno strumento o una risorsa" />
       {results.length === 0 ? (
         <EmptyState title="Nessun risultato" description="Prova con una categoria, un tag o una parola chiave diversa." />
       ) : (
