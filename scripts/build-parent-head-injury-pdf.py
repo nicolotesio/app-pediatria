@@ -158,4 +158,3 @@ for page, name in zip(reader.pages, ['trauma-cranico-monitoraggio', 'trauma-cran
     shutil.copyfile(dest, ROOT / 'public/schede' / dest.name)
     print(dest)
 OUT.unlink()
-

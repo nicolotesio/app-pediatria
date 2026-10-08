@@ -19,7 +19,7 @@ export function Card({ title, description, href, children, meta, inlineHeader = 
       {inlineHeader ? (
         <div className={`${description || children ? "mb-2" : ""} flex items-center gap-2 sm:gap-3 ${isCentered ? "justify-center" : ""}`}>
           {meta ? <div className="shrink-0">{meta}</div> : null}
-          <h3 className="text-base font-semibold text-slate-950 sm:text-lg dark:text-white">{title}</h3>
+          <h3 className="text-base font-semibold text-slate-950 dark:text-white">{title}</h3>
         </div>
       ) : (
         <>

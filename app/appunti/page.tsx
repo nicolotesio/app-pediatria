@@ -67,7 +67,7 @@ function NotesSection({ notes }: { notes: NoteItem[] }) {
           return (
             <Link key={note.href} href={note.href} className="group flex items-center gap-3 border-b border-slate-200 py-4 dark:border-slate-800">
               <Icon className="size-5 shrink-0 text-blue-700 dark:text-blue-300" aria-hidden="true" />
-              <span className="min-w-0 flex-1"><span className="block text-sm font-semibold group-hover:text-blue-700 dark:group-hover:text-blue-300">{note.title}</span><span className="mt-1 block text-xs leading-5 text-slate-500 dark:text-slate-400">{note.description}</span></span>
+              <span className="min-w-0 flex-1"><span className="block text-base font-semibold group-hover:text-blue-700 dark:group-hover:text-blue-300">{note.title}</span><span className="mt-1 block text-sm leading-6 text-slate-500 dark:text-slate-400">{note.description}</span></span>
               <ChevronRight className="size-4 shrink-0 text-slate-400" aria-hidden="true" />
             </Link>
           );

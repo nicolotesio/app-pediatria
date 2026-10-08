@@ -133,5 +133,3 @@ export const calculators: CalculatorEntry[] = [
     keywords: "ferro sideremia transferrina saturazione percentuale"
   }
 ];
-
-

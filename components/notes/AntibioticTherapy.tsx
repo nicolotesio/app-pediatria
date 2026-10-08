@@ -745,7 +745,7 @@ export function AntibioticTherapy() {
                     key={antibiotic.id}
                     className="group overflow-hidden rounded-md border border-slate-200 bg-white transition group-open:border-blue-300 dark:border-slate-800 dark:bg-slate-950 dark:group-open:border-blue-800"
                   >
-                    <summary className="antibiotic-summary flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-left text-sm font-medium text-slate-700 transition hover:bg-slate-50 group-open:bg-blue-50 group-open:text-blue-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:group-open:bg-blue-950 dark:group-open:text-blue-100 [&::-webkit-details-marker]:hidden">
+                    <summary className="antibiotic-summary flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-left text-base font-medium text-slate-700 transition hover:bg-slate-50 group-open:bg-blue-50 group-open:text-blue-950 dark:text-slate-200 dark:hover:bg-slate-900 dark:group-open:bg-blue-950 dark:group-open:text-blue-100 [&::-webkit-details-marker]:hidden">
                       <span className="min-w-0">
                         <span>{antibiotic.name}</span>
                         {antibiotic.generation ? (

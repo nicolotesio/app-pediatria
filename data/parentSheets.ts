@@ -12,10 +12,10 @@ export const parentSheetCategories: ParentSheet["category"][] = ["Trauma cranico
 
 export const parentSheets: ParentSheet[] = [{
   id: "trauma-cranico",
-  title: "Trauma cranico: monitoraggio a casa",
+  title: "Monitoraggio a casa",
   category: "Trauma cranico",
   updatedAt: "2026-10-07",
-  content: "Scheda da consegnare ai genitori dopo la valutazione medica: osservazione nelle prime 24 ore e segnali per tornare subito in ospedale.",
+  content: "Controlli nelle prime 24 ore e segnali d’allarme.",
   whenToCall: [],
   pdf: {
     url: "/schede/trauma-cranico-monitoraggio.pdf",
@@ -25,10 +25,10 @@ export const parentSheets: ParentSheet[] = [{
   }
 }, {
   id: "sintomi-commotivi",
-  title: "Trauma cranico: sintomi commotivi",
+  title: "Sintomi commotivi",
   category: "Trauma cranico",
   updatedAt: "2026-10-07",
-  content: "Come riconoscere i sintomi commotivi e accompagnare il bambino nella ripresa delle attività scolastiche e sportive.",
+  content: "Disturbi dopo il trauma e ripresa di scuola e sport.",
   whenToCall: [],
   pdf: {
     url: "/schede/trauma-cranico-sintomi-commotivi.pdf",
