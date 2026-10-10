@@ -7,6 +7,8 @@ Webapp Next.js 14 (App Router, TypeScript, Tailwind) con appunti e calcolatori c
 - L'app gira sul PC Windows dell'autore, nella cartella `Desktop\NICOLO\Appunti di Pediatria`.
 - Avvio: doppio clic su `run-local.cmd` (richiama `start-local.ps1`: controlla Node.js, installa le dipendenze se mancano, lancia `next dev` sulla porta 3000). Se l'app e gia attiva lo script esce subito.
 - Indirizzo: `http://localhost:3000`.
+- Dopo un push fatto da un ambiente esterno, la cartella sul PC si riallinea con doppio clic su `aggiorna-da-github.cmd` (chiede conferma, poi `git reset --hard origin/main`).
+- Commit direttamente su `main`, senza rami separati.
 - Negli ambienti cloud senza accesso al registro npm l'app non si puo installare: provarla sul PC dell'autore e, per la sola logica, eseguire i test.
 
 ## Comandi
