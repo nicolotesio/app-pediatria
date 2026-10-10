@@ -113,24 +113,27 @@ export function calculateWetflag(ageYears: number, weightKg = estimateWeightForA
 }
 
 /**
- * Diametro interno del tubo tracheale (ERC 2021, Paediatric Life Support):
- * lattante 3,5-4,0 non cuffiato / 3,0-3,5 cuffiato; 1-2 anni 4,0-4,5 / 3,5-4,0;
- * oltre 2 anni età/4 + 4 (non cuffiato) ed età/4 + 3,5 (cuffiato), arrotondati al mezzo millimetro.
+ * Diametro interno del tubo tracheale.
+ * Sotto i 2 anni: valori della Paediatric emergency drug chart RCUK (gennaio 2026):
+ * 1 mese 3,0-3,5 non cuffiato / 3,0 cuffiato; 3-6 mesi 3,5 / 3,0; 1 anno 4,0 / 3,5.
+ * Da 2 anni: età/4 + 4 (non cuffiato) ed età/4 + 3,5 (cuffiato), arrotondati al mezzo millimetro,
+ * coerenti con la stessa tabella (2 anni 4,5 / 4,0; 4 anni 5,0 / 4,5; 6 anni 5,5 / 5,0).
  */
 export function getTrachealTube(ageYears: number): WetflagResult["endotrachealTubeMm"] {
   if (ageYears < 1) {
+    const underThreeMonths = Math.round(ageYears * 12) < 3;
     return {
-      uncuffed: "3,5-4,0",
-      cuffed: "3,0-3,5",
+      uncuffed: underThreeMonths ? "3,0-3,5" : "3,5",
+      cuffed: "3,0",
       oralDepthCm: null,
       fromAgeTable: true,
-      note: "Sotto 1 anno le formule per età non sono valide: diametri da tabella per il lattante, profondità da verificare clinicamente (auscultazione, capnografia, RX)."
+      note: "Sotto 1 anno le formule per età non sono valide: diametri da tabella per età, profondità da verificare clinicamente (auscultazione, capnografia, RX)."
     };
   }
 
   const oralDepthCm = round1(ageYears / 2 + 12);
   if (ageYears < 2) {
-    return { uncuffed: "4,0-4,5", cuffed: "3,5-4,0", oralDepthCm, fromAgeTable: true, note: null };
+    return { uncuffed: "4,0", cuffed: "3,5", oralDepthCm, fromAgeTable: true, note: null };
   }
 
   return {

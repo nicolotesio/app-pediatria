@@ -15,7 +15,7 @@ export const clinicalSources: ClinicalSource[] = [
   {
     id: "wetflag",
     title: "WETFLAG",
-    reference: `${RCUK_PAEDIATRIC_CHART_2026} ${ERC_PLS_2021} (tabella dei diametri dei tubi tracheali).`,
+    reference: RCUK_PAEDIATRIC_CHART_2026,
     updatedAt: "2026-10-10",
     validationNote: "Stime iniziali: confermare peso reale, concentrazioni disponibili e protocollo locale prima della somministrazione."
   },
@@ -25,7 +25,7 @@ export const clinicalSources: ClinicalSource[] = [
     reference: `${RCUK_PAEDIATRIC_CHART_2026} ${ERC_PLS_2021}`,
     updatedAt: "2026-10-10",
     validationNote:
-      "Massimali applicati: adrenalina 1 mg, bolo di fluidi 500 ml, glucosio 10% 50 ml, amiodarone 300 mg (prima dose), adenosina 6 mg (prima dose), calcio gluconato 10% 30 ml. Per potassio cloruro, insulina/glucosio nell'iperkaliemia e salbutamolo EV le fonti citate non riportano un massimale: confermare con il protocollo locale."
+      "Massimali applicati dalla tabella RCUK: adrenalina 1 mg, bolo di fluidi 500 ml, glucosio 10% 50 ml, amiodarone 300 mg (prima dose), calcio gluconato 10% 30 ml. Adenosina prima dose max 6 mg secondo ERC 2021 (la tabella RCUK non riporta un massimale per la prima dose). Per potassio cloruro, insulina/glucosio nell'iperkaliemia e salbutamolo EV le fonti citate non riportano un massimale: confermare con il protocollo locale."
   }
 ];
 

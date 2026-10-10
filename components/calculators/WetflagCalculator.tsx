@@ -215,7 +215,7 @@ function getTubeCalculation(ageYears: number, tube: { cuffed: string; uncuffed: 
   const age = formatAgeForCalculation(ageYears);
   const depth = tube.oralDepthCm === null ? "Profondità orale: formula età / 2 + 12 valida da 1 anno, verificare clinicamente" : `${age} / 2 + 12 = ${formatDecimal(tube.oralDepthCm)} cm profondità orale`;
   if (tube.fromAgeTable) {
-    return `Tabella per età, ${ageYears < 1 ? "lattante" : "1-2 anni"}: ${tube.cuffed} mm cuffiato, ${tube.uncuffed} mm non cuffiato; ${depth}`;
+    return `Tabella per età, ${ageYears < 1 ? "sotto 1 anno" : "1-2 anni"}: ${tube.cuffed} mm cuffiato, ${tube.uncuffed} mm non cuffiato; ${depth}`;
   }
   return `${age} / 4 + 3,5 -> ${tube.cuffed} mm ⌀ interno tubo cuffiato, arrotondato a 0,5 mm; ${age} / 4 + 4 -> ${tube.uncuffed} mm ⌀ interno tubo non cuffiato, arrotondato a 0,5 mm; ${depth}`;
 }

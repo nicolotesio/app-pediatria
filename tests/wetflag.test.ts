@@ -52,17 +52,19 @@ describe("calculateWetflag", () => {
   it("sotto 1 anno usa la tabella del lattante e non le formule per età", () => {
     const result = calculateWetflag(1 / 12);
 
-    expect(result.endotrachealTubeMm.uncuffed).toBe("3,5-4,0");
-    expect(result.endotrachealTubeMm.cuffed).toBe("3,0-3,5");
+    expect(result.endotrachealTubeMm.uncuffed).toBe("3,0-3,5");
+    expect(result.endotrachealTubeMm.cuffed).toBe("3,0");
+    expect(calculateWetflag(6 / 12).endotrachealTubeMm.uncuffed).toBe("3,5");
+    expect(calculateWetflag(6 / 12).endotrachealTubeMm.cuffed).toBe("3,0");
     expect(result.endotrachealTubeMm.oralDepthCm).toBeNull();
     expect(result.endotrachealTubeMm.note).toContain("Sotto 1 anno");
   });
 
-  it("tra 1 e 2 anni usa l'intervallo tabellare", () => {
+  it("tra 1 e 2 anni usa il valore tabellare", () => {
     const result = calculateWetflag(1.5);
 
-    expect(result.endotrachealTubeMm.uncuffed).toBe("4,0-4,5");
-    expect(result.endotrachealTubeMm.cuffed).toBe("3,5-4,0");
+    expect(result.endotrachealTubeMm.uncuffed).toBe("4,0");
+    expect(result.endotrachealTubeMm.cuffed).toBe("3,5");
     expect(result.endotrachealTubeMm.oralDepthCm).toBe(12.8);
   });
 

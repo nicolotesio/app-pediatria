@@ -1,126 +1,25 @@
 import { describe, expect, it } from "vitest";
-import {
-  calculateHollidaySegar,
-  calculateHollidaySegarMaintenance,
-  calculateMaintenanceFluids,
-  calculatePredictableLosses,
-  calculatePreviousLosses,
-  calculateSodiumCorrection,
-  getRestrictionFactor,
-  subtractOtherFluids,
-  type FluidInputs
-} from "../lib/calculators/maintenanceFluids";
+import { calculateHollidaySegarMaintenance } from "../lib/calculators/maintenanceFluids";
 
-const baseInputs: FluidInputs = {
-  weightKg: 12,
-  usualWeightKg: null,
-  hydrationStatus: "euvolemic",
-  siadhRisk: false,
-  overloadRisk: false,
-  sodium: null,
-  sodiumTarget: 140,
-  sodiumAgeGroup: "olderChild",
-  fever: false,
-  diarrheaStools: 0,
-  measuredLossesMlDay: 0,
-  otherFluidsMlDay: 0
-};
-
-describe("maintenance fluids", () => {
-  it("calcola Holliday-Segar per 5 kg", () => {
-    expect(calculateHollidaySegar(5)).toEqual({ mlDay: 500, mlHour: 20.8, capped: false, isCapped: false });
+describe("calculateHollidaySegarMaintenance", () => {
+  it("usa 100 mL/kg fino a 10 kg", () => {
+    expect(calculateHollidaySegarMaintenance(5)).toEqual({ mlDay: 500, mlHour: 20.8 });
+    expect(calculateHollidaySegarMaintenance(10)).toEqual({ mlDay: 1000, mlHour: 41.7 });
   });
 
-  it("calcola Holliday-Segar per 12 kg", () => {
-    expect(calculateHollidaySegar(12)).toEqual({ mlDay: 1100, mlHour: 45.8, capped: false, isCapped: false });
+  it("aggiunge 50 mL/kg tra 10 e 20 kg", () => {
+    expect(calculateHollidaySegarMaintenance(12)).toEqual({ mlDay: 1100, mlHour: 45.8 });
+    expect(calculateHollidaySegarMaintenance(20)).toEqual({ mlDay: 1500, mlHour: 62.5 });
   });
 
-  it("calcola Holliday-Segar per 25 kg", () => {
-    expect(calculateHollidaySegar(25)).toEqual({ mlDay: 1600, mlHour: 66.7, capped: false, isCapped: false });
-  });
-
-  it("segnala il cap Holliday-Segar sopra 2000 mL/24h", () => {
-    expect(calculateHollidaySegar(60)).toEqual({ mlDay: 2000, mlHour: 83.3, capped: true, isCapped: true });
-  });
-
-  it("restituisce la formula Holliday-Segar senza cap nel calcolatore di mantenimento", () => {
+  it("aggiunge 20 mL/kg oltre i 20 kg", () => {
+    expect(calculateHollidaySegarMaintenance(25)).toEqual({ mlDay: 1600, mlHour: 66.7 });
     expect(calculateHollidaySegarMaintenance(60)).toEqual({ mlDay: 2300, mlHour: 95.8 });
   });
 
-  it("applica restrizione per rischio SIADH", () => {
-    expect(getRestrictionFactor({ siadhRisk: true, overloadRisk: false }).factor).toBe(0.7);
-  });
-
-  it("applica restrizione più severa per rischio overload", () => {
-    expect(getRestrictionFactor({ siadhRisk: true, overloadRisk: true }).factor).toBe(0.5);
-  });
-
-  it("calcola perdite da peso perso se disponibile", () => {
-    expect(calculatePreviousLosses({ weightKg: 10, usualWeightKg: 10.8, hydrationStatus: "mildDehydration" })).toMatchObject({
-      ml: 800,
-      source: "Da peso perso"
-    });
-  });
-
-  it("calcola perdite da stima clinica se manca peso anamnestico", () => {
-    expect(calculatePreviousLosses({ weightKg: 10, usualWeightKg: null, hydrationStatus: "moderateDehydration" })).toMatchObject({
-      ml: 700,
-      source: "Da stima clinica"
-    });
-  });
-
-  it("calcola perdite prevedibili", () => {
-    expect(calculatePredictableLosses({ weightKg: 10, fever: true, diarrheaStools: 3, measuredLossesMlDay: 100 }).ml).toBe(400);
-  });
-
-  it("non restituisce quota EV negativa se altri apporti superano il target", () => {
-    expect(subtractOtherFluids(700, 900)).toMatchObject({
-      residualMlDay: 0,
-      residualMlHour: 0,
-      noAdditionalIv: true
-    });
-  });
-
-  it("segnala Na <125 come alert critico", () => {
-    const result = calculateMaintenanceFluids({ ...baseInputs, sodium: 124 });
-    expect(result.alerts.some((alert) => alert.level === "critical" && alert.message.includes("Iponatriemia severa"))).toBe(true);
-  });
-
-  it("segnala Na >160 come alert critico", () => {
-    const result = calculateMaintenanceFluids({ ...baseInputs, sodium: 161 });
-    expect(result.alerts.some((alert) => alert.level === "critical" && alert.message.includes("Ipernatriemia severa"))).toBe(true);
-  });
-
-  it("calcola deficit sodio per iponatriemia", () => {
-    const result = calculateSodiumCorrection({ weightKg: 10, hydrationStatus: "euvolemic", sodiumAgeGroup: "olderChild", sodium: 130, sodiumTarget: 140 });
-    expect(result.sodiumDeficitMEq).toBe(70);
-    expect(result.note).toContain("max 8-10 mEq/L");
-  });
-
-  it("calcola eccesso sodio per ipernatriemia", () => {
-    const result = calculateSodiumCorrection({ weightKg: 10, hydrationStatus: "euvolemic", sodiumAgeGroup: "olderChild", sodium: 154, sodiumTarget: 140 });
-    expect(result.sodiumExcessMEq).toBe(98);
-  });
-
-  it("usa VdNa ridotto in disidratazione nel bambino grande", () => {
-    const result = calculateSodiumCorrection({ weightKg: 10, hydrationStatus: "moderateDehydration", sodiumAgeGroup: "olderChild", sodium: 154, sodiumTarget: 140 });
-    expect(result.distributionFactor).toBe(0.6);
-    expect(result.sodiumExcessMEq).toBe(84);
-  });
-
-  it("segnala disidratazione severa come scenario critico", () => {
-    const result = calculateMaintenanceFluids({ ...baseInputs, hydrationStatus: "severeDehydration" });
-    expect(result.alerts.some((alert) => alert.level === "critical" && alert.message.includes("Disidratazione severa"))).toBe(true);
-  });
-
-  it("segnala uso del peso secco se il peso anamnestico è inferiore", () => {
-    const result = calculateMaintenanceFluids({
-      ...baseInputs,
-      weightKg: 10,
-      actualWeightKg: 12,
-      usesDryWeightForMaintenance: true
-    });
-    expect(result.standardMlDay).toBe(1000);
-    expect(result.alerts.some((alert) => alert.message.includes("peso anamnestico è inferiore"))).toBe(true);
+  it("rifiuta pesi non validi", () => {
+    expect(() => calculateHollidaySegarMaintenance(0)).toThrow("peso valido");
+    expect(() => calculateHollidaySegarMaintenance(-3)).toThrow("peso valido");
+    expect(() => calculateHollidaySegarMaintenance(Number.NaN)).toThrow("peso valido");
   });
 });

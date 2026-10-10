@@ -52,7 +52,7 @@ Per contenuti MDX piu ricchi, il progetto e configurato con `@next/mdx`; si poss
 
 Questa app non sostituisce linee guida, protocolli locali o giudizio clinico. Non inserire dataset, curve di crescita, dosaggi o algoritmi senza fonte validata e data di aggiornamento. Dove i dati non sono disponibili, usare la dicitura **dataset non ancora configurato** o **non configurato**.
 
-Il calcolatore WETFLAG e implementato come stima iniziale per eta 1 mese-12 anni e richiede conferma con peso reale, condizioni cliniche, concentrazioni disponibili e protocolli locali. Sotto 1 anno i diametri del tubo tracheale derivano dalla tabella per eta (le formule valgono da 1-2 anni).
+Il calcolatore WETFLAG e implementato come stima iniziale per eta 1 mese-12 anni e richiede conferma con peso reale, condizioni cliniche, concentrazioni disponibili e protocolli locali. Sotto i 2 anni i diametri del tubo tracheale derivano dalla tabella RCUK per eta (le formule valgono da 2 anni).
 
 Fonti e massimali di WETFLAG e farmaci in emergenza sono centralizzati in `lib/sources/clinicalSources.ts` e `EMERGENCY_DRUG_LIMITS` (`lib/calculators/emergencyDrugs.ts`). Per potassio cloruro, insulina/glucosio nell'iperkaliemia e salbutamolo EV non e applicato alcun massimale: le fonti citate non lo riportano.
 
