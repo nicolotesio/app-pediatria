@@ -5,6 +5,8 @@ import { CalculatorLayout } from "@/components/CalculatorLayout";
 import { WarningBox } from "@/components/ui/WarningBox";
 import { calculateHollidaySegarMaintenance } from "@/lib/calculators/maintenanceFluids";
 
+const MAX_USUAL_MAINTENANCE_ML_DAY = 2000;
+
 export function MaintenanceFluidsCalculator() {
   const [weightKg, setWeightKg] = useState("");
   const weight = parseDecimal(weightKg);
@@ -50,6 +52,12 @@ export function MaintenanceFluidsCalculator() {
         ) : (
           <WarningBox tone={weightKg.trim() === "" ? "info" : "warning"}>Inserire un peso valido in kg per calcolare il mantenimento.</WarningBox>
         )}
+
+        {result && result.mlDay > MAX_USUAL_MAINTENANCE_ML_DAY ? (
+          <WarningBox>
+            Il valore teorico supera {formatNumber(MAX_USUAL_MAINTENANCE_ML_DAY)} mL/24 h ({formatNumber(round1(MAX_USUAL_MAINTENANCE_ML_DAY / 24))} mL/h), tetto abitualmente usato per il mantenimento: la formula di Holliday–Segar sovrastima il fabbisogno nei pesi elevati. Valutare di non superarlo.
+          </WarningBox>
+        ) : null}
           <details className="rounded-md bg-slate-50 px-4 py-3 text-sm leading-6 text-slate-700 dark:bg-slate-900 dark:text-slate-200">
             <summary className="cursor-pointer font-medium">Formula di Holliday–Segar</summary>
             <p>100 mL/kg/24 h per i primi 10 kg + 50 mL/kg/24 h per i successivi 10 kg + 20 mL/kg/24 h oltre i 20 kg.</p>
@@ -57,6 +65,10 @@ export function MaintenanceFluidsCalculator() {
       </div>
     </CalculatorLayout>
   );
+}
+
+function round1(value: number) {
+  return Math.round(value * 10) / 10;
 }
 
 function parseDecimal(value: string) {

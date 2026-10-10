@@ -78,5 +78,30 @@ if ($Clean) {
   Clear-NextDevCache
 }
 
+# Node.js installato da poco potrebbe non essere ancora nel PATH di questa finestra.
+if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
+  $nodeDir = Join-Path $env:ProgramFiles "nodejs"
+  if (Test-Path -LiteralPath (Join-Path $nodeDir "npm.cmd")) {
+    $env:Path = "$nodeDir;$env:Path"
+  }
+}
+
+if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
+  Write-Host ""
+  Write-Host "Node.js non trovato: l'app non puo' partire." -ForegroundColor Red
+  Write-Host "Installarlo con:  winget install OpenJS.NodeJS.LTS"
+  Write-Host "oppure da https://nodejs.org (versione LTS), poi rilanciare run-local.cmd."
+  exit 1
+}
+
+if (-not (Test-Path -LiteralPath (Join-Path $root "node_modules\next"))) {
+  Write-Host "Dipendenze mancanti: installazione in corso (solo la prima volta)"
+  npm install
+  if ($LASTEXITCODE -ne 0) {
+    Write-Host "Installazione delle dipendenze non riuscita." -ForegroundColor Red
+    exit 1
+  }
+}
+
 Write-Host "Starting local app at $url"
 npm run local

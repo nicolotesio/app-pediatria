@@ -5,6 +5,7 @@ import { calculateWetflag, wetflagMetadata } from "@/lib/calculators/wetflag";
 import { CalculatorLayout } from "@/components/CalculatorLayout";
 import { AgeWeightSelector, estimatePediatricWeightKg, type AgeWeightValue } from "@/components/calculators/AgeWeightSelector";
 import { WarningBox } from "@/components/ui/WarningBox";
+import { formatDecimal } from "@/lib/format";
 
 type ResultTone = "blue" | "amber" | "red" | "cyan" | "violet" | "rose" | "green";
 
@@ -41,7 +42,7 @@ export function WetflagCalculator() {
       validity={wetflagMetadata.validity}
       units={wetflagMetadata.units}
       unframed
-      showSource={false}
+      sourceTitle="Riferimenti bibliografici"
       warningPlacement="bottom"
       warning="Calcoli rapidi per emergenza pediatrica. Confermare sempre peso reale, dosaggi, concentrazioni disponibili, protocolli locali e valutazione clinica prima della somministrazione."
     >
@@ -69,7 +70,7 @@ export function WetflagCalculator() {
                 initial="W"
                 tone="blue"
                 label="Peso"
-                value={`${result.estimatedWeightKg} kg`}
+                value={`${formatDecimal(result.estimatedWeightKg)} kg`}
                 calculation={selectorValue.estimateWeightFromAge ? getWeightCalculation(result.ageYears, result.estimatedWeightKg) : "Peso inserito manualmente."}
                 showCalculation={showCalculations}
               />
@@ -77,8 +78,8 @@ export function WetflagCalculator() {
                 initial="E"
                 tone="amber"
                 label="Energia defibrillatore (iniziale)"
-                value={`${result.defibrillationEnergyJ} J`}
-                calculation={`4 J/kg x ${result.estimatedWeightKg} kg = ${roundForDisplay(4 * result.estimatedWeightKg)} J, max 120-200 J sulla base del tipo di defibrillatore -> ${result.defibrillationEnergyJ} J`}
+                value={`${formatDecimal(result.defibrillationEnergyJ)} J`}
+                calculation={`4 J/kg x ${formatDecimal(result.estimatedWeightKg)} kg = ${formatDecimal(4 * result.estimatedWeightKg)} J, max 120-200 J sulla base del tipo di defibrillatore -> ${formatDecimal(result.defibrillationEnergyJ)} J`}
                 showCalculation={showCalculations}
               />
               <ResultItem
@@ -88,9 +89,9 @@ export function WetflagCalculator() {
                 rows={[
                   { label: "⌀ interno tubo cuffiato", value: `${result.endotrachealTubeMm.cuffed} mm` },
                   { label: "⌀ interno tubo non cuffiato", value: `${result.endotrachealTubeMm.uncuffed} mm` },
-                  { label: "Profondità orale", value: `${result.endotrachealTubeMm.oralDepthCm} cm` }
+                  { label: "Profondità orale", value: result.endotrachealTubeMm.oralDepthCm === null ? "da verificare" : `${formatDecimal(result.endotrachealTubeMm.oralDepthCm)} cm` }
                 ]}
-                calculation={`${formatAgeForCalculation(result.ageYears)} / 4 + 3,5 = ${result.endotrachealTubeMm.cuffed} mm ⌀ interno tubo cuffiato; ${formatAgeForCalculation(result.ageYears)} / 4 + 4 = ${result.endotrachealTubeMm.uncuffed} mm ⌀ interno tubo non cuffiato; ${formatAgeForCalculation(result.ageYears)} / 2 + 12 = ${result.endotrachealTubeMm.oralDepthCm} cm profondità orale`}
+                calculation={getTubeCalculation(result.ageYears, result.endotrachealTubeMm)}
                 showCalculation={showCalculations}
               />
               <ResultItem
@@ -101,36 +102,37 @@ export function WetflagCalculator() {
                   { label: "Emergenza medica (20 ml/kg)", value: `${result.fluidBolusOptionsMl.twentyPerKg} ml` },
                   { label: "Trauma (10 ml/kg)", value: `${result.fluidBolusOptionsMl.tenPerKg} ml` }
                 ]}
-                calculation={`20 ml/kg x ${result.estimatedWeightKg} kg = ${Math.round(20 * result.estimatedWeightKg)} ml, max 500 ml -> ${result.fluidBolusOptionsMl.twentyPerKg} ml; 10 ml/kg x ${result.estimatedWeightKg} kg = ${Math.round(10 * result.estimatedWeightKg)} ml, max 500 ml -> ${result.fluidBolusOptionsMl.tenPerKg} ml`}
+                calculation={`20 ml/kg x ${formatDecimal(result.estimatedWeightKg)} kg = ${Math.round(20 * result.estimatedWeightKg)} ml, max 500 ml -> ${result.fluidBolusOptionsMl.twentyPerKg} ml; 10 ml/kg x ${formatDecimal(result.estimatedWeightKg)} kg = ${Math.round(10 * result.estimatedWeightKg)} ml, max 500 ml -> ${result.fluidBolusOptionsMl.tenPerKg} ml`}
                 showCalculation={showCalculations}
               />
               <ResultItem
                 initial="L"
                 tone="violet"
                 label="Lorazepam"
-                value={`${result.lorazepam.mg} mg`}
-                calculation={`0,1 mg/kg x ${result.estimatedWeightKg} kg = ${roundForDisplay(0.1 * result.estimatedWeightKg)} mg, max 4 mg -> ${result.lorazepam.mg} mg`}
+                value={`${formatDecimal(result.lorazepam.mg)} mg`}
+                calculation={`0,1 mg/kg x ${formatDecimal(result.estimatedWeightKg)} kg = ${formatDecimal(0.1 * result.estimatedWeightKg)} mg, max 4 mg -> ${formatDecimal(result.lorazepam.mg)} mg`}
                 showCalculation={showCalculations}
               />
               <ResultItem
                 initial="A"
                 tone="rose"
                 label="Adrenalina"
-                value={`${result.adrenaline.micrograms} µg; ${result.adrenaline.mlOfOneInTenThousand} ml di 1:10.000`}
-                valueParts={[`${result.adrenaline.micrograms} µg`, `${result.adrenaline.mlOfOneInTenThousand} ml di 1:10.000`]}
-                calculation={`10 µg/kg x ${result.estimatedWeightKg} kg = ${result.adrenaline.micrograms} µg; 0,1 ml/kg x ${result.estimatedWeightKg} kg = ${result.adrenaline.mlOfOneInTenThousand} ml; Da ripetere ogni 3-5 minuti.`}
+                value={`${formatDecimal(result.adrenaline.micrograms)} µg; ${formatDecimal(result.adrenaline.mlOfOneInTenThousand)} ml di 1:10.000`}
+                valueParts={[`${formatDecimal(result.adrenaline.micrograms)} µg`, `${formatDecimal(result.adrenaline.mlOfOneInTenThousand)} ml di 1:10.000`]}
+                calculation={`10 µg/kg x ${formatDecimal(result.estimatedWeightKg)} kg = ${formatDecimal(10 * result.estimatedWeightKg)} µg, max 1000 µg -> ${formatDecimal(result.adrenaline.micrograms)} µg; ${formatDecimal(result.adrenaline.micrograms)} µg / 100 µg/ml = ${formatDecimal(result.adrenaline.mlOfOneInTenThousand)} ml di 1:10.000; Da ripetere ogni 3-5 minuti.`}
                 showCalculation={showCalculations}
               />
               <ResultItem
                 initial="G"
                 tone="green"
                 label="Glucosio"
-                value={`${result.glucose.grams} g; ${result.glucose.d10Ml} ml D10`}
-                valueParts={[`${result.glucose.grams} g`, `${result.glucose.d10Ml} ml D10`]}
-                calculation={`${result.glucose.d10Ml} ml D10 x 0,1 g/ml = ${result.glucose.grams} g; 2 ml/kg x ${result.estimatedWeightKg} kg = ${result.glucose.d10Ml} ml D10`}
+                value={`${formatDecimal(result.glucose.grams)} g; ${formatDecimal(result.glucose.d10Ml)} ml D10`}
+                valueParts={[`${formatDecimal(result.glucose.grams)} g`, `${formatDecimal(result.glucose.d10Ml)} ml D10`]}
+                calculation={`2 ml/kg x ${formatDecimal(result.estimatedWeightKg)} kg = ${formatDecimal(2 * result.estimatedWeightKg)} ml, max 50 ml -> ${formatDecimal(result.glucose.d10Ml)} ml D10; ${formatDecimal(result.glucose.d10Ml)} ml D10 x 0,1 g/ml = ${formatDecimal(result.glucose.grams)} g`}
                 showCalculation={showCalculations}
               />
             </dl>
+            {result.endotrachealTubeMm.note ? <WarningBox title="Tubo ET nel lattante">{result.endotrachealTubeMm.note}</WarningBox> : null}
           </div>
         )}
       </div>
@@ -209,10 +211,19 @@ function renderValueParts(valueParts: string[]) {
   ));
 }
 
+function getTubeCalculation(ageYears: number, tube: { cuffed: string; uncuffed: string; oralDepthCm: number | null; fromAgeTable: boolean }) {
+  const age = formatAgeForCalculation(ageYears);
+  const depth = tube.oralDepthCm === null ? "Profondità orale: formula età / 2 + 12 valida da 1 anno, verificare clinicamente" : `${age} / 2 + 12 = ${formatDecimal(tube.oralDepthCm)} cm profondità orale`;
+  if (tube.fromAgeTable) {
+    return `Tabella per età, ${ageYears < 1 ? "lattante" : "1-2 anni"}: ${tube.cuffed} mm cuffiato, ${tube.uncuffed} mm non cuffiato; ${depth}`;
+  }
+  return `${age} / 4 + 3,5 -> ${tube.cuffed} mm ⌀ interno tubo cuffiato, arrotondato a 0,5 mm; ${age} / 4 + 4 -> ${tube.uncuffed} mm ⌀ interno tubo non cuffiato, arrotondato a 0,5 mm; ${depth}`;
+}
+
 function getWeightCalculation(ageYears: number, estimatedWeightKg: number) {
-  if (ageYears < 1) return `0,5 x ${Math.round(ageYears * 12)} mesi (${formatAgeForCalculation(ageYears)}) + 4 = ${estimatedWeightKg} kg`;
-  if (ageYears < 6) return `2 x ${formatAgeForCalculation(ageYears)} + 8 = ${estimatedWeightKg} kg`;
-  return `3 x ${formatAgeForCalculation(ageYears)} + 7 = ${estimatedWeightKg} kg`;
+  if (ageYears < 1) return `0,5 x ${Math.round(ageYears * 12)} mesi (${formatAgeForCalculation(ageYears)}) + 4 = ${formatDecimal(estimatedWeightKg)} kg`;
+  if (ageYears < 6) return `2 x ${formatAgeForCalculation(ageYears)} + 8 = ${formatDecimal(estimatedWeightKg)} kg`;
+  return `3 x ${formatAgeForCalculation(ageYears)} + 7 = ${formatDecimal(estimatedWeightKg)} kg`;
 }
 
 function formatCalculation(calculation: string) {
@@ -222,10 +233,6 @@ function formatCalculation(calculation: string) {
     .split("\n")
     .map((line) => line.trim())
     .filter(Boolean);
-}
-
-function roundForDisplay(value: number) {
-  return Math.round(value * 100) / 100;
 }
 
 function formatAgeForCalculation(ageYears: number) {

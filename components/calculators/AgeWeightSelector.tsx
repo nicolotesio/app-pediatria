@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { estimateWeightForAge } from "@/lib/calculators/wetflag";
+import { formatDecimal } from "@/lib/format";
+
 export type AgeWeightValue = {
   ageYears: number;
   weightKg: number;
@@ -15,11 +19,8 @@ type AgeWeightSelectorProps = {
   weightMax?: number;
 };
 
-export function estimatePediatricWeightKg(ageYears: number) {
-  if (ageYears < 1) return round1(0.5 * ageToMonths(ageYears) + 4);
-  if (ageYears < 6) return Math.round(2 * ageYears + 8);
-  return Math.round(3 * ageYears + 7);
-}
+/** Stima del peso per età: unica implementazione in lib/calculators/wetflag. */
+export const estimatePediatricWeightKg = estimateWeightForAge;
 
 export function AgeWeightSelector({ value, onChange, ageMin = 1 / 12, ageMax = 12, weightMin = 3, weightMax = 70 }: AgeWeightSelectorProps) {
   const updateAge = (nextAge: number) => {
@@ -38,6 +39,25 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1 / 12, ageMax = 1
       estimateWeightFromAge: false
     });
   };
+
+  // Campo numerico del peso: più rapido e preciso del cursore su telefono.
+  const [weightText, setWeightText] = useState(formatDecimal(value.weightKg, 1));
+
+  useEffect(() => {
+    setWeightText((current) => (parseDecimal(current) === value.weightKg ? current : formatDecimal(value.weightKg, 1)));
+  }, [value.weightKg]);
+
+  const updateWeightFromText = (text: string) => {
+    setWeightText(text);
+    const parsed = parseDecimal(text);
+    if (!Number.isFinite(parsed) || parsed < weightMin || parsed > weightMax) return;
+    onChange({ ...value, weightKg: round1(parsed), estimateWeightFromAge: false });
+  };
+
+  const weightTextIsValid = (() => {
+    const parsed = parseDecimal(weightText);
+    return Number.isFinite(parsed) && parsed >= weightMin && parsed <= weightMax;
+  })();
 
   const updateEstimate = (estimateWeightFromAge: boolean) => {
     onChange({
@@ -89,7 +109,21 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1 / 12, ageMax = 1
                 Stima da età
               </label>
             </div>
-            <output className="text-xl font-semibold text-slate-950 dark:text-white">{value.weightKg} kg</output>
+            <div className="flex items-center gap-2">
+              <input
+                id="weight-kg-input"
+                type="text"
+                inputMode="decimal"
+                aria-label="Peso in kg"
+                aria-invalid={!weightTextIsValid}
+                value={weightText}
+                onChange={(event) => updateWeightFromText(event.target.value)}
+                onFocus={(event) => event.target.select()}
+                onBlur={() => setWeightText(formatDecimal(value.weightKg, 1))}
+                className={`w-20 rounded-md border bg-white px-2 py-1 text-right text-xl font-semibold text-slate-950 outline-none focus:border-blue-500 dark:bg-slate-950 dark:text-white ${weightTextIsValid ? "border-slate-200 dark:border-slate-800" : "border-amber-500"}`}
+              />
+              <span className="text-xl font-semibold text-slate-950 dark:text-white">kg</span>
+            </div>
           </div>
           <input
             id="weight-kg"
@@ -106,10 +140,19 @@ export function AgeWeightSelector({ value, onChange, ageMin = 1 / 12, ageMax = 1
             <span>{weightMin} kg</span>
             <span>{weightMax} kg</span>
           </div>
+          {!weightTextIsValid ? (
+            <p role="status" className="text-sm text-amber-700 dark:text-amber-300">
+              Inserire un peso tra {weightMin} e {weightMax} kg: il calcolo usa ancora {formatDecimal(value.weightKg, 1)} kg.
+            </p>
+          ) : null}
         </div>
       </div>
     </section>
   );
+}
+
+function parseDecimal(text: string) {
+  return text.trim() === "" ? Number.NaN : Number(text.trim().replace(",", "."));
 }
 
 function clamp(value: number, min: number, max: number) {

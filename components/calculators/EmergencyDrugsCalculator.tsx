@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { calculateEmergencyDrugs, type DrugSection } from "@/lib/calculators/emergencyDrugs";
+import { calculateEmergencyDrugs, emergencyDrugsMetadata, type DrugSection } from "@/lib/calculators/emergencyDrugs";
 import { CalculatorLayout } from "@/components/CalculatorLayout";
 import { AgeWeightSelector, estimatePediatricWeightKg, type AgeWeightValue } from "@/components/calculators/AgeWeightSelector";
 import { WarningBox } from "@/components/ui/WarningBox";
@@ -34,7 +34,10 @@ export function EmergencyDrugsCalculator() {
   return (
     <CalculatorLayout
       unframed
-      showSource={false}
+      source={emergencyDrugsMetadata.source}
+      sourceNote={emergencyDrugsMetadata.note}
+      sourceTitle="Riferimenti bibliografici"
+      updatedAt={emergencyDrugsMetadata.updatedAt}
       warningPlacement="bottom"
       warning="Calcoli rapidi per emergenza pediatrica. Confermare sempre peso reale, dosaggi, concentrazioni disponibili, protocolli locali e valutazione clinica prima della somministrazione."
     >
@@ -58,12 +61,13 @@ export function EmergencyDrugsCalculator() {
 }
 
 function DrugSectionCard({ section }: { section: DrugSection }) {
-  const [isOpen, setIsOpen] = useState(false);
+  // L'arresto cardiaco è la sezione più urgente: parte già aperta.
+  const [isOpen, setIsOpen] = useState(section.id === "cardiac-arrest");
   const [showCalculations, setShowCalculations] = useState(false);
 
   return (
     <section className="grid gap-3">
-      <button type="button" onClick={() => setIsOpen((value) => !value)} className="flex items-center justify-between gap-3 text-left">
+      <button type="button" aria-expanded={isOpen} onClick={() => setIsOpen((value) => !value)} className="flex items-center justify-between gap-3 text-left">
         <h2 className={`text-xl font-bold leading-tight sm:text-2xl ${sectionToneClasses[section.tone]}`}>{section.title}</h2>
         <ChevronDown className={`size-6 shrink-0 transition ${isOpen ? "" : "-rotate-90"} ${sectionToneClasses[section.tone]}`} />
       </button>

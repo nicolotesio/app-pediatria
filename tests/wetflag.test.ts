@@ -7,9 +7,10 @@ describe("calculateWetflag", () => {
 
     expect(result.estimatedWeightKg).toBe(16);
     expect(result.defibrillationEnergyJ).toBe(64);
-    expect(result.endotrachealTubeMm.uncuffed).toBe(5);
-    expect(result.endotrachealTubeMm.cuffed).toBe(4.5);
+    expect(result.endotrachealTubeMm.uncuffed).toBe("5,0");
+    expect(result.endotrachealTubeMm.cuffed).toBe("4,5");
     expect(result.endotrachealTubeMm.oralDepthCm).toBe(14);
+    expect(result.endotrachealTubeMm.note).toBeNull();
     expect(result.fluidBolusMl).toBe(320);
     expect(result.fluidBolusOptionsMl.tenPerKg).toBe(160);
     expect(result.fluidBolusOptionsMl.twentyPerKg).toBe(320);
@@ -27,7 +28,7 @@ describe("calculateWetflag", () => {
     expect(result.estimatedWeightKg).toBe(20);
     expect(result.defibrillationEnergyJ).toBe(80);
     expect(result.fluidBolusMl).toBe(400);
-    expect(result.endotrachealTubeMm.uncuffed).toBe(5);
+    expect(result.endotrachealTubeMm.uncuffed).toBe("5,0");
   });
 
   it("limita fluidi e lorazepam al massimo previsto", () => {
@@ -37,6 +38,39 @@ describe("calculateWetflag", () => {
     expect(result.fluidBolusOptionsMl.tenPerKg).toBe(500);
     expect(result.fluidBolusOptionsMl.twentyPerKg).toBe(500);
     expect(result.lorazepam.mg).toBe(4);
+  });
+
+  it("limita adrenalina e glucosio al massimo previsto", () => {
+    const result = calculateWetflag(12, 120);
+
+    expect(result.adrenaline.micrograms).toBe(1000);
+    expect(result.adrenaline.mlOfOneInTenThousand).toBe(10);
+    expect(result.glucose.d10Ml).toBe(50);
+    expect(result.glucose.grams).toBe(5);
+  });
+
+  it("sotto 1 anno usa la tabella del lattante e non le formule per età", () => {
+    const result = calculateWetflag(1 / 12);
+
+    expect(result.endotrachealTubeMm.uncuffed).toBe("3,5-4,0");
+    expect(result.endotrachealTubeMm.cuffed).toBe("3,0-3,5");
+    expect(result.endotrachealTubeMm.oralDepthCm).toBeNull();
+    expect(result.endotrachealTubeMm.note).toContain("Sotto 1 anno");
+  });
+
+  it("tra 1 e 2 anni usa l'intervallo tabellare", () => {
+    const result = calculateWetflag(1.5);
+
+    expect(result.endotrachealTubeMm.uncuffed).toBe("4,0-4,5");
+    expect(result.endotrachealTubeMm.cuffed).toBe("3,5-4,0");
+    expect(result.endotrachealTubeMm.oralDepthCm).toBe(12.8);
+  });
+
+  it("oltre 2 anni arrotonda il diametro al mezzo millimetro", () => {
+    const result = calculateWetflag(2.5);
+
+    expect(result.endotrachealTubeMm.uncuffed).toBe("4,5");
+    expect(result.endotrachealTubeMm.cuffed).toBe("4,0");
   });
 
   it("segnala età fuori range", () => {

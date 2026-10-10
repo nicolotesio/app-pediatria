@@ -6,12 +6,31 @@ export type ClinicalSource = {
   validationNote: string;
 };
 
+export const RCUK_PAEDIATRIC_CHART_2026 =
+  "Resuscitation Council UK. Paediatric emergency algorithms and resources, versione 5 (gennaio 2026), basati sulle Guidelines 2025: Paediatric emergency drug chart.";
+export const ERC_PLS_2021 =
+  "Van de Voorde P et al. European Resuscitation Council Guidelines 2021: Paediatric Life Support. Resuscitation. 2021;161:327-387.";
+
 export const clinicalSources: ClinicalSource[] = [
   {
-    id: "wetflag-local-review-needed",
+    id: "wetflag",
     title: "WETFLAG",
-    reference: "Formula mnemonica WETFLAG configurata per stime iniziali; richiede confronto con protocollo locale PALS/ALS prima dell'uso clinico.",
-    updatedAt: "2026-05-08",
-    validationNote: "Validare formule, concentrazioni e range con fonti locali prima di uso operativo."
+    reference: `${RCUK_PAEDIATRIC_CHART_2026} ${ERC_PLS_2021} (tabella dei diametri dei tubi tracheali).`,
+    updatedAt: "2026-10-10",
+    validationNote: "Stime iniziali: confermare peso reale, concentrazioni disponibili e protocollo locale prima della somministrazione."
+  },
+  {
+    id: "emergency-drugs",
+    title: "Farmaci in emergenza",
+    reference: `${RCUK_PAEDIATRIC_CHART_2026} ${ERC_PLS_2021}`,
+    updatedAt: "2026-10-10",
+    validationNote:
+      "Massimali applicati: adrenalina 1 mg, bolo di fluidi 500 ml, glucosio 10% 50 ml, amiodarone 300 mg (prima dose), adenosina 6 mg (prima dose), calcio gluconato 10% 30 ml. Per potassio cloruro, insulina/glucosio nell'iperkaliemia e salbutamolo EV le fonti citate non riportano un massimale: confermare con il protocollo locale."
   }
 ];
+
+export function getClinicalSource(id: string) {
+  const source = clinicalSources.find((item) => item.id === id);
+  if (!source) throw new Error(`Fonte clinica non trovata: ${id}`);
+  return source;
+}

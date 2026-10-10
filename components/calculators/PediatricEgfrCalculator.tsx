@@ -37,7 +37,7 @@ export function PediatricEgfrCalculator() {
           <li>Formula bedside: eGFR = 0,413 x altezza(cm) / creatinina(mg/dL).</li>
         </ul>
       }
-      sourceNote="La pagina indicata dall'utente rimanda all'uso della formula di Schwartz in ambito pediatrico; il calcolo qui usa creatinina in mg/dL o conversione da µmol/L."
+      sourceNote="Il calcolo usa la creatinina in mg/dL; i valori in µmol/L sono convertiti dividendo per 88,4."
       updatedAt="2026-07-09"
       units="mL/min/1,73 m²"
       unframed

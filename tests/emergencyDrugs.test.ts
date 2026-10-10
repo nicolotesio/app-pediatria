@@ -50,6 +50,15 @@ describe("calculateEmergencyDrugs", () => {
     expect(section.rows[7].value).toBe("10 mmol");
   });
 
+  it("limita adenosina e calcio gluconato a 45 kg", () => {
+    const result = calculateEmergencyDrugs(10, 45);
+    const arrhythmias = result.sections.find((section) => section.id === "arrhythmias");
+    const hyperkalaemia = result.sections.find((section) => section.id === "hyperkalaemia-non-arrest");
+
+    expect(arrhythmias?.rows[1].value).toBe("4,5 - 6 mg");
+    expect(hyperkalaemia?.rows[2].value).toBe("22,5 ml");
+  });
+
   it("applica i massimali principali", () => {
     const result = calculateEmergencyDrugs(12, 70);
     const seizures = result.sections.find((section) => section.id === "seizures");
@@ -58,7 +67,15 @@ describe("calculateEmergencyDrugs", () => {
 
     expect(seizures?.rows[0].value).toBe("4 mg");
     expect(arrhythmias?.rows[0].value).toBe("500 µg");
-    expect(arrest?.rows[1].value).toBe("150 mg");
+    const hyperkalaemia = result.sections.find((section) => section.id === "hyperkalaemia-non-arrest");
+    const hypoglycaemia = result.sections.find((section) => section.id === "hypoglycaemia");
+
+    expect(arrest?.rows[0].value).toBe("7 ml (700 µg)");
+    expect(arrest?.rows[1].value).toBe("300 mg");
+    expect(arrest?.rows[2].value).toBe("500 ml");
+    expect(arrhythmias?.rows[1].value).toBe("6 - 6 mg");
+    expect(hyperkalaemia?.rows[2].value).toBe("30 ml");
+    expect(hypoglycaemia?.rows[0].value).toBe("50 ml");
     expect(arrest?.rows[3].value).toBe("200 J");
     expect(arrest?.rows[4].value).toBe("360 J");
   });

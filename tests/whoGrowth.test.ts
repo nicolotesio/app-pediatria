@@ -39,6 +39,33 @@ describe("calculateWhoGrowth", () => {
     expect(result.results.some((item) => item.dataset === "wfl")).toBe(false);
   });
 
+  it("oltre +3 DS applica la correzione WHO agli indicatori basati sul peso", () => {
+    const row = getWhoRows(whoGrowthData, "wfa", "male").find((item) => item.x === 365);
+    if (!row) throw new Error("Riga WHO a 365 giorni non trovata");
+    const [, , , , , sd2, sd3] = row.sd;
+    const weightKg = 16;
+    const result = calculateWhoGrowth(whoGrowthData, "male", 365, weightKg, null, null);
+
+    expect(result.results[0]?.zScore).toBeCloseTo(3 + (weightKg - sd3) / (sd3 - sd2), 1);
+  });
+
+  it("sotto -3 DS applica la correzione WHO agli indicatori basati sul peso", () => {
+    const row = getWhoRows(whoGrowthData, "wfa", "male").find((item) => item.x === 365);
+    if (!row) throw new Error("Riga WHO a 365 giorni non trovata");
+    const [sd3neg, sd2neg] = row.sd;
+    const weightKg = 5.5;
+    const result = calculateWhoGrowth(whoGrowthData, "male", 365, weightKg, null, null);
+
+    expect(result.results[0]?.zScore).toBeCloseTo(-3 + (weightKg - sd3neg) / (sd2neg - sd3neg), 1);
+  });
+
+  it("non modifica gli z-score entro ±3 DS né quelli della lunghezza", () => {
+    const result = calculateWhoGrowth(whoGrowthData, "male", 365, 9.6, 90, null);
+
+    expect(result.results[0]?.zScore).toBeCloseTo(-0.04, 2);
+    expect(result.results[1]?.zScore).toBeGreaterThan(5);
+  });
+
   it("calcola età in giorni dalle date", () => {
     expect(calculateAgeDaysFromDates("2024-01-01", "2024-01-31")).toBe(30);
   });

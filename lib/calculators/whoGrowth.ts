@@ -148,7 +148,7 @@ function calculateWhoMetric(
 ): WhoMetricResult {
   const rows = getWhoRows(data, dataset, sex);
   const reference = interpolateReference(rows, xValue);
-  const zScore = calculateLmsZScore(value, reference.L, reference.M, reference.S);
+  const zScore = calculateWhoZScore(value, reference.L, reference.M, reference.S, RESTRICTED_DATASETS.includes(dataset));
 
   return {
     key,
@@ -193,6 +193,28 @@ function interpolateReference(rows: readonly WhoRawRow[], xValue: number): WhoRe
 }
 
 // Formula LMS WHO per il calcolo dello Z-score.
+// Indicatori basati sul peso: oltre ±3 DS il metodo WHO ("restricted application of the LMS method")
+// misura la distanza dalla curva ±3 DS in unità pari alla distanza fra le curve ±2 e ±3 DS.
+const RESTRICTED_DATASETS: WhoDataset[] = ["wfa", "wfl", "bfa"];
+
+export function calculateWhoZScore(value: number, l: number, m: number, s: number, restricted: boolean) {
+  const zScore = calculateLmsZScore(value, l, m, s);
+  if (!restricted || Math.abs(zScore) <= 3) return zScore;
+
+  if (zScore > 3) {
+    const sd3 = valueAtLmsZScore(3, l, m, s);
+    return 3 + (value - sd3) / (sd3 - valueAtLmsZScore(2, l, m, s));
+  }
+
+  const sd3neg = valueAtLmsZScore(-3, l, m, s);
+  return -3 + (value - sd3neg) / (valueAtLmsZScore(-2, l, m, s) - sd3neg);
+}
+
+function valueAtLmsZScore(zScore: number, l: number, m: number, s: number) {
+  if (Math.abs(l) < 1e-9) return m * Math.exp(s * zScore);
+  return m * (1 + l * s * zScore) ** (1 / l);
+}
+
 function calculateLmsZScore(value: number, l: number, m: number, s: number) {
   if (Math.abs(l) < 1e-9) {
     return Math.log(value / m) / s;

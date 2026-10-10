@@ -14,7 +14,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-3 focus:text-blue-800">Vai al contenuto</a>
     <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-white/95 backdrop-blur dark:border-slate-800 dark:bg-slate-950/95">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-2 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex min-w-0 items-center gap-2.5">
+        <Link href="/" aria-label="Appunti di Pediatria, vai alla home" className="flex min-w-0 items-center gap-2.5">
           <Image src="/favicon-512.png" alt="" aria-hidden="true" width={44} height={44} className="size-10 shrink-0 rounded-lg" priority />
           <span className="text-xl font-semibold leading-tight sm:text-2xl">Appunti di <span className="text-blue-700 dark:text-blue-300">Pediatria</span></span>
         </Link>
