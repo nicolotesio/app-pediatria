@@ -35,10 +35,10 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV",
-            posology: ["15-20 mg/kg ogni 24h", "Dose max: 1.5 g/die"],
-            specialSituations: ["5-7.5 mg/kg ogni 8-12h"],
+            posology: ["15-20 mg/kg ogni 24h", "Dose max: 1,5 g/die"],
+            specialSituations: ["5-7,5 mg/kg ogni 8-12h"],
             dilution: ["SF o SG5%", "50 ml in 60 min"],
-            notes: ["Ototossicita", "Nefrotossicita"]
+            notes: ["Ototossicità", "Nefrotossicità"]
           }
         ]
       },
@@ -50,9 +50,9 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
           {
             route: "EV",
             posology: ["5-7 mg/kg ogni 24h"],
-            specialSituations: ["2.5 mg/kg ogni 8h"],
+            specialSituations: ["2,5 mg/kg ogni 8h"],
             dilution: ["SF", "50 ml in 60 min"],
-            notes: ["Ototossicita", "Nefrotossicita"]
+            notes: ["Ototossicità", "Nefrotossicità"]
           }
         ]
       },
@@ -66,7 +66,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
             posology: ["5-7 mg/kg/die suddivisi in 2 o 3 somministrazioni"],
             specialSituations: ["3 mg/kg ogni 8h"],
             dilution: ["SF o SG5%", "1 mg/ml in 60-120 min"],
-            notes: ["Ototossicita", "Nefrotossicita"]
+            notes: ["Ototossicità", "Nefrotossicità"]
           }
         ]
       },
@@ -77,9 +77,9 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV",
-            posology: ["6-7.5 mg/kg/die suddivisi in 2 o 3 somministrazioni"],
+            posology: ["6-7,5 mg/kg/die suddivisi in 2 o 3 somministrazioni"],
             dilution: ["SF o SG5%", "30-100 ml in 60 min"],
-            notes: ["Ototossicita", "Nefrotossicita"]
+            notes: ["Ototossicità", "Nefrotossicità"]
           }
         ]
       }
@@ -252,7 +252,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV",
-            posology: ["2-23 mesi: 8 mg/kg ogni 8h", ">2 anni e peso <33 kg: 12 mg/kg ogni 8h", ">2 anni e peso >33 kg: 400 mg ogni 8h", "600 mg ogni 12h"],
+            posology: ["2-23 mesi: 8 mg/kg ogni 8h", "2-11 anni (e 12-17 anni con peso <33 kg): 12 mg/kg ogni 8h, max 400 mg/dose", "12-17 anni con peso ≥33 kg: 600 mg ogni 12h"],
             notes: ["Attiva su MRSA"]
           }
         ]
@@ -271,7 +271,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
             route: "EV",
             posology: ["10 mg/kg ogni 12h per 3 dosi, poi 10 mg/kg ogni 24h", "Dose max: 800 mg/die"],
             dilution: ["SF", "<200 mg: 50 ml in 60 min", ">200 mg: 100 ml in 60 min"],
-            notes: ["Monitorare funzionalita renale", "Therapeutic drug monitoring (TDM)"]
+            notes: ["Monitorare funzionalità renale", "Therapeutic drug monitoring (TDM)"]
           }
         ]
       },
@@ -285,7 +285,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
             posology: ["10-15 mg/kg ogni 6h", "40-60 mg/kg/die in infusione continua", "Dose max: 3 g/die (750 mg/dose)"],
             specialSituations: ["Meningiti: 15 mg/kg ogni 6h"],
             dilution: ["SG5%", "<250 mg: 50 ml in 60 min", ">250 mg: 100 ml in 60 min"],
-            notes: ["Monitorare funzionalita renale", "TDM", "Infusione lenta per rischio di red man syndrome"],
+            notes: ["Monitorare funzionalità renale", "TDM", "Infusione lenta per rischio di red man syndrome"],
             links: [
               {
                 label: "RCH Clinical Practice Guideline: Vancomycin",
@@ -312,12 +312,12 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV",
-            posology: ["20-40 mg/kg suddivisi in 3 o 4 somministrazioni", "Dose max: 2.7 g/die; in casi gravissimi fino a 4.8 g/die"],
+            posology: ["20-40 mg/kg suddivisi in 3 o 4 somministrazioni", "Dose max: 2,7 g/die; in casi gravissimi fino a 4,8 g/die"],
             dilution: ["SF o SG5% o Ringer", "Max 18 mg/ml", "Max 30 mg/min"]
           },
           {
             route: "PO",
-            posology: ["30-40 mg/kg suddivisi in 3 o 4 somministrazioni", "Dose max: 1.8 g/die"]
+            posology: ["30-40 mg/kg suddivisi in 3 o 4 somministrazioni", "Dose max: 1,8 g/die"]
           }
         ]
       }
@@ -369,13 +369,13 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV",
-            posology: ["3.75 mg/kg ogni 12h", "Dose max: 1 g/die"],
+            posology: ["7,5 mg/kg ogni 12h", "Dose max: 500 mg/dose (1 g/die)"],
             dilution: ["SF o SG5%", "1-2 mg/ml in 60 min"],
-            notes: ["Rischio allungamento dell'intervallo QT", "Potente inibitore CYP3A4: attenzione alle interazioni"]
+            notes: ["Sotto i 12 anni la via EV è off-label: dati limitati", "Rischio allungamento dell'intervallo QT", "Potente inibitore CYP3A4: attenzione alle interazioni"]
           },
           {
             route: "PO",
-            posology: ["Terapia standard di 5-10 giorni"],
+            posology: ["7,5 mg/kg ogni 12h per 5-10 giorni", "Dose max: 500 mg/dose (1 g/die)"],
             notes: ["Rischio allungamento dell'intervallo QT", "Potente inibitore CYP3A4: attenzione alle interazioni"]
           }
         ]
@@ -394,7 +394,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
             route: "EV/PO",
             posology: ["<12 anni: 10 mg/kg ogni 8h", ">12 anni: 600 mg ogni 12h"],
             dilution: ["EV già costituito: 600 mg/100 ml in 60 min"],
-            notes: ["Attivita su VRSA"]
+            notes: ["Attività su VRSA"]
           }
         ]
       }
@@ -466,7 +466,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV",
-            posology: ["37.5-50 mg/kg ogni 6h"]
+            posology: ["37,5-50 mg/kg ogni 6h"]
           }
         ]
       },
@@ -508,8 +508,8 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV",
-            posology: ["50.000-100.000 U/kg/die suddivise in 3 somministrazioni", "Dose max: 9 milioni U/die"],
-            specialSituations: ["Infezioni gravi: dose di carico 25.000 U/kg"],
+            posology: ["Peso ≤40 kg: 75.000-150.000 UI/kg/die suddivise in 3 somministrazioni", "Peso >40 kg: schema dell'adulto, 9 milioni UI/die in 2 o 3 somministrazioni", "Dose max: 9 milioni UI/die"],
+            specialSituations: ["Dose di carico: nessun dato nel bambino critico (adulto critico: 9 milioni UI)"],
             dilution: ["SF", "50 ml in 60 min"],
             notes: ["Per infezioni gravi da batteri Gram-negativi resistenti"]
           }
@@ -527,12 +527,13 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV",
-            posology: ["10-20 mg/kg ogni 12h", "Dose max: 1.2 g/die"],
-            dilution: ["Gia costituito: 200 mg/100 ml in >60 min"]
+            posology: ["10 mg/kg ogni 8h", "Dose max: 400 mg/dose (1,2 g/die)"],
+            specialSituations: ["IVU complicate e pielonefrite: 6-10 mg/kg ogni 8h"],
+            dilution: ["Già costituito: 200 mg/100 ml in >60 min"]
           },
           {
             route: "PO",
-            posology: ["10-15 mg/kg ogni 12h", "Dose max: 1.5 g/die"]
+            posology: ["10-20 mg/kg ogni 12h", "Dose max: 750 mg/dose (1,5 g/die)"]
           }
         ]
       },
@@ -545,7 +546,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
             route: "EV",
             posology: [">6 mesi e <50 kg: 8 mg/kg ogni 12h", "Dose max: 250 mg/dose"],
             specialSituations: ["Nei >50 kg: 2 volte/die in caso di infezioni molto gravi"],
-            dilution: ["Gia costituito: 600 mg/300 ml in 60 min"]
+            dilution: ["Già costituito: 500 mg/100 ml (5 mg/ml); 250 mg in almeno 30 min, 500 mg in almeno 60 min"]
           },
           {
             route: "PO",
@@ -566,13 +567,13 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
           {
             route: "EV",
             posology: ["Terapia: 4-6 mg(TMP)/kg ogni 12h"],
-            specialSituations: ["PJP: 7.5-10 mg(TMP)/kg ogni 12h", "In infezioni gravi anche in 3-4 dosi/die, per esempio sepsi da Stenotrophomonas"],
+            specialSituations: ["PJP: 7,5-10 mg(TMP)/kg ogni 12h", "In infezioni gravi anche in 3-4 dosi/die, per esempio sepsi da Stenotrophomonas"],
             dilution: ["SF o SG5%", "1 flacone (5 ml) in 150 ml in 60-120 min"],
             notes: ["Associare acido folico"]
           },
           {
             route: "PO",
-            posology: ["Profilassi: 2.5 mg(TMP)/kg ogni 12h", "Dose max: 320 mg/die"],
+            posology: ["Profilassi: 2,5 mg(TMP)/kg ogni 12h", "Dose max: 320 mg/die"],
             notes: ["Associare acido folico"]
           }
         ]
@@ -589,7 +590,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV",
-            posology: ["<12 mesi e <10 kg: 200-300 mg suddivisi in 3 somministrazioni", "1-12 anni e 10-40 kg: 200-400 mg suddivisi in 3 o 4 somministrazioni", ">12 mesi e >40 kg: 12-24 g suddivisi in 3 o 4 somministrazioni"],
+            posology: ["1-12 mesi e <10 kg: 200-300 mg/kg/die suddivisi in 3 somministrazioni", "1-12 anni e 10-40 kg: 200-400 mg/kg/die suddivisi in 3 o 4 somministrazioni", ">12 anni e >40 kg: 12-24 g/die suddivisi in 2 o 3 somministrazioni (meningite: 16-24 g/die in 3 o 4)"],
             dilution: ["SF o SG5%", "50-100 ml in 60-90 min"],
             notes: ["Monitorare sodio"]
           }
@@ -607,12 +608,12 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV",
-            posology: ["22.5-40 mg/kg/die suddivisi in 3 o 4 somministrazioni", "Dose max: 1.5 g/die"],
-            dilution: ["Gia costituito: 500 mg/100 ml in 60 min"]
+            posology: ["22,5-40 mg/kg/die suddivisi in 3 o 4 somministrazioni", "Dose max: 1,5 g/die"],
+            dilution: ["Già costituito: 500 mg/100 ml in 60 min"]
           },
           {
             route: "PO",
-            posology: ["22.5-40 mg/kg/die suddivisi in 3 o 4 somministrazioni", "Dose max: 1.5 g/die"]
+            posology: ["22,5-40 mg/kg/die suddivisi in 3 o 4 somministrazioni", "Dose max: 1,5 g/die"]
           }
         ]
       }
@@ -649,7 +650,7 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV",
-            posology: ["8-11 anni: 1.2 mg/kg ogni 12h", ">12 anni: 50 mg ogni 12h", "Dose max: 100 mg/die"],
+            posology: ["8-11 anni: 1,2 mg/kg ogni 12h", ">12 anni: 50 mg ogni 12h", "Dose max: 100 mg/die"],
             specialSituations: ["Dose di carico (>12 anni): 100 mg"],
             dilution: ["SF", "100 ml in 60 min con lavaggio pre e post"]
           }

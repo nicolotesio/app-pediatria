@@ -35,11 +35,14 @@ export const EMERGENCY_DRUG_LIMITS = {
   amiodaroneFirstDoseMg: 300,
   amiodaroneSecondDoseMg: 150,
   fluidBolusMl: 500,
-  atropineMicrograms: 500,
+  atropineMicrograms: 600,
   adenosineFirstDoseMg: 6,
   adenosineRepeatDoseMg: 18,
   calciumGluconateMl: 30,
   glucoseBolusMl: 50,
+  insulinUnits: 10,
+  hyperkalaemiaGlucoseMl: 250,
+  potassiumChlorideMmol: 30,
   defibrillationInitialJ: 200,
   defibrillationRefractoryJ: 360
 } as const;
@@ -57,8 +60,8 @@ export function calculateEmergencyDrugs(ageYears: number, weightKg: number): Eme
   const limits = EMERGENCY_DRUG_LIMITS;
   const lorazepamMg = round2(cap(0.1 * weight, limits.lorazepamMg));
   const glucoseBolusMl = round1(cap(2 * weight, limits.glucoseBolusMl));
-  const insulinUnits = round1(0.1 * weight);
-  const glucoseInfusionMl = round1(5 * weight);
+  const insulinUnits = round1(cap(0.1 * weight, limits.insulinUnits));
+  const glucoseInfusionMl = round1(cap(5 * weight, limits.hyperkalaemiaGlucoseMl));
   const calciumGluconateMl = round1(cap(0.5 * weight, limits.calciumGluconateMl));
   const salbutamolIvMicrograms = round1(5 * weight);
   const atropineMicrograms = round1(cap(20 * weight, limits.atropineMicrograms));
@@ -71,9 +74,13 @@ export function calculateEmergencyDrugs(ageYears: number, weightKg: number): Eme
   const arrestFluidMl = round1(cap(10 * weight, limits.fluidBolusMl));
   const defibrillationInitialJ = round1(cap(4 * weight, limits.defibrillationInitialJ));
   const defibrillationRefractoryJ = round1(cap(8 * weight, limits.defibrillationRefractoryJ));
-  const hyperkalemiaArrestGlucoseMl = round1(5 * weight);
-  const potassiumChlorideMmol = round1(weight);
-  const anaphylaxis = calculateAnaphylaxisDose(ageYears, weight);
+  const hyperkalemiaArrestGlucoseMl = round1(cap(5 * weight, limits.hyperkalaemiaGlucoseMl));
+  const potassiumChlorideMmol = round1(cap(weight, limits.potassiumChlorideMmol));
+  const adenosineFirstValue =
+    adenosineFirstLowMg === adenosineFirstHighMg
+      ? `${formatNumber(adenosineFirstHighMg)} mg`
+      : `${formatNumber(adenosineFirstLowMg)} - ${formatNumber(adenosineFirstHighMg)} mg`;
+  const anaphylaxis = calculateAnaphylaxisDose(ageYears);
 
   return {
     ageYears,
@@ -89,9 +96,9 @@ export function calculateEmergencyDrugs(ageYears: number, weightKg: number): Eme
           { label: "Fluidi", value: `${formatNumber(arrestFluidMl)} ml`, note: "10 ml/kg, max 500 ml per bolo. Cristalloide bilanciato o NaCl 0,9%; considerare fluidi riscaldati." },
           { label: "Defibrillazione iniziale", value: `${formatNumber(defibrillationInitialJ)} J`, note: "4 J/kg per shock iniziali, max 120-200 J sulla base del tipo di defibrillatore." },
           { label: "Defibrillazione refrattaria VF/pVT", value: `${formatNumber(defibrillationRefractoryJ)} J`, note: "Incrementare fino a 8 J/kg, max 360 J, se VF/pVT refrattaria." },
-          { label: "Iperkaliemia in arresto: insulina", value: `${formatNumber(insulinUnits)} UI` },
-          { label: "Iperkaliemia in arresto: glucosio 10% bolo", value: `${formatNumber(hyperkalemiaArrestGlucoseMl)} ml`, note: "Non somministrare calcio." },
-          { label: "Ipokaliemia in arresto: potassio cloruro EV", value: `${formatNumber(potassiumChlorideMmol)} mmol`, note: "Infondere a 2 mmol/min per 10 minuti, poi dose restante in 5-10 minuti. Ripetere se necessario fino a K+ > 2,5 mmol/l. Considerare Mg2+ se ipomagnesemia." }
+          { label: "Iperkaliemia in arresto: insulina", value: `${formatNumber(insulinUnits)} UI`, note: "0,1 UI/kg di insulina rapida, max 10 UI, in bolo EV con il glucosio." },
+          { label: "Iperkaliemia in arresto: glucosio 10% bolo", value: `${formatNumber(hyperkalemiaArrestGlucoseMl)} ml`, note: "5 ml/kg, max 250 ml. Non somministrare calcio in arresto." },
+          { label: "Ipokaliemia in arresto: potassio cloruro EV", value: `${formatNumber(potassiumChlorideMmol)} mmol`, note: "1 mmol/kg, max 30 mmol. Infondere a 2 mmol/min per 10 minuti (senza superare la dose calcolata), poi l'eventuale dose restante in 5-10 minuti. Ripetere se necessario fino a K+ > 2,5 mmol/l. Considerare Mg2+ se ipomagnesemia." }
         ],
         calculations: [
           `Adrenalina = 10 µg/kg x ${formatNumber(weight)} kg = ${formatNumber(10 * weight)} µg, max 1000 µg -> ${formatNumber(arrestAdrenalineMicrograms)} µg`,
@@ -100,9 +107,9 @@ export function calculateEmergencyDrugs(ageYears: number, weightKg: number): Eme
           `Fluidi = 10 ml/kg x ${formatNumber(weight)} kg = ${formatNumber(10 * weight)} ml, max 500 ml -> ${formatNumber(arrestFluidMl)} ml`,
           `Defibrillazione iniziale = 4 J/kg x ${formatNumber(weight)} kg = ${formatNumber(4 * weight)} J, max 200 J -> ${formatNumber(defibrillationInitialJ)} J`,
           `Defibrillazione refrattaria = 8 J/kg x ${formatNumber(weight)} kg = ${formatNumber(8 * weight)} J, max 360 J -> ${formatNumber(defibrillationRefractoryJ)} J`,
-          `Iperkaliemia in arresto: insulina = 0,1 UI/kg x ${formatNumber(weight)} kg = ${formatNumber(insulinUnits)} UI`,
-          `Iperkaliemia in arresto: glucosio 10% bolo = 5 ml/kg x ${formatNumber(weight)} kg = ${formatNumber(hyperkalemiaArrestGlucoseMl)} ml`,
-          `Ipokaliemia in arresto: potassio cloruro = 1 mmol/kg x ${formatNumber(weight)} kg = ${formatNumber(potassiumChlorideMmol)} mmol`
+          `Iperkaliemia in arresto: insulina = 0,1 UI/kg x ${formatNumber(weight)} kg = ${formatNumber(0.1 * weight)} UI, max 10 UI -> ${formatNumber(insulinUnits)} UI`,
+          `Iperkaliemia in arresto: glucosio 10% bolo = 5 ml/kg x ${formatNumber(weight)} kg = ${formatNumber(5 * weight)} ml, max 250 ml -> ${formatNumber(hyperkalemiaArrestGlucoseMl)} ml`,
+          `Ipokaliemia in arresto: potassio cloruro = 1 mmol/kg x ${formatNumber(weight)} kg = ${formatNumber(weight)} mmol, max 30 mmol -> ${formatNumber(potassiumChlorideMmol)} mmol`
         ]
       },
       {
@@ -110,12 +117,12 @@ export function calculateEmergencyDrugs(ageYears: number, weightKg: number): Eme
         title: "Aritmie - Bradicardia / SVT",
         tone: "indigo",
         rows: [
-          { label: "Atropina (bradicardia)", value: `${formatNumber(atropineMicrograms)} µg`, note: "20 µg/kg, max 0,5 mg. Ripetere ogni 3-5 minuti se necessario, max totale 3 mg." },
-          { label: "Adenosina (SVT - prima dose)", value: `${formatNumber(adenosineFirstLowMg)} - ${formatNumber(adenosineFirstHighMg)} mg`, note: `0,1-0,2 mg/kg, max 6 mg. Se SVT persiste dopo almeno 1 minuto: 0,3 mg/kg -> ${formatNumber(adenosineRepeatMg)} mg (max 12-18 mg). Usare flush rapido e ECG a 12 derivazioni in corso.` }
+          { label: "Atropina (bradicardia)", value: `${formatNumber(atropineMicrograms)} µg`, note: "20 µg/kg, max 0,6 mg. Ripetere ogni 3-5 minuti se necessario, max totale 3 mg." },
+          { label: "Adenosina (SVT - prima dose)", value: adenosineFirstValue, note: `0,1-0,2 mg/kg, max 6 mg. Se SVT persiste dopo almeno 1 minuto: 0,3 mg/kg -> ${formatNumber(adenosineRepeatMg)} mg (max 12-18 mg). Usare flush rapido e ECG a 12 derivazioni in corso.` }
         ],
         calculations: [
-          `Atropina = 20 µg/kg x ${formatNumber(weight)} kg = ${formatNumber(20 * weight)} µg, max 500 µg -> ${formatNumber(atropineMicrograms)} µg`,
-          `Adenosina (range prima dose) = 0,1-0,2 mg/kg x ${formatNumber(weight)} kg = ${formatNumber(0.1 * weight)} - ${formatNumber(0.2 * weight)} mg, max 6 mg -> ${formatNumber(adenosineFirstLowMg)} - ${formatNumber(adenosineFirstHighMg)} mg`,
+          `Atropina = 20 µg/kg x ${formatNumber(weight)} kg = ${formatNumber(20 * weight)} µg, max 600 µg -> ${formatNumber(atropineMicrograms)} µg`,
+          `Adenosina (range prima dose) = 0,1-0,2 mg/kg x ${formatNumber(weight)} kg = ${formatNumber(0.1 * weight)} - ${formatNumber(0.2 * weight)} mg, max 6 mg -> ${adenosineFirstValue}`,
           `Dose successiva se SVT persiste = 0,3 mg/kg x ${formatNumber(weight)} kg = ${formatNumber(0.3 * weight)} mg, max 18 mg -> ${formatNumber(adenosineRepeatMg)} mg`
         ]
       },
@@ -126,7 +133,7 @@ export function calculateEmergencyDrugs(ageYears: number, weightKg: number): Eme
         rows: [
           {
             label: "Adrenalina 1:1000 IM",
-            value: `${formatNumber(anaphylaxis.ml)} ml (${formatNumber(anaphylaxis.micrograms)} µg)`,
+            value: anaphylaxis.value,
             note: anaphylaxis.note
           }
         ],
@@ -137,8 +144,8 @@ export function calculateEmergencyDrugs(ageYears: number, weightKg: number): Eme
         title: "Metabolico - Iperkaliemia (non arresto)",
         tone: "cyan",
         rows: [
-          { label: "Insulina rapida EV", value: `${formatNumber(insulinUnits)} UI` },
-          { label: "Glucosio 10% (infusione EV)", value: `${formatNumber(glucoseInfusionMl)} ml in 30 min` },
+          { label: "Insulina rapida EV", value: `${formatNumber(insulinUnits)} UI`, note: "0,1 UI/kg, max 10 UI." },
+          { label: "Glucosio 10% (infusione EV)", value: `${formatNumber(glucoseInfusionMl)} ml in 30 min`, note: "5 ml/kg, max 250 ml." },
           { label: "Calcio gluconato 10% se alterazioni ECG", value: `${formatNumber(calciumGluconateMl)} ml`, note: "0,5 ml/kg EV in 5-10 minuti, max 30 ml. Ripetibile dopo 5-10 minuti se le alterazioni ECG persistono." }
         ],
         notes: [
@@ -147,8 +154,8 @@ export function calculateEmergencyDrugs(ageYears: number, weightKg: number): Eme
           "Proseguire con infusione contenente glucosio. Controllare K+ e glicemia ogni 15 minuti per 4 ore."
         ],
         calculations: [
-          `Insulina = 0,1 UI/kg x ${formatNumber(weight)} kg = ${formatNumber(insulinUnits)} UI`,
-          `Glucosio 10% (infusione) = 5 ml/kg x ${formatNumber(weight)} kg = ${formatNumber(glucoseInfusionMl)} ml`,
+          `Insulina = 0,1 UI/kg x ${formatNumber(weight)} kg = ${formatNumber(0.1 * weight)} UI, max 10 UI -> ${formatNumber(insulinUnits)} UI`,
+          `Glucosio 10% (infusione) = 5 ml/kg x ${formatNumber(weight)} kg = ${formatNumber(5 * weight)} ml, max 250 ml -> ${formatNumber(glucoseInfusionMl)} ml`,
           `Calcio gluconato 10% = 0,5 ml/kg x ${formatNumber(weight)} kg = ${formatNumber(0.5 * weight)} ml, max 30 ml -> ${formatNumber(calciumGluconateMl)} ml`,
           `Salbutamolo EV (prima dose) = 5 µg/kg x ${formatNumber(weight)} kg = ${formatNumber(salbutamolIvMicrograms)} µg; totale fino a 15 µg/kg se necessario`
         ]
@@ -184,33 +191,37 @@ export function calculateEmergencyDrugs(ageYears: number, weightKg: number): Eme
   };
 }
 
-function calculateAnaphylaxisDose(ageYears: number, weightKg: number) {
+function calculateAnaphylaxisDose(ageYears: number) {
   const ageMonths = Math.round(ageYears * 12);
 
   if (ageMonths < 6) {
-    const ml = round2(0.01 * weightKg);
     return {
-      ml,
-      micrograms: round1(ml * 1000),
-      note: "Età inferiore a 6 mesi: usare 0,01 ml/kg secondo valutazione clinica.",
-      calculations: [`Mappatura per età < 6 mesi: 0,01 ml/kg x ${formatNumber(weightKg)} kg = ${formatNumber(ml)} ml (${formatNumber(ml * 1000)} µg)`]
+      value: "0,1-0,15 ml (100-150 µg)",
+      note: "Età inferiore a 6 mesi -> 100-150 µg (0,1-0,15 ml). Ripetibile dopo 5 minuti.",
+      calculations: ["Mappatura per fascia di età: < 6 mesi -> 0,1-0,15 ml (100-150 µg)"]
     };
   }
 
   if (ageYears < 6) {
     return {
-      ml: 0.15,
-      micrograms: 150,
-      note: "Età 6 mesi-6 anni -> 0,15 ml (150 µg).",
+      value: "0,15 ml (150 µg)",
+      note: "Età 6 mesi-6 anni -> 0,15 ml (150 µg). Ripetibile dopo 5 minuti.",
       calculations: ["Mappatura per fascia di età: 6 mesi-6 anni -> 0,15 ml (150 µg)"]
     };
   }
 
+  if (ageYears <= 12) {
+    return {
+      value: "0,3 ml (300 µg)",
+      note: "Età 6-12 anni -> 0,3 ml (300 µg). Ripetibile dopo 5 minuti.",
+      calculations: ["Mappatura per fascia di età: 6-12 anni -> 0,3 ml (300 µg)"]
+    };
+  }
+
   return {
-    ml: 0.3,
-    micrograms: 300,
-    note: "Età 6-12 anni -> 0,3 ml (300 µg).",
-    calculations: ["Mappatura per fascia di età: 6-12 anni -> 0,3 ml (300 µg)"]
+    value: "0,5 ml (500 µg)",
+    note: "Età > 12 anni -> 0,5 ml (500 µg); 0,3 ml (300 µg) se di piccola corporatura o prepubere. Ripetibile dopo 5 minuti.",
+    calculations: ["Mappatura per fascia di età: > 12 anni -> 0,5 ml (500 µg)"]
   };
 }
 

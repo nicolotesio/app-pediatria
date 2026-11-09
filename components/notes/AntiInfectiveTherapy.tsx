@@ -22,7 +22,7 @@ const antiviralClasses: DrugClass[] = [
       { route: "EV", posology: ["5 mg/kg/die, 1 volta/settimana per 2 dosi; poi ogni 15 giorni per 2 dosi."], dilution: ["1 flacone in 100–150 mL SF in 60 minuti."], notes: ["Tabella: nel paziente adulto associato a probenecid 2 g OS 3 h prima, poi 1 g OS a 2 h e 8 h dopo cidofovir.", "Criticità: la dicitura mg/kg/die è ambigua per un regime settimanale; verificare protocollo locale.", "Dose massima adulti riportata: 375 mg/dose."] }
     ] },
     { id: "valganciclovir", name: "Valganciclovir", routes: [
-      { route: "EV", posology: ["Terapia: 15–18 mg/kg/dose 2 volte/die per 14 giorni.", "Mantenimento: 15–18 mg/kg/dose 1 volta/die per 14 giorni."], notes: ["Dose massima adulti: terapia 900 mg 2 volte/die; mantenimento 900 mg/die.", "Criticità: la tabella riporta EV; verificare via/formulazione nel protocollo locale."] }
+      { route: "OS", posology: ["Terapia: 15–18 mg/kg/dose 2 volte/die per 14 giorni.", "Mantenimento: 15–18 mg/kg/dose 1 volta/die per 14 giorni."], notes: ["Dose massima adulti: terapia 900 mg 2 volte/die; mantenimento 900 mg/die.", "Solo per via orale (compresse o soluzione orale), preferibilmente con il cibo: è il profarmaco orale del ganciclovir."] }
     ] },
     { id: "ganciclovir", name: "Ganciclovir", routes: [
       { route: "EV", posology: ["Terapia: 5 mg/kg/dose 2 volte/die per 14 giorni.", "Mantenimento: 5 mg/kg/dose 1 volta/die per 14 giorni."] }
@@ -42,8 +42,8 @@ const antifungalClasses: DrugClass[] = [
       { route: "EV", posology: [], notes: ["Dose adulti riportata: 200 mg ogni 12 h per 2 giorni, poi 200 mg ogni 24 h."] }
     ] },
     { id: "voriconazolo", name: "Voriconazolo", routes: [
-      { route: "OS", posology: ["7 mg/kg/dose in 2 dosi."], dilution: ["SF 100 mL."], notes: ["Dose adulti riportata: 400 mg ogni 12 h il giorno 1, poi 200 mg ogni 12 h.", "Criticità: verificare via, formulazione ed età nel protocollo locale."] },
-      { route: "EV", posology: [], notes: ["Dose adulti riportata: 6 mg/kg ogni 12 h il giorno 1, seguiti da 4 mg/kg ogni 12 ore."] }
+      { route: "OS", posology: ["2-11 anni (e 12-14 anni con peso <50 kg): 9 mg/kg ogni 12 h, max 350 mg/dose; nessun carico per os."], notes: ["Iniziare preferibilmente per via EV; in questa fascia usare la sospensione orale.", "15-17 anni, o 12-14 anni con peso ≥50 kg: dose dell'adulto (400 mg ogni 12 h il giorno 1, poi 200 mg ogni 12 h)."] },
+      { route: "EV", posology: ["2-11 anni (e 12-14 anni con peso <50 kg): 9 mg/kg ogni 12 h nelle prime 24 h, poi 8 mg/kg ogni 12 h."], dilution: ["SF 100 mL."], notes: ["15-17 anni, o 12-14 anni con peso ≥50 kg: dose dell'adulto (6 mg/kg ogni 12 h il giorno 1, poi 4 mg/kg ogni 12 h).", "Sotto i 2 anni non è definita una posologia."] }
     ] },
     { id: "posaconazolo", name: "Posaconazolo", routes: [
       { route: "OS", posology: ["Profilassi: 200 mg 3 volte/die.", "Terapia: 400 mg 2 volte/die oppure 200 mg 4 volte/die."], notes: ["Dosi riportate nella tabella senza distinzione pediatrica.", "Dosi adulti: profilassi 200 mg ogni 8 h; terapia 400 mg ogni 12 h (se non si alimenta 200 mg 4 volte/die).", "Criticità: formulazioni non intercambiabili; verificare protocollo locale."] }
@@ -54,7 +54,7 @@ const antifungalClasses: DrugClass[] = [
     { id: "amfotericina-deossicolato", name: "Amfotericina B deossicolato", routes: [{ route: "EV", posology: ["0,5–1,5 mg/kg/die."], notes: ["Criticità: verificare diluizione e velocità nel protocollo locale."] }] }
   ] },
   { className: "Echinocandine", drugs: [
-    { id: "caspofungina", name: "Caspofungina", routes: [{ route: "EV", posology: ["70 mg/m² il giorno 1, poi 50 mg/m²."], dilution: ["SF 100 mL."], notes: ["Dose massima pediatrica: 70 mg/m².", "Dose adulti: 70 mg il giorno 1, poi 50 mg/die; se peso >80 kg: 70 mg/die."] }] }
+    { id: "caspofungina", name: "Caspofungina", routes: [{ route: "EV", posology: ["70 mg/m² il giorno 1, poi 50 mg/m²."], dilution: ["SF 100 mL."], notes: ["Dose massima pediatrica: 70 mg/die come dose effettiva, sia al carico sia in mantenimento.", "Dose adulti: 70 mg il giorno 1, poi 50 mg/die; se peso >80 kg: 70 mg/die."] }] }
   ] }
 ];
 function FieldRow({ title, values }: { title: string; values?: string[] }) {

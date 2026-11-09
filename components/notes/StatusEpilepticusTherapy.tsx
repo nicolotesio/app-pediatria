@@ -72,7 +72,7 @@ const drugGroups: { level: DrugLevel; drugs: StatusEpilepticusDrug[] }[] = [
         name: "Fenitoina",
         mechanism: ["-| canali del sodio voltaggio-dipendenti"],
         dose: ["20 (15-20) mg/kg"],
-        infusion: ["Infondere in 20-30 min", "< 50 mg/min", "0,5 mg/kg/min"],
+        infusion: ["Infondere in almeno 20 min", "Max 1 mg/kg/min", "< 50 mg/min"],
         maxDose: ["1 g"],
         onset: "10-30 min",
         duration: "12-24 ore",

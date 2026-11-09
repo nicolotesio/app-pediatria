@@ -15,7 +15,7 @@ const medications = [
     brand: "TRIMETON, fiale da 10 mg",
     rows: [
       ["Via di somministrazione", "EV"],
-      ["Posologia", "0.2 mg/kg"],
+      ["Posologia", "0,2 mg/kg"],
       ["Dose massima", "20 mg (2 fiale)"],
       ["Somministrazione", "EV in > 1 min"]
     ]

@@ -15,7 +15,7 @@ const antiemeticClasses: Array<{ className: string; drugs: AntiemeticDrug[] }> =
       {
         name: "Palonosetron",
         route: "EV",
-        posology: ["20 μg/kg/dose, singola somministrazione", "Dose max: 250 μg (1 fiala)"],
+        posology: ["20 μg/kg/dose, singola somministrazione", "Dose max: 1500 μg (infusione in 15 minuti)"],
         notes: [
           "Indicato per cicli molto emetogeni o emesi importante nei cicli precedenti.",
           "Azione prolungata (circa 72 ore).",
@@ -26,7 +26,7 @@ const antiemeticClasses: Array<{ className: string; drugs: AntiemeticDrug[] }> =
       {
         name: "Ondansetron",
         route: "EV, PO, SL",
-        posology: ["0.15-0.2 mg/kg/dose, ripetibile ogni 8 ore", "Dose max: 8 mg/dose"],
+        posology: ["0,15-0,2 mg/kg/dose, ripetibile ogni 8 ore", "Dose max: 8 mg/dose"],
         notes: ["Rischio allungamento del QT."]
       }
     ]
@@ -124,7 +124,7 @@ const antiemeticClasses: Array<{ className: string; drugs: AntiemeticDrug[] }> =
       {
         name: "Clorpromazina",
         route: "PO, EV",
-        posology: ["0.5-1 mg/kg/dose, ogni 8 ore", "Dose max: 25 mg/dose"],
+        posology: ["0,5-1 mg/kg/dose, ogni 8 ore", "Dose max: 25 mg/dose"],
         notes: [
           "Gli antipsicotici sono poco usati come antiemetici per il rischio di effetto paradosso, ma possono essere utili quando è presente una prevalente componente psicologica che causa vomito anticipatorio. In questo caso può essere utile anche l'utilizzo di Lorazepam PO."
         ]
@@ -137,7 +137,7 @@ const antiemeticClasses: Array<{ className: string; drugs: AntiemeticDrug[] }> =
       {
         name: "Clorfenamina",
         route: "EV",
-        posology: ["0.2 mg/kg/dose, ogni 8-12 ore", "Dose max: 10 mg/dose"],
+        posology: ["0,2 mg/kg/dose, ogni 8-12 ore", "Dose max: 10 mg/dose"],
         notes: ["Antistaminico di prima generazione."]
       }
     ]

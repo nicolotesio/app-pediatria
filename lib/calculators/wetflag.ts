@@ -1,5 +1,6 @@
 import { getClinicalSource } from "@/lib/sources/clinicalSources";
 import { formatFixed } from "@/lib/format";
+import { EMERGENCY_DRUG_LIMITS } from "@/lib/calculators/emergencyDrugs";
 
 export type WetflagResult = {
   ageYears: number;
@@ -46,11 +47,12 @@ export const wetflagMetadata = {
 
 const MIN_AGE = 1 / 12;
 const MAX_AGE = 12;
-const MAX_DEFIBRILLATION_ENERGY_J = 200;
-const MAX_FLUID_BOLUS_ML = 500;
-const MAX_LORAZEPAM_MG = 4;
-const MAX_ADRENALINE_MICROGRAMS = 1000;
-const MAX_GLUCOSE_D10_ML = 50;
+// Massimali: unica definizione in lib/calculators/emergencyDrugs.
+const MAX_DEFIBRILLATION_ENERGY_J = EMERGENCY_DRUG_LIMITS.defibrillationInitialJ;
+const MAX_FLUID_BOLUS_ML = EMERGENCY_DRUG_LIMITS.fluidBolusMl;
+const MAX_LORAZEPAM_MG = EMERGENCY_DRUG_LIMITS.lorazepamMg;
+const MAX_ADRENALINE_MICROGRAMS = EMERGENCY_DRUG_LIMITS.adrenalineArrestMicrograms;
+const MAX_GLUCOSE_D10_ML = EMERGENCY_DRUG_LIMITS.glucoseBolusMl;
 
 export function calculateWetflag(ageYears: number, weightKg = estimateWeightForAge(ageYears)): WetflagResult {
   if (!Number.isFinite(ageYears)) {

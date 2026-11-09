@@ -66,17 +66,40 @@ describe("calculateEmergencyDrugs", () => {
     const arrest = result.sections.find((section) => section.id === "cardiac-arrest");
 
     expect(seizures?.rows[0].value).toBe("4 mg");
-    expect(arrhythmias?.rows[0].value).toBe("500 µg");
+    expect(arrhythmias?.rows[0].value).toBe("600 µg");
     const hyperkalaemia = result.sections.find((section) => section.id === "hyperkalaemia-non-arrest");
     const hypoglycaemia = result.sections.find((section) => section.id === "hypoglycaemia");
 
     expect(arrest?.rows[0].value).toBe("7 ml (700 µg)");
     expect(arrest?.rows[1].value).toBe("300 mg");
     expect(arrest?.rows[2].value).toBe("500 ml");
-    expect(arrhythmias?.rows[1].value).toBe("6 - 6 mg");
+    expect(arrhythmias?.rows[1].value).toBe("6 mg");
     expect(hyperkalaemia?.rows[2].value).toBe("30 ml");
     expect(hypoglycaemia?.rows[0].value).toBe("50 ml");
     expect(arrest?.rows[3].value).toBe("200 J");
     expect(arrest?.rows[4].value).toBe("360 J");
+  });
+
+  it("limita insulina, glucosio e potassio secondo ERC 2025", () => {
+    const result = calculateEmergencyDrugs(12, 120);
+    const arrest = result.sections.find((section) => section.id === "cardiac-arrest");
+    const hyperkalaemia = result.sections.find((section) => section.id === "hyperkalaemia-non-arrest");
+
+    expect(arrest?.rows[5].value).toBe("10 UI");
+    expect(arrest?.rows[6].value).toBe("250 ml");
+    expect(arrest?.rows[7].value).toBe("30 mmol");
+    expect(hyperkalaemia?.rows[0].value).toBe("10 UI");
+    expect(hyperkalaemia?.rows[1].value).toBe("250 ml in 30 min");
+  });
+
+  it("mappa l'adrenalina IM dell'anafilassi su tutte le fasce di età", () => {
+    const doseAt = (ageYears: number) =>
+      calculateEmergencyDrugs(ageYears, 10).sections.find((section) => section.id === "anaphylaxis")?.rows[0].value;
+
+    expect(doseAt(0.25)).toBe("0,1-0,15 ml (100-150 µg)");
+    expect(doseAt(0.5)).toBe("0,15 ml (150 µg)");
+    expect(doseAt(6)).toBe("0,3 ml (300 µg)");
+    expect(doseAt(12)).toBe("0,3 ml (300 µg)");
+    expect(doseAt(14)).toBe("0,5 ml (500 µg)");
   });
 });

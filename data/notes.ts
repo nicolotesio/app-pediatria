@@ -28,8 +28,8 @@ export const notes: ClinicalNote[] = [
     title: "Farmaci antiemetici",
     category: "Farmacologia",
     tags: ["antiemetici", "nausea", "vomito", "farmacologia"],
-    updatedAt: "2026-07-18",
-    sources: [],
+    updatedAt: "2026-11-09",
+    sources: ["EMA product information (palonosetron)"],
     content: "Farmaci antiemetici organizzati per classe farmacologica.",
     searchText: "antagonisti recettore 5-HT3 5-HT3RA palonosetron ondansetron corticosteroidi methylprednisolone metilprednisolone desametasone antagonisti recettore NK1 NKI aprepitant antagonisti dopaminergici alizapride antipsicotici clorpromazina antistaminici antiistaminici clorfenamina"
   },
@@ -65,8 +65,8 @@ export const notes: ClinicalNote[] = [
     title: "Farmaci antibiotici",
     category: "Farmacologia",
     tags: ["antibiotici", "terapia antibiotica", "posologia", "diluizione", "pediatria"],
-    updatedAt: "2026-07-06",
-    sources: ["Wellington ICU Drug Manual, 2020"],
+    updatedAt: "2026-11-09",
+    sources: ["Wellington ICU Drug Manual, 2020", "Riassunti delle caratteristiche del prodotto (EMA/AIFA), revisione novembre 2026"],
     content: "Schede rapide di terapia antibiotica pediatrica con classi, vie di somministrazione, posologia, diluizioni EV e note.",
     searchText:
       "amikacina gentamicina tobramicina netilmicina ertapenem meropenem imipenem cilastatina cefazolina cefuroxime cefixima cefotaxime cefpodoxima ceftazidime ceftriaxone cefepime ceftarolina teicoplanina vancomicina clindamicina daptomicina azitromicina claritromicina linezolid amoxicillina clavulanato ampicillina sulbactam oxacillina piperacillina tazobactam ticarcillina colistina ciprofloxacina levofloxacina cotrimossazolo trimetoprim sulfametossazolo tmp smx fosfomicina metronidazolo rifampicina tigeciclina aminoglicosidi carbapenemici cefalosporine glicopeptidi lincosamidi lipopeptidi macrolidi oxazolidinoni penicilline polimixine chinolonici fluorochinolonici sulfonamidici nitroimidazoli rifamicine glicilcicline"
@@ -76,7 +76,7 @@ export const notes: ClinicalNote[] = [
     title: "Farmaci antivirali",
     category: "Farmacologia",
     tags: ["antivirali", "aciclovir", "ganciclovir", "valganciclovir", "foscarnet", "cidofovir", "farmacologia"],
-    updatedAt: "2026-09-21",
+    updatedAt: "2026-11-09",
     sources: ["EMA product information; NIH Pediatric Opportunistic Infection Guidelines"],
     content: "Schede rapide di terapia antivirale pediatrica con vie di somministrazione, posologia e monitoraggio.",
     searchText: "antivirali aciclovir ganciclovir valganciclovir cidofovir foscarnet CMV HSV VZV"
@@ -86,7 +86,7 @@ export const notes: ClinicalNote[] = [
     title: "Farmaci antifungini",
     category: "Farmacologia",
     tags: ["antifungini", "fluconazolo", "voriconazolo", "posaconazolo", "amfotericina", "caspofungina", "farmacologia"],
-    updatedAt: "2026-09-21",
+    updatedAt: "2026-11-09",
     sources: ["EMA product information"],
     content: "Schede rapide di terapia antifungina pediatrica con vie di somministrazione, posologia e monitoraggio.",
     searchText: "antifungini fluconazolo itraconazolo voriconazolo posaconazolo amfotericina caspofungina candida aspergillus"
@@ -115,8 +115,8 @@ export const notes: ClinicalNote[] = [
     title: "Terapia dello stato di male epilettico",
     category: "Farmacologia",
     tags: ["stato di male epilettico", "epilessia", "convulsioni", "benzodiazepine", "farmacologia"],
-    updatedAt: "2026-07-13",
-    sources: ["Emergenze pediatriche"],
+    updatedAt: "2026-11-09",
+    sources: ["Emergenze pediatriche", "Children's Health Queensland: Status epilepticus, emergency management in children (fenitoina)"],
     content: "Tabella farmaci per terapia dello stato di male epilettico pediatrico.",
     searchText: "midazolam diazepam lorazepam levetiracetam fenitoina fenobarbitale acido valproico valproato piridossina buccolam micropam convulsioni crisi epilettica stato epilettico"
   }
