@@ -392,9 +392,9 @@ const antibioticClasses: { className: string; antibiotics: Antibiotic[] }[] = [
         routes: [
           {
             route: "EV/PO",
-            posology: ["<12 anni: 10 mg/kg ogni 8h", ">12 anni: 600 mg ogni 12h"],
-            dilution: ["EV già costituito: 600 mg/100 ml in 60 min"],
-            notes: ["Attività su VRSA"]
+            posology: ["<12 anni: 10 mg/kg ogni 8h, max 600 mg/dose", "≥12 anni: 600 mg ogni 12h"],
+            dilution: ["EV già costituito: 600 mg/300 ml (2 mg/ml) in 30-120 min"],
+            notes: ["Attività su VRSA", "Sotto i 18 anni uso off-label in Europa: l'RCP non riporta una posologia pediatrica"]
           }
         ]
       }
